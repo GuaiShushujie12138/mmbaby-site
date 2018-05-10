@@ -1,0 +1,329 @@
+@charset "UTF-8";
+
+.reg_content {
+    background: #fff url("../../images/reg_bj.jpg") no-repeat center top;
+    min-height: 600px;
+}
+.regbody_content{
+    width:1190px;
+    margin:0 auto;
+    padding:116px 0 120px 0;
+    overflow: hidden;
+}
+.regbody-left{
+    width: 570px;
+    overflow: hidden;
+}
+.regbody-left .register-explain{
+    margin: 56px 0 0 95px;
+}
+.regbody-left .explain{
+    margin-top: 35px;
+}
+.regbody-left .title{
+    width: 320px;
+    font-size: 18px;
+    line-height: 26px;
+    color: #333;
+}
+.regbody-left .explain li{
+    margin-top: 13px;
+}
+.regbody-left .main{
+    font-size: 14px;
+    color: #333;
+    line-height: 22px;
+    font-weight:bold;
+}
+.regbody-left .des{
+    font-size: 12px;
+    color: #666;
+}
+.regbody-left .buyer .title{
+    border-bottom: 2px solid  #ff9100;
+}
+.regbody-left .seller .title{
+    border-bottom: 2px solid  #2e8cdb;
+}
+.regbody-right{
+    width: 588px;
+    position:relative;
+}
+.reg_title {
+    padding: 0 0 20px 150px;
+    color: #818181;
+    font: 34px/38px "Microsoft YaHei";
+}
+
+.reg_list {
+    /*overflow: hidden;*/
+    zoom: 1;
+    margin: 18px 0 0 0;
+    height:43px;
+    position: relative;
+}
+.fast_login_error  label.reg_list_error{
+    width: 160px;
+    color: #e74c3c;
+    background: url(../../images/error.png) no-repeat;
+    padding-left: 20px;
+    position: absolute;
+    top: 10px;
+    left: 445px;
+}
+.fast_login_error label[for="reg-mobile"]{
+    top:85px;
+}
+.fast_login_error label[for="reg-vcode"]{
+    top:147px;
+}
+.fast_login_error label[for="reg-password"]{
+    top:205px;
+}
+.fast_login_error label[for="reg-confirm-password"]{
+    top:270px;
+}
+.fast_login_error label[for="company-name"]{
+    top:330px;
+}
+.fast_login_error label[for="contact-name"]{
+    top:390px;
+}
+/*.reg-form .verifyDiv{*/
+    /*width: 134px;*/
+    /*height: 20px;*/
+    /*background: #f2f2f2;*/
+    /*padding-top: 16px;*/
+/*}*/
+
+.reg_left {
+    font: 14px/16px "Microsoft YaHei";
+    color: #a0a0a0;
+    text-align: right;
+    float: left;
+    width: 120px;
+    padding-top: 10px;
+    _padding-top: 30px;
+}
+
+.reg_left span {
+    color: #e74c3c;
+}
+
+.reg_list .reg_right {
+    width: 460px;
+    float: left;
+}
+
+.reg_list .reg_vcode {
+    width: 150px;
+}
+
+.reg_right {
+    position: relative;
+    height: 43px;
+}
+
+.reg_right em {
+    width: 15px;
+    height: 19px;
+    position: absolute;
+    top: 8px;
+    background: url("../../images/icon.png") no-repeat;
+}
+
+.reg_right em.left {
+    left: 15px;
+}
+
+.reg_right em.right {
+    /*right: 15px;*/
+    left:290px;
+}
+
+.reg_right em.tel {
+    background-position: -114px 1px;
+}
+
+.reg_right em.tel.current {
+    background-position: -114px -24px;
+}
+
+.reg_right em.password {
+    background-position: 0 0;
+}
+
+.reg_right em.password.current {
+    background-position: 0 -24px;
+}
+
+.reg_right em.success {
+    background-position: -54px -24px;
+}
+
+.reg_right input {
+    border: 1px solid #a0a0a0;
+    width: 285px;
+    font: 14px/28px "Microsoft YaHei";
+    padding: 7px 15px 6px 15px;
+    background:#fff;
+    height:20px;
+}
+
+.reg_right input.click {
+    border: 1px solid #7cbaf4;
+}
+
+
+
+.reg_error {
+    float: left;
+    margin-left: 10px;
+}
+
+.reg_error label {
+    /*width: 325px;*/
+    /*padding: 0 15px;*/
+    color: #e74c3c;
+    line-height: 41px;
+    /*border: 1px solid #e3867c;*/
+    /*background: #fac5c5;*/
+    display: block;
+}
+
+.reg_list .btn {
+    float: left;
+    width: 350px;
+}
+
+.reg_list .check_l {
+    background: url("../../images/icon.png") no-repeat -97px -24px;
+}
+
+.reg_list .check_g {
+    background-position: -78px -24px;
+}
+
+.check_box span {
+    color: #1480c8;
+}
+
+.select_list {
+    overflow: hidden;
+}
+
+.select_list select {
+    float: left;
+    margin: 11px 10px 0 0;
+}
+
+.agreement {
+    width: 820px;
+    height: 430px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -230px;
+    margin-left: -410px;
+    background: #fff;
+    box-shadow: 5px 5px 5px #ccc;
+    display: none;
+    z-index: 999999;
+}
+
+.agreement h2 {
+    background: #e3e3e3;
+    text-align: center;
+    position: relative;
+    font: 18px/36px "Microsoft YaHei";
+}
+
+.agreement em {
+    display: inline-block;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 10px;
+    right: 10px;
+    background: url(../../images/icon.png) -164px -141px;
+    cursor: pointer;
+}
+
+.agreement_con {
+    height: 250px;
+    overflow-y: scroll;
+    padding: 30px;
+    font-family: "Microsoft YaHei";
+}
+
+.agreement_con p {
+    line-height: 25px;
+}
+
+.agreement_con h4 {
+    line-height: 82px;
+}
+
+.agreement_con i {
+    font-style: italic;
+    font-weight: bold;
+}
+
+#agree-btn {
+    display: block;
+    padding: 10px 75px;
+    background: #e74c3c;
+    border: none;
+    curdor: pointer;
+    color: #fff;
+    font: 18px/18px "Microsoft YaHei";
+    margin: 20px auto;
+    cursor: pointer;
+}
+
+#get-vcode-btn {
+    width: 155px;
+    height: 33px;
+    border: 1px solid #a0a0a0;
+    float: left;
+    margin-left: 10px;
+    text-align: center;
+    font: 14px/33px "Microsoft YaHei";
+    background: #f9f9f9;
+    color: #666;
+    cursor: pointer;
+}
+
+#reg-vcode {
+    width: 120px;
+}
+
+#reg-btn {
+    width: 317px;
+    height: 46px;
+    background: #e74c3c;
+    color: #fff;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    font: normal 18px/46px "Microsoft YaHei";
+    float: left;
+}
+
+/*注册页面添加密码加固样式*/
+.phone-list{
+    position:relative;
+}
+.reg_mark,.reg_error,.reg_mark1{
+    width: 160px;
+    color: #e74c3c;
+    background: url(../../images/error.png) no-repeat;
+    padding-left: 20px;
+    position: absolute;
+    top: 9px;
+    left: 445px;
+    display: none;
+}
+.reg_mark,.reg_mark1{
+}

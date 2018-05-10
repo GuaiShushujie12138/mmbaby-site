@@ -1,0 +1,96 @@
+/*璁㈠崟鎼滅储寮€濮�*/
+.search-order-t{
+    width: 100%;
+    padding:22px 0 0 0;
+}
+.search-order-box{
+    width: 940px;
+    height: auto;
+    padding:0px 5px;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.search-keyword{
+    width:250px;
+    height: 24px;
+    border: 1px solid #c9c9c9;
+    line-height: 24px;
+    padding-left: 5px;
+}
+.simpleSearch{
+    margin-left:-1px;
+}
+.how-search{
+    height: 24px;
+    line-height: 24px;
+    margin-left: 10px;
+}
+.senior-search a{
+    color: #535353;
+}
+.senior-search i{
+    width:12px;
+    height:11px;
+    margin-left: 2px;
+    display: inline-block;
+    zoom: 1;
+}
+.senior-search i.low{
+    background: url("../../images/iconDetail.png") no-repeat -421px -18px;
+}
+.senior-search i.high{
+    background: url("../../images/iconDetail.png") no-repeat -421px -28px;
+}
+.search-order{
+    height:45px;
+}
+.search-order-b{
+    overflow: hidden;
+    margin-top: 20px;
+}
+.search-order-b input{
+    border: 1px solid #c9c9c9;
+    height: 23px;
+    line-height: 23px;
+    padding-left: 5px;
+}
+.hide-order{
+    cursor:pointer;
+    position: absolute;
+    top: 20px;
+    left: 700px;
+}
+.hide-order input{
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 3px;
+}
+.hideText{
+    width: 100px;
+    position: relative;
+    left: -22px;
+    padding-left: 24px;
+}
+.search-order-button{
+    margin:20px 0 10px;
+    overflow: hidden;
+    padding-left:324px;
+}
+.order-list{
+    width:268px;
+    float:left
+}
+.search-left{
+    display:inline-block;
+    width:72px;
+    text-align:right;
+    margin-right: 10px;
+}
+.time-current .current{
+    color: #E74C3C;
+}
+
+/**鍟嗗搧鎼滅储缁撴潫*/

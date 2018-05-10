@@ -1,0 +1,25 @@
+/*茣�埇���--茣�垬拭��--��膤私査篆≧��*/
+.upload-visitingCard {
+    line-height: 78px;
+    font-size: 40px;
+}
+.upload-visitingCard.upload {
+    float: left;
+    width: 78px;
+    height: 78px;
+    border: 1px solid #dedede;
+    text-align: center;
+    color: #dedede;
+    margin-right: 20px;
+    line-height: 76px;
+}
+.upload-visitingCard.upload img{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.upload .autosize {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}

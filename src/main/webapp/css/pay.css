@@ -1,0 +1,456 @@
+/*蹇嵎鏀粯寮€濮�*/
+input{
+	border:1px solid #ccc;
+}
+.mt30{
+	margin-top: 30px;
+}
+.show{
+	display: block;
+}
+.none{
+	display: none;
+}
+/*鎶ラ敊椤甸潰 寮€濮�*/
+.pay-error{
+	width: 100%;
+	height: 285px;
+	padding-top: 145px;
+}
+.pay-error .pic{
+	width: 70px;
+	height: 70px;
+	background: url('../../images/quickpay/pay.error.png') no-repeat;
+	margin:0 auto 30px;
+	display: block;
+}
+.pay-error .text{
+	width: 100%;
+	text-align: center;
+	font-size: 14px;
+	text-align: center;
+	color: #E74C3C;
+}
+.pay-error .text span{
+	color: #999999;
+}
+/*鎶ラ敊椤甸潰 缁撴潫*/
+.quickpay{
+	position: relative;
+	padding: 0 62px 30px;
+}
+.disabled{
+	background: #ccc;
+	border: 1px solid #ccc;
+	cursor: default;
+}
+.quickpay .credit-remind{
+	position: absolute;
+	top: 80px;
+	right: 150px;
+	width: 255px;
+	height: 365px;
+	background: url('../../images/quickpay/credit.remind.png') no-repeat;
+}
+.quickpay .bind-card{
+	position: relative;
+	border: 1px solid #e74b3c;
+	background:#fff;
+	padding-bottom:20px;
+}
+.quickpay .tip{
+	position: relative;
+	color: #b0b0b0;
+	margin-top: 12px;
+	padding-left: 18px;
+}
+.quickpay .tip .icon{
+	position: absolute;
+	float: left;
+	width: 16px;
+	height: 22px;
+	background: url(../../images/icon.png) no-repeat -158px -481px;
+	top: -2px;
+	left: 0;
+}
+.payCommon  .title{
+	width: 613px;
+	height: 30px;
+	background: #fffded;
+	border: 1px solid #bae8fd;
+	margin: 12px 0 12px 62px;
+	line-height: 30px;
+	color: #56b6e4;
+	padding-left: 30px;
+	position: relative;
+}
+.quickpay  .title{
+	margin-left: 0;
+}
+.payCommon .title em{
+	position: absolute;
+	top: 5px;
+	left: 10px;
+	width: 16px;
+	height: 22px;
+	background: url('../../images/icon.png') no-repeat -111px -481px;
+}
+.quickpay .title1 em{
+	position: absolute;
+	top: 6px;
+	left: 10px;
+	width: 16px;
+	height: 18px;
+	background: url('../../images/icon.png') no-repeat -136px -481px;
+}
+.quickpay .title1{
+  	border: none;
+	background:none;
+	color: #828282;
+	margin-top: 20px;
+	margin-bottom: 8px;
+	position: relative;
+	left:88px;
+}
+.quickpay .row{
+	width: 100%;
+	height: 42px
+}
+.quickpay .row-mb10{
+	margin-bottom: 10px;
+}
+.quickpay .row-h20{
+	height: 20px;
+}
+.quickpay .row-next{
+
+}
+.quickpay .effective-date p{
+	margin-right: 10px;
+}
+.quickpay .effective-date select{
+	width: 60px;
+	height: 34px;
+	margin-right: 5px;
+}
+.quickpay .row-next .next-pay{
+	margin-top: 12px;
+}
+.quickpay .row-next .next-pay.disabled{
+	background: #ccc;
+	border: 1px solid #ccc;
+	cursor: default;
+}
+.quickpay .row-next .row-right{
+	padding-left: 0;
+}
+.quickpay .row-next .next-pay.disabled,.payButton.disabled{
+	background: #ccc;
+	color: #8A8282;
+	border: 1px solid #ccc;
+}
+.quickpay  .blue{
+	color: #488dd2;
+	cursor: pointer;
+}
+.quickpay .row-left{
+	width: 120px;
+	height: 100%;
+	line-height: 34px;
+	text-align: right;
+	color: #757575;
+}
+.quickpay .row-right{
+	width: 960px;
+	height: 100%;
+	padding-left: 10px;
+}
+.quickpay .row-right .input-mess{
+	width: 210px;
+	height: 32px;
+	line-height: 32px;
+	padding-left: 10px;
+	background: #fff;
+	border: 1px solid #d2d2d2;
+}
+.quickpay .verify-code{
+	height: 24px;
+	line-height: 24px;
+	padding: 0 10px;
+	background:#fff;
+	border: 1px solid #2578D9;
+	color: #2578D9;
+	margin: 4px 0 0 12px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+.quickpay .verify-code.disabled{
+	color: #ccc;
+	border-color: #ccc;
+}
+.quickpay .backcard-name{
+	width: 75px;
+	height: 100%;
+	line-height: 34px;
+}
+.quickpay .row-right .backcard-type{
+	height: 32px;
+	line-height: 32px;
+	margin-right: 5px;
+}
+.quickpay .row-right .pay-bank{
+	width: 316px;
+	height: 38px;
+	background: #fff;
+	border: 1px solid #d2d2d2;
+	line-height: 38px;
+}
+.quickpay .row-right .pay-bank span{
+	width: 100px;
+	height: 30px;
+	margin: 4px 0 4px 8px;
+}
+.quickpay .pay-bank span .bank-logo{
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	margin: 0;
+	border: none;
+}
+.quickpay .row-right .pay-bank p{
+	width: 190px;
+	text-align: right;
+}
+.quickpay .error-mess{
+	line-height: 34px;
+	padding-left: 8px;
+}
+.quickpay .error-mess em{
+	width: 18px;
+	height: 18px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: -1px;
+	background: url('../../images/icon.png') no-repeat -135px -412px;
+}
+.quickpay  .check-agree{
+	width: 12px;
+	height: 12px;
+	background: url(../../images/icon.png) -97px 0 no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: -2px;
+}
+.quickpay .check-agreed{
+	background-position: -78px 0;
+}
+ .close-btn{
+	margin-top: 20px;
+	margin-left: 440px !important;
+}
+ .view-banks{
+	 line-height:34px;
+	 padding-left:12px;
+	 cursor:pointer;
+ }
+/*蹇嵎鏀粯缁撴潫*/
+
+/*閾惧皻蹇嵎鏀粯浣跨敤璇存槑  寮€濮�*/
+.quickpay-des{
+	border: 1px solid #dcdcdc;
+	padding-left: 20px;
+	padding-top: 30px;
+	margin-top: 30px;
+}
+.quickpay-answer{
+	margin-bottom: 25px;
+}
+.quickpay-des p{
+	line-height: 24px;
+	color: #828282;
+}
+.quickpay-des p.title{
+	color: #3e3e3e;
+}
+/*閾惧皻蹇嵎鏀粯浣跨敤璇存槑  缁撴潫*/
+
+/* 鏀寔鐨勯摱琛屽崱鍒楄〃寮€濮� */
+.bank-cards-box{
+	width:662px;
+	height: 468px;
+	background:#fff;
+	padding:10px;
+	position: fixed;
+	left:50%;
+	top:50%;
+	z-index:9900001;
+	margin-left:-331px;
+	margin-top:-240px;
+}
+.bank-card-tab .tab{
+	padding:5px 10px 5px;
+	line-height:34px;
+	cursor:pointer;
+	color:#000;
+	font-size:16px;
+}
+.bank-card-tab{
+	margin-left:10px;
+}
+.bank-card-tab .current{
+	color: #e74b3c;
+	border-bottom:2px solid #e74b3c;
+}
+.bank-card-con{
+	border-top:1px solid #ccc;
+}
+.banks-con{
+	height: 410px;
+	overflow: hidden;
+	overflow-y: scroll;
+}
+.banks-con .bank-card-list{
+	width:200px;
+	height:53px;
+	margin:10px 0px 0px 10px;
+	border:1px solid #ccc;
+}
+.icon-close{
+	padding-right:10px;
+	font-size:16px;
+	cursor:pointer;
+}
+.notSupportCards{
+	line-height: 178px;
+	text-align: center;
+	font-size: 16px;
+}
+
+/* 鏀寔鐨勯摱琛屽崱鍒楄〃缁撴潫 */
+
+/*蹇嵎鏀粯鍚庡彴绠＄悊寮€濮�*/
+.bandBankCard{
+	padding:30px 20px;
+}
+.bank-list{
+	color:#000;
+	line-height:48px;
+	height:48px;
+	border:1px solid #e6e6e6;
+	background:#fff;
+	margin-bottom:16px;
+	padding-left:20px;
+	cursor:pointer;
+	position: relative;
+}
+.bank-list-mask{
+	width: 100%;
+	height: 100%;
+	background: #fff;
+	opacity: 0.6;
+	filter:alpha(opacity=60);
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.bank-list.cur{
+	background: #fff;
+	opacity: 0.6;
+	cursor: default;
+	border: 1px solid #fff;
+}
+.bank-list input{
+	vertical-align:middle;
+}
+.icon-bank{
+	width:27px;
+	height:27px;
+	display:inline-block;
+	vertical-align:middle;
+	margin:0 38px;
+}
+.item-bank{
+	display:inline-block;
+	width:170px;
+}
+.current-border{
+	border-color:#e74c3c;
+}
+.other-bank{
+	width:150px;
+	line-height:40px;
+	background:#fff;
+	color:#2578d9;
+	border:dashed 1px #e6e6e6;
+	text-align:center;
+	cursor:pointer;
+}
+.bank-con{
+	border:1px solid #e74b3c;
+	padding:20px 0;
+	background:#fff;
+}
+.pay_bank_cont .icon-bank{
+	float: none;
+	margin: 0 38px;
+	width: 27px;
+	height: 27px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.codeMobileNum{
+	padding-top:20px;
+	color:#000;
+}
+.codeMobile-list{
+	line-height:24px;
+	margin-bottom:10px;
+	position: relative;
+}
+.codeMobile-l{
+	width:110px;
+	text-align:left;
+}
+.input-box{
+	height:24px;
+	padding-left: 10px;
+}
+.codeMobileNum .getCodeNum{
+	width: auto;
+	border-radius:4px;
+	margin-bottom:3px;
+	background:#fff;
+	border: 1px solid #2578D9;
+	color: #2578D9;
+	padding: 0 10px;
+	margin-left:12px;
+}
+.quickpay .row-right{
+	width:800px;
+}
+.forget-text{
+	vertical-align: bottom;
+	line-height: 20px;
+	margin-left:12px;
+}
+.quick-prompt{
+	color: #2578D9;
+	margin-left:110px;
+	margin-bottom:24px;
+}
+.password-right{
+
+}
+/*蹇嵎鏀粯鍚庡彴绠＄悊缁撴潫*/
+
+/*鎻愮ず璇綅缃樉绀�*/
+.verifyDiv{
+	padding-top:7px;
+	float:left;
+	position:static;
+}
+.warnMsgDiv{
+	float:left;
+	margin-left:12px;
+}
