@@ -34,6 +34,8 @@
         <useDefaultDelimiters>false</useDefaultDelimiters>
         <org.springframework.version>4.2.1.RELEASE</org.springframework.version>
         <slf4j.version>1.7.5</slf4j.version>
+        <pigeon.version>2.9.8-SNAPSHOT</pigeon.version>
+        <swift.version>0.17.0</swift.version>
     </properties>
 
     <dependencies>
@@ -237,6 +239,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.mmbaby</groupId>
+            <artifactId>mmbaby-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
             <version>1.7.1.RELEASE</version>
@@ -273,6 +281,29 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.19</version>
+        </dependency>
+
+        <!-- 需要自行加入swift的jar，swift.version可以是0.17.0或更高版本 -->
+        <dependency>
+            <groupId>com.facebook.swift</groupId>
+            <artifactId>swift-annotations</artifactId>
+            <version>${swift.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.facebook.swift</groupId>
+            <artifactId>swift-codec</artifactId>
+            <version>${swift.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.facebook.swift</groupId>
+            <artifactId>swift-generator</artifactId>
+            <version>${swift.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dianping</groupId>
+            <artifactId>pigeon</artifactId>
+            <version>${pigeon.version}</version>
         </dependency>
 
         <!--<dependency>-->
