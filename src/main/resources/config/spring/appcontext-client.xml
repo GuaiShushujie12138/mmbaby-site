@@ -17,4 +17,23 @@
         <property name="timeout" value="5000"/>
     </bean>
 
+    <bean id="customerQueryService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/customer_query_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.customer.service.CustomerQueryService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
+
+    <bean id="addressSubmitService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/address_submit_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.address.service.AddressSubmitService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
 </beans>
