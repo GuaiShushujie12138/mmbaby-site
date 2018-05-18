@@ -1,5 +1,8 @@
 package com.mmbaby.site.base.controller;
 
+import com.mmbaby.customer.dto.domain.CustomerDTO;
+import com.mmbaby.site.base.response.GeneralResponse;
+import com.mmbaby.site.base.response.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +21,10 @@ import static com.mmbaby.site.base.constants.Constants.LOGIN_CUSTOMER;
 @RequestMapping("/")
 public class WebController extends BaseController {
 
+    /**
+     * 首页
+     * @return
+     */
     @RequestMapping(value = {"/", "/index", "/index.html"}, method = RequestMethod.GET)
     public ModelAndView getIndex() {
 
@@ -26,6 +33,10 @@ public class WebController extends BaseController {
         return view;
     }
 
+    /**
+     * 客户登陆界面
+     * @return
+     */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView getLogin() {
 
@@ -38,6 +49,10 @@ public class WebController extends BaseController {
         return view;
     }
 
+    /**
+     * 客户注册界面
+     * @return
+     */
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView getRegister() {
 
@@ -48,5 +63,18 @@ public class WebController extends BaseController {
         }
 
         return view;
+    }
+
+
+
+    /**
+     * 是否登陆,并且获取登陆的客户信息
+     * @return
+     */
+    @RequestMapping(value = "/ifLogin", method = RequestMethod.POST, produces = "application/json")
+    public Response ifLogin() {
+        CustomerDTO customerDTO = getCustomer();
+
+        return new GeneralResponse<CustomerDTO>(customerDTO);
     }
 }

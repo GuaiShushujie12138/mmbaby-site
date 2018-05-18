@@ -36,4 +36,75 @@
         <property name="callType" value="sync"/>
         <property name="timeout" value="5000"/>
     </bean>
+
+    <bean id="addressQueryService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/address_query_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.address.service.AddressQueryService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
+
+    <bean id="commentSubmitService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/comment_submit_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.comment.service.CommentSubmitService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
+
+    <bean id="orderSubmitService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/order_submit_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.order.service.OrderSubmitService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
+
+    <bean id="productQueryService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/product_query_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.product.service.ProductQueryService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
+
+    <bean id="productSubmitService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/product_submit_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.product.service.ProductSubmitService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
+
+    <bean id="shopQueryService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/shop_query_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.shop.service.ShopQueryService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
+
+    <bean id="userSubmitService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/user_submit_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.user.service.UserSubmitService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
+
 </beans>

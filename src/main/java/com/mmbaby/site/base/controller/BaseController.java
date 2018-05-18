@@ -21,7 +21,7 @@ public class BaseController {
     public static final String INDEX_URL = "/";
 
     public boolean isLogin() {
-        return getCustomer().getId() != null;
+        return getCustomer() != null && getCustomer().getId() != null;
     }
 
     /**
@@ -31,12 +31,15 @@ public class BaseController {
      */
     public CustomerDTO getCustomer() {
 
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
 
         Object object = session.getAttribute(LOGIN_CUSTOMER);
-        CustomerDTO customerDTO = object == null ? new CustomerDTO() : (CustomerDTO) object;
+        CustomerDTO customerDTO = object == null
+                ? null
+                : (CustomerDTO) object;
 
         return customerDTO;
     }
@@ -46,7 +49,8 @@ public class BaseController {
         return getLoginUrl(req, "");
     }
 
-    public String getLoginUrl(HttpServletRequest req, String redirect) throws Exception {
+    public String getLoginUrl(HttpServletRequest req,
+                              String redirect) throws Exception {
 
         String loginUrl;
 

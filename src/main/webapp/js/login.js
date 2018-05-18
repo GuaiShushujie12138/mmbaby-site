@@ -22,7 +22,7 @@ try {
             b("phone") && $("#phoneInput").val(b("phone"))
         }
 
-        $("#login-username,#login-password,#reg-confirm-password,#reg-password,#phoneInput").focus(function () {
+        $("#login-username,#slide-login-password,#reg-confirm-password,#reg-password,#phoneInput").focus(function () {
             var a = $(this);
             a.removeClass("login_list_error"), a.siblings().addClass("current"), a.is("#reg-password") && $(".phoneLoginDiv label[for='reg-password']").hide(), a.is("#reg-confirm-password") && $(".phoneLoginDiv label[for='reg-confirm-password']").hide()
         }).blur(function () {
@@ -32,44 +32,41 @@ try {
         var e = function () {
             var a = $(".widgetPwd"), b = "true";
             return a.length > 0 && ($.each(a, function (a, c) {
-                if ("false" === $(c).attr("checkrlt") && (b = "瀵嗙爜寮哄害澶急,璇烽噸鏂拌缃�"), $(c).val().length < 6) return void(b = "瀵嗙爜闀垮害搴斾负6-20浣�")
-            }), 2 == a.length && "true" === b && $(a[0]).val() != $(a[1]).val() && (b = "涓ゆ杈撳叆瀵嗙爜涓嶄竴鑷�")), "true" === b || (Lsmain.tip.warning(b), !1)
+                if ("false" === $(c).attr("checkrlt") && (b = "密码强度太弱,请重新设置"), $(c).val().length < 6) return void(b = "密码长度应为6-20位")
+            }), 2 == a.length && "true" === b && $(a[0]).val() != $(a[1]).val() && (b = "两次输入密码不一致")), "true" === b || (Lsmain.tip.warning(b), !1)
         };
         $.validator.addMethod("reg-mobile-regex", function (a, b) {
+            alert("进来了111!")
             return /^1\d{10}$/.test(a)
         }), $.validator.addMethod("password-regex", function (a, b) {
+            alert("进来了222!")
             return /^[a-zA-Z0-9_-]{6,20}$/.test(a)
         }), $("#login-form").validate({
             onkeyup: !1,
-            rules: {"login-username": {required: !0}, "login-password": {required: !0}},
-            messages: {"login-username": {required: "璇疯緭鍏ョ敤鎴峰悕"}, "login-password": {required: "璇疯緭鍏ュ瘑鐮�"}},
+            rules: {"login-username": {required: !0}, "slide-login-password": {required: !0}},
+            messages: {"login-username": {required: "请输入用户名"}, "slide-login-password": {required: "请输入密码"}},
             errorClass: "login_list_error",
             errorLabelContainer: ".default_login_error",
             submitHandler: function (a) {
                 var b = $("#login-btn");
                 if (b.hasClass("btn_no")) return !1;
-                b.addClass("btn_no").val("鐧诲綍涓�...");
+                b.addClass("btn_no").val("登录中...");
                 var c = new Lsmain.UrlParserClass;
                 c.parse(window.location.href);
                 var d = c.paras, e = d.ls_activity_id, f = d.ls_source_id, g = d.ls_content, h = d.jumpTo, i = d.items;
                 d.isStaging;
-                $.post("/user/login", {
-                    data: {
-                        username: $.trim($("#login-username").val()),
-                        password: $.trim($("#login-password").val()),
+                $.post("/customer/login", {
+                        customerName: $.trim($("#login-username").val()),
+                        password: $.trim($("#slide-login-password").val()),
+                        password: $("#slide-login-password").val(),
                         remember: $("#login-remember").val(),
                         ls_activity_id: e,
                         ls_source_id: f,
                         ls_content: g,
                         jumpTo: h
-                    }
                 }, function (a) {
-                    if (1 == a.status || 200 == a.code) if (a.data.url.indexOf("pay/order/buyNow") >= 0) {
-                        var b = i,
-                            c = $('<form action="/pay/order/buyNow" method="post"><input type="hidden" name="items" value="" /></form>');
-                        $(document.body).append(c), c.find("[name=items]").val(b), c.submit()
-                    } else window.location.href.indexOf("activity/springboard") >= 0 ? location.href = " /" + h + "&ls_source_id=" + f + "&ls_content=" + g : location.href = a.data.url; else Lsmain.tip.warning(a.message);
-                    $("#login-btn").removeClass("btn_no").val("鐧诲綍")
+                    if (1 == a.status || 200 == a.code)  location.href = "/"; else Lsmain.tip.warning(a.message);
+                    $("#login-btn").removeClass("btn_no").val("登录")
                 })
             }
         }), $(".tab li").on("click", function () {
@@ -86,10 +83,10 @@ try {
             v: "v3", showMessage: function () {
             }, getHandler: function () {
                 var a = $("#phoneInput");
-                if ("" == a.val()) return $(".reg_mark").show().text("璇疯緭鍏ユ墜鏈哄彿"), $(".phone-list .reg_error").hide(), !1;
-                if (!/^1\d{10}$/.test($("#phoneInput").val())) return $(".reg_mark").show().text("鎵嬫満鍙风爜閿欒锛岃閲嶆柊杈撳叆"), !1;
+                if ("" == a.val()) return $(".reg_mark").show().text("请输入手机号"), $(".phone-list .reg_error").hide(), !1;
+                if (!/^1\d{10}$/.test($("#phoneInput").val())) return $(".reg_mark").show().text("手机号码错误，请重新输入"), !1;
                 if (!a.is(".reg_list_error")) {
-                    $("#get-vcode-btn-quick").html("璇风◢鍚�...");
+                    $("#get-vcode-btn-quick").html("请稍后...");
                     var a = $("#phoneInput");
                     return {data: {mobiles: $.trim(a.val()), act: 8}}
                 }
@@ -111,12 +108,12 @@ try {
                 "contact-name": {required: !0}
             },
             messages: {
-                phoneInput: {required: "璇疯緭鍏ユ墜鏈哄彿鐮�"},
-                phoneCode: {required: "璇疯緭鍏ュ姩鎬侀獙璇佺爜"},
-                "reg-password": {required: "璇疯緭鍏ュ瘑鐮�"},
-                "reg-confirm-password": {required: "璇烽噸鏂拌緭鍏ュ瘑鐮�"},
-                "company-name": {required: "璇疯緭鍏ュ叕鍙稿悕绉�"},
-                "contact-name": {required: "璇疯緭鍏ヨ仈绯讳汉"}
+                phoneInput: {required: "请输入手机号码"},
+                phoneCode: {required: "请输入动态验证码"},
+                "reg-password": {required: "请输入密码"},
+                "reg-confirm-password": {required: "请重新输入密码"},
+                "company-name": {required: "请输入公司名称"},
+                "contact-name": {required: "请输入联系人"}
             },
             errorClass: "login_list_error",
             errorLabelContainer: ".fast_login_error",
@@ -125,9 +122,9 @@ try {
                 if (0 == f) {
                     var g = $("#register-login");
                     if (!e()) return !1;
-                    if ("0" == $("#reg-check-agreement").val()) return messager.error("璇峰嬀閫夌敤鎴峰崗璁紒"), !1;
+                    if ("0" == $("#reg-check-agreement").val()) return messager.error("请勾选用户协议！"), !1;
                     if (g.hasClass("btn_no")) return !1;
-                    g.addClass("btn_no").val("娉ㄥ唽骞剁櫥褰曚腑..."), $.post("/user/register-confirm", {
+                    g.addClass("btn_no").val("注册并登录中..."), $.post("/user/register-confirm", {
                         data: {
                             mobile: $.trim($("#phoneInput").val()),
                             code: $.trim($("#phoneCode").val()),
@@ -137,18 +134,18 @@ try {
                             companyName: $.trim($("#company-name").val())
                         }
                     }, function (b) {
-                        1 == b.status ? (1 == d ? a("phone", $.trim($("#phoneInput").val())) : c("phone"), Lsmain.tip.success("鎭枩鎮紝娉ㄥ唽鎴愬姛"), location.href = b.data.url) : Lsmain.tip.warning(b.message), $("#register-login").removeClass("btn_no").val("娉ㄥ唽骞剁櫥褰�")
+                        1 == b.status ? (1 == d ? a("phone", $.trim($("#phoneInput").val())) : c("phone"), Lsmain.tip.success("恭喜您，注册成功"), location.href = b.data.url) : Lsmain.tip.warning(b.message), $("#register-login").removeClass("btn_no").val("注册并登录")
                     })
                 } else if (1 == f) {
                     var h = $("#phoneLogin-btn");
                     if (h.hasClass("btn_no")) return !1;
-                    h.addClass("btn_no").val("鐧诲綍涓�..."), $.post("/user/do-quick-login", {
+                    h.addClass("btn_no").val("登录中..."), $.post("/user/do-quick-login", {
                         data: {
                             mobiles: $.trim($("#phoneInput").val()),
                             code: $.trim($("#phoneCode").val())
                         }
                     }, function (b) {
-                        1 == b.status ? (1 == d ? a("phone", $.trim($("#phoneInput").val())) : c("phone"), location.href = b.data.url) : Lsmain.tip.warning(b.message), $("#phoneLogin-btn").removeClass("btn_no").val("鐧诲綍")
+                        1 == b.status ? (1 == d ? a("phone", $.trim($("#phoneInput").val())) : c("phone"), location.href = b.data.url) : Lsmain.tip.warning(b.message), $("#phoneLogin-btn").removeClass("btn_no").val("登录")
                     })
                 }
             }
