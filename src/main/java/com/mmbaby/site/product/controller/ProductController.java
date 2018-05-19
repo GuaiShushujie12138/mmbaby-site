@@ -98,7 +98,7 @@ public class ProductController extends BaseController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "/show-product", method = RequestMethod.GET)
+    @RequestMapping(value = "/get-product", method = RequestMethod.GET)
     public ModelAndView showProduct(@RequestParam(value = "productId", defaultValue = "10") Integer productId,
                                     HttpSession session) {
         ModelAndView view = new ModelAndView("item");

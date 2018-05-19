@@ -12,6 +12,25 @@
     <meta name="keywords" content="怪蜀黍lianshang.com,面料搜索，辅料搜索">
     <meta name="description" content="怪蜀黍lianshang.com-'.$temp.'，整合时尚制衣业线上线下各环节，链接供应商和采购商，面辅料交易方便快捷！">
 
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            // 判断客户是否登陆
+            $.post("ifLogin", function(data) {
+                console.log(data)
+                if (data.code == 200 && data.data != null) {
+                    $("#login-toolbar").css("display", "block");
+                    $("#un-login-toolbar").css("display", "none");
+
+                    $("#customer-name-a").text(data.data.customerName);
+                } else {
+                    $("#login-toolbar").css("display", "none");
+                    $("#un-login-toolbar").css("display", "block");
+                }
+            });
+        });
+
+    </script>
     <script async="" charset="UTF-8" src="../../js/meiqia.js?v=10"></script>
     <script src="//hm.baidu.com/hm.js?bfeebb83050db0f41b20bd00fade1531"></script>
     <script type="text/javascript" data-pack-ignore="">
@@ -29,6 +48,7 @@
     <link rel="shortcut icon" href="//img.lianshang.cn/lsweb/resources/images/favicon.ico" type="image/x-icon">
     <link href="../../css/site.css?v=180408141735" rel="stylesheet" type="text/css">
     <style type="text/css">
+
         .bankCardList .need_l_last.hint-box,
         .apply_bankcard .need_l_last.hint-box {
             display: none;
@@ -496,13 +516,21 @@
     <!-- toolbar开始 -->
     <div id="toolbar">
         <div class="toolbar_cont">
-            <div class="toolbar_left left">
+            <div class="toolbar_left left" id="un-login-toolbar">
                 <div class="toolbar_home left">
                     <em></em>
                     <a href="/">怪蜀黍首页</a>
                 </div>
-                <a href="/user/login" class="dl">请登录</a>
-                <a href="/user/register" class="zc">注册</a>
+                <a href="/login" class="dl">请登录</a>
+                <a href="/register" class="zc">注册</a>
+            </div>
+
+            <div class="toolbar_left left" id="login-toolbar" style="display: none;">
+                <div class="toolbar_home left"><em></em><a href="/">怪蜀黍首页</a></div>
+                <a href="/customer/customerInfo" target="_blank" id="customer-name-a"></a>
+
+                <p>欢迎来到怪蜀黍，</p><a href="/customer/logout" class="exit">退出</a>
+                <em class="line_head line_left"></em>
             </div>
             <div class="toolbar_right right">
                 <!-- 手机怪蜀黍 -->
@@ -575,264 +603,102 @@
                 <div class="dt">
                     <a href="javascript:;">商品导航</a>
                 </div>
-                <div class="dd dd1 none">
+                <div class="dd ddl none">
                     <div class="dd_inner clearfix">
                         <ul>
-                            <li class="dd_li_first clearfix" style="border-right: 1px solid transparent; width: 188px;">
+                            <li class="dd_li_first clearfix">
                                 <div class="dd_ml">
                                     <div class="dd_ml_t">
                                     </div>
                                     <div class="dd_ml_b hot-search">
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%85%A8%E6%A3%89" data-click-log="index_nav11">全棉</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E4%BA%BA%E9%80%A0%E6%A3%89" data-click-log="index_nav11">人造棉</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%89%9B%E5%A5%B6%E4%B8%9D" data-click-log="index_nav11">牛奶丝</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=TR" data-click-log="index_nav11">TR</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=TC" data-click-log="index_nav11">TC</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=CVC" data-click-log="index_nav11">CVC</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E9%BA%BB%E6%A3%89" data-click-log="index_nav11">麻棉</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%A4%A7%E6%8F%90%E8%8A%B1" data-click-log="index_nav11">大提花</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%AB%B9%E8%8A%82" data-click-log="index_nav11">竹节</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E4%BA%9A%E9%BA%BB" data-click-log="index_nav11">亚麻</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%9C%9F%E4%B8%9D" data-click-log="index_nav11">真丝</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%A0%BC%E5%AD%90" data-click-log="index_nav11">格子</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%9D%A1%E7%BA%B9" data-click-log="index_nav11">条纹</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E4%B8%9D%E7%BB%92" data-click-log="index_nav11">丝绒</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%95%B0%E7%A0%81%E5%8D%B0%E8%8A%B1"
-                                            data-click-log="index_nav11">数码印花</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%BD%91%E7%BA%B1" data-click-log="index_nav11">网纱</a>
+                                        <!-- TODO 使用循环遍历 -->
+                                        <a target="_blank" href="/product/get-product-list?category=340" data-click-log="index_nav11">辣妈衣装</a>
+                                        <a target="_blank" href="/product/get-product-list?category=330" data-click-log="index_nav11">孕后/产期营养</a>
+                                        <a target="_blank" href="/product/get-product-list?category=320" data-click-log="index_nav11">卫生用品</a>
+                                        <a target="_blank" href="/product/get-product-list?category=310" data-click-log="index_nav11">个人护理</a>
+                                        <a target="_blank" href="/product/get-product-list?category=300" data-click-log="index_nav11">保健品</a>
+
                                     </div>
                                 </div>
-                                <div class="dorpdown_layer side_1" style="display: none;">
+                                <div class="dorpdown_layer side_1">
                                     <div class="item_sub category_item_1 ">
                                         <div class="prop-item">
                                             <dl>
-                                                <dt>主要成分</dt>
+                                                <dt>辣妈衣装</dt>
                                                 <dd>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%A3%89%E7%BA%BA" data-click-log="index_nav12">棉纺</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%8C%96%E7%BA%A4" data-click-log="index_nav12">化纤</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E9%BA%BB%E7%BA%BA" data-click-log="index_nav12">麻纺</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E4%B8%9D%E7%BB%B8" data-click-log="index_nav12">丝绸</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%AF%9B%E7%BA%BA" data-click-log="index_nav12">毛纺</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%85%B6%E4%BB%96" data-click-log="index_nav12">其他</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=340" data-click-log="index_nav11">辣妈衣装</a>
                                                 </dd>
-                                                <dt>面料结构</dt>
+                                                <dt>孕后/产期营养</dt>
                                                 <dd>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%A2%AD%E7%BB%87" data-click-log="index_nav12">梭织</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E9%92%88%E7%BB%87" data-click-log="index_nav12">针织</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%9A%AE%E9%9D%A9%7C%E7%9A%AE%E8%8D%89"
-                                                        data-click-log="index_nav12">皮革|皮草</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E9%9D%9E%E7%BB%87%E9%80%A0%E5%B8%83"
-                                                        data-click-log="index_nav12">非织造布</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=330" data-click-log="index_nav11">孕后/产期营养</a>
                                                 </dd>
-                                                <dt>主要工艺</dt>
+                                                <dt>卫生用品</dt>
                                                 <dd>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%8D%B0%E8%8A%B1" data-click-log="index_nav12">印花</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E8%89%B2%E7%BB%87" data-click-log="index_nav12">色织</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%8F%90%E8%8A%B1" data-click-log="index_nav12">提花</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%BB%A3%E8%8A%B1" data-click-log="index_nav12">绣花</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%9F%93%E8%89%B2" data-click-log="index_nav12">染色</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%B0%B4%E6%B4%97" data-click-log="index_nav12">水洗</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%B0%B4%E6%BA%B6" data-click-log="index_nav12">水溶</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%83%82%E8%8A%B1%2F%E7%83%A7%E8%8A%B1"
-                                                        data-click-log="index_nav12">烂花/烧花</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%A4%8D%E5%90%88" data-click-log="index_nav12">复合</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%B6%82%E5%B1%82" data-click-log="index_nav12">涂层</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%A4%8D%E7%BB%92" data-click-log="index_nav12">植绒</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%83%AB%E9%87%91%2F%E7%83%AB%E5%9B%BE"
-                                                        data-click-log="index_nav12">烫金/烫图</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%A3%A8%E6%AF%9B" data-click-log="index_nav12">磨毛</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%8B%89%E6%AF%9B%2F%E6%8B%89%E7%BB%92"
-                                                        data-click-log="index_nav12">拉毛/拉绒</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%86%B2%E5%AD%94%2F%E5%88%87%E8%8A%B1"
-                                                        data-click-log="index_nav12">冲孔/切花</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=320" data-click-log="index_nav11">卫生用品</a>
                                                 </dd>
-                                                <dt>主要用途</dt>
+                                                <dt>个人护理</dt>
                                                 <dd>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E8%A1%AC%E8%A1%AB" data-click-log="index_nav12">衬衫</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E8%A5%BF%E8%A3%85" data-click-log="index_nav12">西装</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E9%87%8C%E6%96%99" data-click-log="index_nav12">里料</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E8%BF%90%E5%8A%A8%E6%9C%8D%E8%A3%85"
-                                                        data-click-log="index_nav12">运动服装</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%8D%AB%E8%A1%A3" data-click-log="index_nav12">卫衣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=T%E6%81%A4%2FPOLO%E8%A1%AB" data-click-log="index_nav12">T恤/POLO衫</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E8%A3%99%E8%A3%85" data-click-log="index_nav12">裙装</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E8%A3%A4%E8%A3%85" data-click-log="index_nav12">裤装</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%A4%96%E5%A5%97%2F%E5%A4%B9%E5%85%8B"
-                                                        data-click-log="index_nav12">外套/夹克</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E9%A3%8E%E8%A1%A3" data-click-log="index_nav12">风衣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E9%92%88%E7%BB%87%E8%A1%AB%2F%E6%AF%9B%E8%A1%A3"
-                                                        data-click-log="index_nav12">针织衫/毛衣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%A4%BC%E6%9C%8D%2F%E5%A9%9A%E7%BA%B1"
-                                                        data-click-log="index_nav12">礼服/婚纱</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%A4%A7%E8%A1%A3" data-click-log="index_nav12">大衣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%B7%A5%E8%A3%85%2F%E5%88%B6%E6%9C%8D"
-                                                        data-click-log="index_nav12">工装/制服</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%BE%BD%E7%BB%92%E6%9C%8D%2F%E6%A3%89%E6%9C%8D"
-                                                        data-click-log="index_nav12">羽绒服/棉服</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%88%B7%E5%A4%96%E6%9C%8D%E8%A3%85"
-                                                        data-click-log="index_nav12">户外服装</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=310" data-click-log="index_nav11">个人护理</a>
                                                 </dd>
-                                                <dt>热门产品</dt>
+                                                <dt>保健品</dt>
                                                 <dd>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%89%9B%E4%BB%94%E5%B8%83" data-click-log="index_nav12">牛仔布</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E8%95%BE%E4%B8%9D" data-click-log="index_nav12">蕾丝</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%BD%91%E5%B8%83" data-click-log="index_nav12">网布</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E9%9B%AA%E7%BA%BA" data-click-log="index_nav12">雪纺</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%B1%97%E5%B8%83" data-click-log="index_nav12">汗布</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%BD%97%E9%A9%AC%E5%B8%83" data-click-log="index_nav12">罗马布</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E5%8D%AB%E8%A1%A3%E5%B8%83" data-click-log="index_nav12">卫衣布</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%A9%BA%E6%B0%94%E5%B1%82" data-click-log="index_nav12">空气层</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E8%89%B2%E4%B8%81" data-click-log="index_nav12">色丁</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%8F%A0%E5%9C%B0%E5%B8%83" data-click-log="index_nav12">珠地布</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E7%81%AF%E8%8A%AF%E7%BB%92" data-click-log="index_nav12">灯芯绒</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E9%BA%82%E7%9A%AE%E7%BB%92" data-click-log="index_nav12">麂皮绒</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%AC%A7%E6%A0%B9%E7%BA%B1" data-click-log="index_nav12">欧根纱</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E9%A1%BA%E6%AF%9B%E5%91%A2" data-click-log="index_nav12">顺毛呢</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E4%BB%BF%E8%AE%B0%E5%BF%86" data-click-log="index_nav12">仿记忆</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=1&amp;type=1&amp;keyword=%E6%B6%A4%E5%A1%94%E5%A4%AB" data-click-log="index_nav12">涤塔夫</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=300" data-click-log="index_nav11">保健品</a>
                                                 </dd>
                                             </dl>
                                         </div>
                                     </div>
                                 </div>
                             </li>
-                            <li class="dd_li_sec clearfix" style="border-right: 1px solid transparent; width: 188px;">
+                            <li class="dd_li_sec clearfix">
                                 <div class="dd_fl">
                                     <div class="dd_fl_t_in">
                                         <div class="dd_fl_t"></div>
                                     </div>
                                     <div class="dd_fl_b hot-search">
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%8A%B1%E8%BE%B9" data-click-log="index_nav21">花边</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%8B%89%E9%93%BE" data-click-log="index_nav21">拉链</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BA%BD%E6%89%A3" data-click-log="index_nav21">纽扣</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BB%87%E5%B8%A6" data-click-log="index_nav21">织带</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%B2%98%E5%90%88%E8%A1%AC" data-click-log="index_nav21">粘合衬</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%95%86%E6%A0%87" data-click-log="index_nav21">商标</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%B0%B4%E9%92%BB" data-click-log="index_nav21">水钻</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BB%A3%E7%AB%A0" data-click-log="index_nav21">绣章</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E9%A2%86%E8%8A%B1" data-click-log="index_nav21">领花</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%B7%A5%E5%AD%97%E6%89%A3" data-click-log="index_nav21">工字扣</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E9%92%89%2F%E7%8F%A0%E7%89%87" data-click-log="index_nav21">钉/珠片</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%9D%BE%E7%B4%A7%E5%B8%A6" data-click-log="index_nav21">松紧带</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BD%97%E7%BA%B9%E5%B8%A6" data-click-log="index_nav21">罗纹带</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%90%8A%E9%92%9F" data-click-log="index_nav21">吊钟</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%9B%9B%E5%90%88%E6%89%A3" data-click-log="index_nav21">四合扣</a>
-                                        <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%AF%9B%E6%9D%A1%2F%E6%AF%9B%E9%A2%86"
-                                            data-click-log="index_nav21">毛条/毛领</a>
+                                        <!-- TODO 循环遍历 -->
+                                        <a target="_blank" href="/product/get-product-list?category=100" data-click-log="index_nav21">宝宝健康</a>
+                                        <a target="_blank" href="/product/get-product-list?category=90" data-click-log="index_nav21">喂养</a>
+                                        <a target="_blank" href="/product/get-product-list?category=80" data-click-log="index_nav21">婴儿食品</a>
+                                        <a target="_blank" href="/product/get-product-list?category=70" data-click-log="index_nav21">童鞋</a>
+                                        <a target="_blank" href="/product/get-product-list?category=60" data-click-log="index_nav21">童装</a>
+                                        <a target="_blank" href="/product/get-product-list?category=50" data-click-log="index_nav21">玩具</a>
+                                        <a target="_blank" href="/product/get-product-list?category=40" data-click-log="index_nav21">安全座椅</a>
+                                        <a target="_blank" href="/product/get-product-list?category=30" data-click-log="index_nav21">婴儿奶粉</a>
+                                        <a target="_blank" href="/product/get-product-list?category=20" data-click-log="index_nav21">婴儿车</a>
+                                        <a target="_blank" href="/product/get-product-list?category=10" data-click-log="index_nav21">纸尿裤</a>
                                     </div>
                                 </div>
-                                <div class="dorpdown_layer side_166" style="display: none;">
+                                <div class="dorpdown_layer side_166">
                                     <div class="item_sub category_item_1 ">
                                         <div class="prop-item">
                                             <dl>
-                                                <dt>装饰类辅料</dt>
+                                                <dt>童装童鞋</dt>
                                                 <dd>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%8A%B1%E8%BE%B9" data-click-log="index_nav22">花边</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%B0%B4%E9%92%BB" data-click-log="index_nav22">水钻</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%8F%A0%E7%89%87" data-click-log="index_nav22">珠片</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BB%A3%E7%AB%A0" data-click-log="index_nav22">绣章</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%90%8A%E9%92%9F" data-click-log="index_nav22">吊钟</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E9%A2%86%E8%8A%B1" data-click-log="index_nav22">领花</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E9%93%86%E9%92%89" data-click-log="index_nav22">铆钉</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%AF%9B%E6%9D%A1" data-click-log="index_nav22">毛条</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%A3%85%E9%A5%B0%E9%93%BE" data-click-log="index_nav22">装饰链</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%B0%94%E7%9C%BC" data-click-log="index_nav22">气眼</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%89%8B%E5%B7%A5%E8%8A%B1" data-click-log="index_nav22">手工花</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%A3%85%E9%A5%B0%E6%8C%82%E4%BB%B6"
-                                                        data-click-log="index_nav22">装饰挂件</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%83%AB%E9%92%BB%2F%E7%89%87" data-click-log="index_nav22">烫钻/片</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%B5%81%E8%8B%8F" data-click-log="index_nav22">流苏</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%8B%89%E7%89%87" data-click-log="index_nav22">拉片</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BE%BD%E6%AF%9B" data-click-log="index_nav22">羽毛</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=70" data-click-log="index_nav21">童鞋</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=60" data-click-log="index_nav21">童装</a>
                                                 </dd>
-                                                <dt>线/带/绳</dt>
+                                                <dt>食品</dt>
                                                 <dd>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BB%87%E5%B8%A6" data-click-log="index_nav22">织带</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%A3%85%E9%A5%B0%E5%B8%A6" data-click-log="index_nav22">装饰带</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%9D%BE%E7%B4%A7%E5%B8%A6%2F%E6%A9%A1%E7%AD%8B"
-                                                        data-click-log="index_nav22">松紧带/橡筋</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BD%97%E7%BA%B9%E5%B8%A6" data-click-log="index_nav22">罗纹带</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BC%96%E7%BB%87%E7%BB%B3" data-click-log="index_nav22">编织绳</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E9%87%91%E9%93%B6%E7%BA%BF" data-click-log="index_nav22">金银线</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BC%9D%E7%BA%AB%E7%BA%BF" data-click-log="index_nav22">缝纫线</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BB%A3%E8%8A%B1%E7%BA%BF" data-click-log="index_nav22">绣花线</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%9A%AE%E7%BB%B3" data-click-log="index_nav22">皮绳</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%BB%9A%E8%BE%B9%E5%B8%A6" data-click-log="index_nav22">滚边带</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E9%95%B6%E5%B5%8C%E7%BA%BF" data-click-log="index_nav22">镶嵌线</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%B8%BD%E5%A2%99%E5%B8%A6" data-click-log="index_nav22">帽墙带</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%83%8C%E5%8C%85%E5%B8%A6" data-click-log="index_nav22">背包带</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E4%BA%BA%E5%AD%97%E5%B8%A6" data-click-log="index_nav22">人字带</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E9%98%B2%E6%BB%91%E5%B8%A6" data-click-log="index_nav22">防滑带</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%90%AD%E6%89%A3%E5%B8%A6" data-click-log="index_nav22">搭扣带</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=30" data-click-log="index_nav21">婴儿奶粉</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=80" data-click-log="index_nav21">婴儿食品</a>
                                                 </dd>
-                                                <dt>紧扣类辅料</dt>
+                                                <dt>玩具</dt>
                                                 <dd>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BA%BD%E6%89%A3" data-click-log="index_nav22">纽扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%8B%89%E9%93%BE" data-click-log="index_nav22">拉链</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%B7%A5%E5%AD%97%E6%89%A3" data-click-log="index_nav22">工字扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%9B%9B%E5%90%88%E6%89%A3" data-click-log="index_nav22">四合扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%9B%98%E6%89%A3" data-click-log="index_nav22">盘扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%9A%97%E6%89%A3" data-click-log="index_nav22">暗扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%8E%AF" data-click-log="index_nav22">环</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E9%92%A9" data-click-log="index_nav22">钩</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%8C%89%E6%89%A3" data-click-log="index_nav22">按扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%A3%A4%E6%89%A3" data-click-log="index_nav22">裤扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%89%9B%E8%A7%92%E6%89%A3" data-click-log="index_nav22">牛角扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%9A%AE%E6%94%80%E6%89%A3" data-click-log="index_nav22">皮攀扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%AD%90%E6%AF%8D%E6%90%AD%E6%89%A3"
-                                                        data-click-log="index_nav22">子母搭扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%A9%84%E6%A6%84%E6%89%A3" data-click-log="index_nav22">橄榄扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%8C%85%E5%B8%83%E6%89%A3" data-click-log="index_nav22">包布扣</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=D%E5%AD%97%E6%89%A3" data-click-log="index_nav22">D字扣</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=50" data-click-log="index_nav21">玩具</a>
                                                 </dd>
-                                                <dt>衬/垫/填</dt>
+                                                <dt>安全座椅</dt>
                                                 <dd>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%85%B0%E8%A1%AC" data-click-log="index_nav22">腰衬</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%9E%AB%E8%82%A9" data-click-log="index_nav22">垫肩</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%83%B8%E8%A1%AC" data-click-log="index_nav22">胸衬</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E9%A2%86%E8%A1%AC" data-click-log="index_nav22">领衬</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%B2%98%E5%90%88%E8%A1%AC" data-click-log="index_nav22">粘合衬</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%97%A0%E7%BA%BA%E5%B8%83" data-click-log="index_nav22">无纺布</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%83%B8%E5%9E%AB%2F%E7%BD%A9%E6%9D%AF"
-                                                        data-click-log="index_nav22">胸垫/罩杯</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%89%B5%E6%9D%A1%E8%A1%AC" data-click-log="index_nav22">牵条衬</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%A3%89%E7%B5%AE" data-click-log="index_nav22">棉絮</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BE%BD%E7%BB%92" data-click-log="index_nav22">羽绒</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%A3%89%E5%B8%83%E8%A1%AC" data-click-log="index_nav22">棉布衬</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E9%BA%BB%E5%B8%83%E8%A1%AC" data-click-log="index_nav22">麻布衬</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%AF%9B%E8%A1%AC" data-click-log="index_nav22">毛衬</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%8C%96%E7%BA%A4%E8%A1%AC%E5%B8%83"
-                                                        data-click-log="index_nav22">化纤衬布</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E4%B8%9D%E7%BB%B5" data-click-log="index_nav22">丝绵</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%90%88%E6%88%90%E5%A1%AB%E6%96%99"
-                                                        data-click-log="index_nav22">合成填料</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=40" data-click-log="index_nav21">安全座椅</a>
                                                 </dd>
-                                                <dt>配饰配件</dt>
+                                                <dt>婴儿车</dt>
                                                 <dd>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%85%B0%E5%B8%A6%2F%E7%9A%AE%E5%B8%A6"
-                                                        data-click-log="index_nav22">腰带/皮带</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%9B%B4%E5%B7%BE%2F%E6%8A%AB%E8%82%A9"
-                                                        data-click-log="index_nav22">围巾/披肩</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E9%A1%B9%E9%93%BE" data-click-log="index_nav22">项链</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%89%8B%E9%93%BE%2F%E8%84%9A%E9%93%BE"
-                                                        data-click-log="index_nav22">手链/脚链</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%A4%B4%E9%A5%B0" data-click-log="index_nav22">头饰</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%85%B0%E9%93%BE" data-click-log="index_nav22">腰链</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%83%B8%E9%92%88" data-click-log="index_nav22">胸针</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=20" data-click-log="index_nav21">婴儿车</a>
                                                 </dd>
-                                                <dt>其他辅料</dt>
+                                                <dt>宝宝健康</dt>
                                                 <dd>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%95%86%E6%A0%87" data-click-log="index_nav22">商标</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%BB%87%E5%94%9B" data-click-log="index_nav22">织唛</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E7%9A%AE%E6%A0%87" data-click-log="index_nav22">皮标</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%B4%97%E6%B6%A4%E6%A0%87" data-click-log="index_nav22">洗涤标</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%90%8A%E7%B2%92" data-click-log="index_nav22">吊粒</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%90%8A%E7%89%8C" data-click-log="index_nav22">吊牌</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%8C%85%E8%A3%85%E8%A2%8B" data-click-log="index_nav22">包装袋</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%8C%85%E8%A3%85%E7%9B%92" data-click-log="index_nav22">包装盒</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E5%8C%85%E8%A3%85%E7%BA%B8" data-click-log="index_nav22">包装纸</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E6%89%8B%E6%8F%90%E8%A2%8B" data-click-log="index_nav22">手提袋</a>
-                                                    <a target="_blank" href="/search/item-keyword?rootCategoryId=2&amp;type=2&amp;keyword=%E8%A1%A3%E6%9E%B6" data-click-log="index_nav22">衣架</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=10" data-click-log="index_nav21">纸尿裤</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=100" data-click-log="index_nav21">宝宝健康</a>
+                                                    <a target="_blank" href="/product/get-product-list?category=90" data-click-log="index_nav21">喂养</a>
                                                 </dd>
                                             </dl>
                                         </div>
