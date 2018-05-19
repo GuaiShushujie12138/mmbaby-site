@@ -35,4 +35,29 @@ public class Constants {
      * 默认的product_id
      */
     public static final Integer DEFAULT_PRODUCT_ID = 10;
+
+    /**
+     * 商家id
+     */
+    public static final String SHOP_ID = "shop_id";
+
+    /**
+     * 默认的shop_id
+     */
+    public static final Integer DEFAULT_SHOP_ID = 10;
+
+    /**
+     * 价格区间
+     */
+    public static final String PRICE_REGION = "price_region";
+
+    /**
+     * 默认的价格区间
+     */
+    public static final Integer DEFAULT_PRICE_REGION = 10;
+
+    /**
+     * 购物车中选择的商品id集合
+     */
+    public static final String PRODUCT_ID_LIST = "product_id_list";
 }

@@ -1,13 +1,18 @@
 package com.mmbaby.site.product.controller;
 
 import com.dianping.pigeon.util.CollectionUtils;
+import com.google.common.collect.Lists;
 import com.mmbaby.base.util.GeneralResult;
+import com.mmbaby.orderline.dto.cart.CartDTO;
+import com.mmbaby.orderline.dto.domain.OrderLineDTO;
 import com.mmbaby.product.dto.domain.ProductDTO;
 import com.mmbaby.product.dto.query.ProductQueryDTO;
 import com.mmbaby.product.service.ProductQueryService;
+import com.mmbaby.site.base.controller.BaseController;
 import com.mmbaby.site.base.response.ErrorResponse;
 import com.mmbaby.site.base.response.GeneralResponse;
 import com.mmbaby.site.base.response.Response;
+import com.mmbaby.site.base.response.SimpleSuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.mmbaby.site.base.constants.Constants.*;
 
@@ -28,7 +34,7 @@ import static com.mmbaby.site.base.constants.Constants.*;
 
 @RestController
 @RequestMapping("/product")
-public class ProductController {
+public class ProductController extends BaseController {
 
     @Autowired
     private ProductQueryService productQueryService;
@@ -59,11 +65,21 @@ public class ProductController {
     public Response queryProductList(HttpSession session) {
         // 获取category
         Integer category = session.getAttribute(PRODUCT_CATEGORY) == null
-                ? DEFAULT_CATEGORY
+                ? null
                 : (Integer) session.getAttribute(PRODUCT_CATEGORY);
 
+        // 获取商家信息
+        Long shopId = session.getAttribute(SHOP_ID) == null
+                ? null
+                : (Long) session.getAttribute(SHOP_ID);
+
+        // 获取价格区间
+        Integer price_region = session.getAttribute(PRICE_REGION) == null
+                ? null
+                : (Integer) session.getAttribute(PRICE_REGION);
+
         // 构造查询对象
-        ProductQueryDTO productQueryDTO = buildProductQueryDTO(category);
+        ProductQueryDTO productQueryDTO = buildProductQueryDTO(category, shopId, price_region);
 
         // 根据category查询商品
         GeneralResult<List<ProductDTO>> generalResult =
@@ -93,6 +109,11 @@ public class ProductController {
         return view;
     }
 
+    /**
+     * 查询单个商品详细信息
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/query-product", method = RequestMethod.GET)
     public Response queryProduct(HttpSession session) {
         // 获取productId
@@ -115,10 +136,20 @@ public class ProductController {
      * @param category
      * @return
      */
-    private ProductQueryDTO buildProductQueryDTO(Integer category) {
+    private ProductQueryDTO buildProductQueryDTO(Integer category, Long shopId, Integer priceRegion) {
         ProductQueryDTO productQueryDTO = new ProductQueryDTO();
 
-        productQueryDTO.setCategory(category);
+        if (category != null) {
+            productQueryDTO.setCategory(category);
+        }
+
+        if (shopId != null) {
+            productQueryDTO.setShopId(shopId);
+        }
+
+        if (priceRegion != null) {
+            productQueryDTO.setPriceRegion(priceRegion);
+        }
 
         return productQueryDTO;
     }

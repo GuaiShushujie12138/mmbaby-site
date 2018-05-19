@@ -107,4 +107,34 @@
         <property name="timeout" value="5000"/>
     </bean>
 
+    <bean id="informationQueryService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/information_query_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.information.service.InformationQueryService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
+
+    <bean id="informationSubmitService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/information_submit_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.information.service.InformationSubmitService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
+
+    <bean id="orderQueryService" class="com.dianping.pigeon.remoting.invoker.config.spring.ReferenceBean"
+          init-method="init">
+        <property name="url"
+                  value="http://service.mmaaby.com/order_query_service_1.0.0"/>
+        <property name="interfaceName" value="com.mmbaby.order.service.OrderQueryService"/>
+        <property name="serialize" value="hessian"/>
+        <property name="callType" value="sync"/>
+        <property name="timeout" value="5000"/>
+    </bean>
+
 </beans>

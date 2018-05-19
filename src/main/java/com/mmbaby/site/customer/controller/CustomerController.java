@@ -6,15 +6,13 @@ import com.mmbaby.customer.dto.submitbiz.CustomerSubmitDTO;
 import com.mmbaby.customer.service.CustomerQueryService;
 import com.mmbaby.customer.service.CustomerSubmitService;
 import com.mmbaby.site.base.controller.BaseController;
-import com.mmbaby.site.base.response.DataSuccessResponse;
-import com.mmbaby.site.base.response.ErrorResponse;
-import com.mmbaby.site.base.response.Response;
-import com.mmbaby.site.base.response.SimpleSuccessResponse;
+import com.mmbaby.site.base.response.*;
 import com.site.lookup.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
@@ -79,6 +77,69 @@ public class CustomerController extends BaseController {
         session.setAttribute(LOGIN_CUSTOMER, generalResult.getData());
 
         return new DataSuccessResponse();
+    }
+
+    /**
+     * 客户注销
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "logout", method = RequestMethod.POST)
+    public ModelAndView logout(HttpSession session) {
+        ModelAndView view = new ModelAndView("index");
+
+        // 清空session内容
+        session.invalidate();
+
+        return view;
+    }
+
+    /**
+     * 更新客户信息
+     * @param customerSubmitDTO
+     * @return
+     */
+    @RequestMapping(value = "update-info", method = RequestMethod.POST)
+    public Response updateCustomer(CustomerSubmitDTO customerSubmitDTO) {
+        // 检查登陆参数
+        Response response = checkUpdateArgs(customerSubmitDTO);
+        if (!response.isSuccess()) {
+            return new ErrorResponse(response.getMessage());
+        }
+
+        GeneralResult<CustomerDTO> generalResult =
+                customerSubmitService.updateCustomerInfo(customerSubmitDTO);
+        if (!generalResult.isSuccess()
+                || generalResult.getData() == null) {
+            return new ErrorResponse(generalResult.getMsg());
+        }
+
+        return new GeneralResponse<>(generalResult.getData());
+    }
+
+    /**
+     * 检查更新参数
+     * @param customerSubmitDTO
+     * @return
+     */
+    private Response checkUpdateArgs(CustomerSubmitDTO customerSubmitDTO) {
+        if (customerSubmitDTO == null) {
+            return new ErrorResponse("提交的参数对象不能为空");
+        }
+
+        if (StringUtils.isEmpty(customerSubmitDTO.getCustomerName())) {
+            return new ErrorResponse("客户名称不能为空");
+        }
+
+        if (StringUtils.isEmpty(customerSubmitDTO.getPassword())) {
+            return new ErrorResponse("客户密码不能为空");
+        }
+
+        if (StringUtils.isEmpty(customerSubmitDTO.getMobile())) {
+            return new ErrorResponse("客户注册手机号不能为空");
+        }
+
+        return new SimpleSuccessResponse();
     }
 
     /**
