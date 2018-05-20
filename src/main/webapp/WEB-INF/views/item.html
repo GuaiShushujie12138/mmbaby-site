@@ -31,9 +31,14 @@
         $.get("query-product", function(data) {
             if (data.code == 200 && data.data != null) {
                 $("#item_name").html(data.data.name);
-                $("#price").html(data.data.price);
+                $("#price").html("￥" + data.data.price);
                 $("#inventory").html(data.data.inventory);
                 $("#sales").html(data.data.sales);
+                $("#big_image").attr("src", data.data.pic);
+                $("#big_image").attr("alt", data.data.name);
+                $("#small_image").attr("src", data.data.pic);
+                $("#small_image").attr("alt", data.data.name);
+                $("#fbig").attr("src", data.data.pic);
             } else {
                 alert("商品不存在!")
             }
@@ -763,38 +768,17 @@
                         <div class="img_big">
                             <div class="f_mask" style="display: none; left: 18px; top: 92.5px;">
                             </div>
-                            <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193216457463_y.jpg?x-oss-process=style/p_w_360" class="cur"
+                            <img id="big_image" src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193216457463_y.jpg?x-oss-process=style/p_w_360" class="cur"
                                 alt="" style="display: block;">
-                            <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193217148103_y.jpg?x-oss-process=style/p_w_360" alt=""
-                                class="" style="display: none;">
-                            <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193218762565_y.jpg?x-oss-process=style/p_w_360" alt=""
-                                class="" style="display: none;">
-                            <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193218730920_y.jpg?x-oss-process=style/p_w_360" alt=""
-                                class="" style="display: none;">
-                            <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193219161543_y.jpg?x-oss-process=style/p_w_360" alt=""
-                                class="" style="display: none;">
                         </div>
                         <div class="img_small">
                             <div class="img_small_content">
-                                <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193216457463_y.jpg?x-oss-process=style/p_w_80" class="current"
+                                <img id="small_image" src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193216457463_y.jpg?x-oss-process=style/p_w_80" class="current"
                                     alt="">
-                                <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193217148103_y.jpg?x-oss-process=style/p_w_80" alt=""
-                                    class="">
-                                <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193218762565_y.jpg?x-oss-process=style/p_w_80" alt=""
-                                    class="">
-                                <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193218730920_y.jpg?x-oss-process=style/p_w_80" alt=""
-                                    class="">
-                                <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193219161543_y.jpg?x-oss-process=style/p_w_80" alt=""
-                                    class="">
                             </div>
                         </div>
                         <div class="f_big" style="display: none;">
-                            <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193216457463_y.jpg" class="cur cur1" style="min-width: 800px; min-height: 800px; margin-top: -218.935px; margin-left: -42.6036px; display: inline;">
-
-                            <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193217148103_y.jpg" alt="" style="display: none;">
-                            <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193218762565_y.jpg" alt="" style="display: none;">
-                            <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193218730920_y.jpg" alt="" style="display: none;">
-                            <img src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193219161543_y.jpg" alt="" style="display: none;">
+                            <img id="fbig" src="http://img.lianshang.cn/data/goods/106/200094/200094_20151211193216457463_y.jpg" class="cur cur1" style="min-width: 800px; min-height: 800px; margin-top: -218.935px; margin-left: -42.6036px; display: inline;">
                         </div>
                         <a href="javascript:;" class="detail_btnL"></a>
                         <a href="javascript:;" class="detail_btnR"></a>
@@ -872,7 +856,6 @@
                         </dl>
 
                         <div class="buy_in">
-                            <div class="buy_clo buyNow btn_small_t btn_tjiao" data-click-log="item_buy" act="buy">立即购买</div>
                             <div class="buy_clo buyCar shopingCar btn_small_t btn_tjiao" data-click-log="item_cart" act="cart">
                                 加入购物车
                             </div>

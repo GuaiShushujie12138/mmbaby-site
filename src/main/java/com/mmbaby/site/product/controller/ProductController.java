@@ -8,6 +8,8 @@ import com.mmbaby.orderline.dto.domain.OrderLineDTO;
 import com.mmbaby.product.dto.domain.ProductDTO;
 import com.mmbaby.product.dto.query.ProductQueryDTO;
 import com.mmbaby.product.service.ProductQueryService;
+import com.mmbaby.shop.dto.domain.ShopDTO;
+import com.mmbaby.shop.service.ShopQueryService;
 import com.mmbaby.site.base.controller.BaseController;
 import com.mmbaby.site.base.response.ErrorResponse;
 import com.mmbaby.site.base.response.GeneralResponse;
@@ -39,6 +41,9 @@ public class ProductController extends BaseController {
     @Autowired
     private ProductQueryService productQueryService;
 
+    @Autowired
+    private ShopQueryService shopQueryService;
+
     /**
      * 跳转到商品列表页
      * @param category
@@ -46,12 +51,38 @@ public class ProductController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/get-product-list", method = RequestMethod.GET)
-    public ModelAndView getProductList(@RequestParam(value = "category", defaultValue = "10") Integer category,
+    public ModelAndView getProductList(@RequestParam(value = "category", required = false) Integer category,
+                                       @RequestParam(value = "shopId", required = false) Long shopId,
+                                       @RequestParam(value = "priceRegion", required = false) Integer priceRegion,
+                                       @RequestParam(value = "ageRegion", required = false) Integer ageRegion,
                                        HttpSession session) {
         ModelAndView view = new ModelAndView("show");
 
-        // 将传进来的category存进session中
-        session.setAttribute(PRODUCT_CATEGORY, category);
+        if (category != null) {
+            // 将传进来的category存进session中
+            session.setAttribute(PRODUCT_CATEGORY, category);
+        }
+
+        if (shopId != null) {
+            // 将传进来的shopId存进session中
+            session.setAttribute(SHOP_ID, shopId);
+        } else {
+            session.removeAttribute(SHOP_ID);
+        }
+
+        if (priceRegion != null) {
+            // 将传进来的priceRegion存进session中
+            session.setAttribute(PRICE_REGION, priceRegion);
+        } else {
+            session.removeAttribute(PRICE_REGION);
+        }
+
+        if (ageRegion != null) {
+            // 将传进来的ageRegion存进session中
+            session.setAttribute(AGE_REGION, ageRegion);
+        } else {
+            session.removeAttribute(AGE_REGION);
+        }
 
         return view;
     }
@@ -78,8 +109,13 @@ public class ProductController extends BaseController {
                 ? null
                 : (Integer) session.getAttribute(PRICE_REGION);
 
+        // 获取年龄区间
+        Integer age_region = session.getAttribute(AGE_REGION) == null
+                ? null
+                : (Integer) session.getAttribute(AGE_REGION);
+
         // 构造查询对象
-        ProductQueryDTO productQueryDTO = buildProductQueryDTO(category, shopId, price_region);
+        ProductQueryDTO productQueryDTO = buildProductQueryDTO(category, shopId, price_region, age_region);
 
         // 根据category查询商品
         GeneralResult<List<ProductDTO>> generalResult =
@@ -89,7 +125,10 @@ public class ProductController extends BaseController {
             return new GeneralResponse(null);
         }
 
-        return new GeneralResponse<>(generalResult.getData());
+        // 查询店铺名称,put
+        List<ProductDTO> productList = buildProductList(generalResult.getData());
+
+        return new GeneralResponse<>(productList);
     }
 
     /**
@@ -99,12 +138,12 @@ public class ProductController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/get-product", method = RequestMethod.GET)
-    public ModelAndView showProduct(@RequestParam(value = "productId", defaultValue = "10") Integer productId,
+    public ModelAndView showProduct(@RequestParam(value = "id", defaultValue = "10") Integer productId,
                                     HttpSession session) {
         ModelAndView view = new ModelAndView("item");
 
         // 将传进来的productId存进session中
-        session.setAttribute(PRODUCT_CATEGORY, productId);
+        session.setAttribute(PRODUCT_ID, productId);
 
         return view;
     }
@@ -132,11 +171,32 @@ public class ProductController extends BaseController {
     }
 
     /**
-     * 构造ProductQueryDTO 对象
-     * @param category
+     * 构造List<ProductDTO> 对象 put 店铺名称
+     * @param productList
      * @return
      */
-    private ProductQueryDTO buildProductQueryDTO(Integer category, Long shopId, Integer priceRegion) {
+    private List<ProductDTO> buildProductList(List<ProductDTO> productList) {
+        for (ProductDTO productDTO : productList) {
+            GeneralResult<ShopDTO> generalResult = shopQueryService.queryShopById(productDTO.getShopId());
+            if (generalResult.isSuccess()
+                    && generalResult.getData() != null) {
+                productDTO.setShopName(generalResult.getData().getName());
+            }
+        }
+
+        return productList;
+    }
+
+    /**
+     * 构造ProductQueryDTO 对象
+     * @param category
+     * @param shopId
+     * @param priceRegion
+     * @param ageRegion
+     * @return
+     */
+    private ProductQueryDTO buildProductQueryDTO(Integer category, Long shopId,
+                                                 Integer priceRegion, Integer ageRegion) {
         ProductQueryDTO productQueryDTO = new ProductQueryDTO();
 
         if (category != null) {
@@ -149,6 +209,10 @@ public class ProductController extends BaseController {
 
         if (priceRegion != null) {
             productQueryDTO.setPriceRegion(priceRegion);
+        }
+
+        if (ageRegion != null) {
+            productQueryDTO.setAgeRegion(ageRegion);
         }
 
         return productQueryDTO;

@@ -60,4 +60,9 @@ public class Constants {
      * 购物车中选择的商品id集合
      */
     public static final String PRODUCT_ID_LIST = "product_id_list";
+
+    /**
+     * 年龄区间
+     */
+    public static final String AGE_REGION = "age_region";
 }
