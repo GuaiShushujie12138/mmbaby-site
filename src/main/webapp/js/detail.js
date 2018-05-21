@@ -43,10 +43,8 @@ try {
 
         function d() {
             var a = $(".cloth_typea1.current");
-            if (a.length < 1) return f("请选择商品类型", !0);
             var b = a.data().id, c = skuCaculater.sku;
             if (1 == b || e()) {
-                if (null == c) return f("请选择要购买的商品", !0);
                 var d = {
                     itemId: $("#itemId").attr("uid"),
                     skuId: c.skuId,
@@ -57,19 +55,7 @@ try {
             }
         }
 
-        function e() {
-            for (var a = $("#skuProps [data-property]"), b = null, c = !0, d = null, e = 0, g = a.length; e < g; e++) {
-                d = a.eq(e).children("span").html();
-                var h = [];
-                h = d.split("：");
-                var i = h[0];
-                if (b = a.eq(e), b.find(".current").length < 1) {
-                    c = !1, f("请选择" + i, !0);
-                    break
-                }
-            }
-            return c
-        }
+
 
         function f(a, b) {
             b ? Lsmain.tip.warning(a) : Lsmain.tip.success(a)
@@ -109,76 +95,7 @@ try {
             }
         }), cur1 = $(".img_big").find(".cur2").attr("src");
         var q = 0;
-        $(".bu-cloth").click(function () {
-            if (!$(this).is(".disabled")) {
-                q = $(this).index();
-                var a = $(this).children("img").attr("src");
-                $(this).parent("ul").find("img").hide(), $(".img_big").find(".cur").removeClass("cur1"), $(".img_big").find(".cur").attr("src", cur1), $(".img_big").find(".cur").attr("src", cur1), b(a), $(this).siblings().removeClass("current").find("em").removeClass("cur_color"), $(this).is(".current") && b(null)
-            }
-        }), $(".cloth_typea1").click(function () {
-            if ($(this).hasClass("current")) return !1;
-            $(this).toggleClass("current").find("em").toggleClass("cur"), $(this).parent().siblings().children(".cloth_typea1").removeClass("current").find("em").removeClass("cur");
-            var a = $(this).data(), b = 1 == a.id ? "立即调样" : "立即购买", c = a.decimal;
-            if ($(".buyNow").html(b), $(this).is(".current")) if (1 == c) {
-                $(".stock-in").find(".decimal").show(), $(".stock-in").find(".nodecimal").hide();
-                var d = $(this).data().min || 1;
-                d = Number(d).toFixed(2), $(".item_quantity").val(d)
-            } else {
-                $(".stock-in").find(".decimal").hide(), $(".stock-in").find(".nodecimal").show();
-                var d = $(this).data().min || 1;
-                $(".item_quantity").val(d)
-            }
-            skuCaculater.refreshStock()
-        }), $(".remarks").hover(function () {
-            $(this).find("p").toggleClass("none")
-        }), $(".selling_pic").bind("click", function (a) {
-            var c = $(this).attr("src");
-            b(c)
-        }), $(".stock_top").on("click", function () {
-            c($(this), 1), calTotalPrice()
-        }), $(".stock_down").on("click", function () {
-            c($(this), 2), calTotalPrice()
-        }), $(".item_quantity").change(function () {
-            var a = 0;
-            a = "none" == $(".item_quantity").eq(0).css("display") ? $(".item_quantity").eq(1).val() : $(".item_quantity").eq(0).val(), skuCaculater.sync(a, !1), calTotalPrice()
-        }), $(".item_quantity").keyup(function () {
-            calTotalPrice()
-        }), $(".shopingCar").on("click", function (a) {
-            var b = $(this);
-            if (!b.is(".disabled")) {
-                var c = d();
-                null != c && g.ajaxAddCart(c, b.offset())
-            }
-        }), $(".buyNow").on("click", function (a) {
-            if (!$(this).is(".disabled")) {
-                var b = d();
-                if (null != b) {
-                    var c = JSON.stringify([b]),
-                        e = $('<form action="/pay/order/buyNow" method="post"><input type="hidden" name="items" value="" /></form>');
-                    $(document.body).append(e), e.find("[name=items]").val(c), e.submit()
-                }
-            }
-        }), $(".login_ing").on("click", function () {
-            LS.dialog.login()
-        }), $(".goods_right_title li").click(function () {
-            var a = $(this).index();
-            $(this).addClass("current").siblings().removeClass("current"), $(this).parent().siblings("div:eq(" + a + ")").show().siblings("div").hide()
-        }), $(".goods_collect").on("click", function () {
-            var a = $(this);
-            if (void 0 == a.attr("status")) {
-                var b = {objectId: a.attr("uid"), type: "3" == a.attr("type") ? "SHOP" : "ITEM"};
-                $.ajax({
-                    url: "/favorites/favoritesSave",
-                    type: "post",
-                    data: JSON.stringify(b),
-                    contentType: "application/json",
-                    dataType: "json",
-                    success: function (b) {
-                        0 == b.code ? (f("成功加入收藏夹"), a.addClass("have_saved").attr("status", "y")) : LS.user.token ? f(b.message, !0) : LS.dialog.login()
-                    }
-                })
-            }
-        }), $("#item_qr_box").hover(function () {
+        $("#item_qr_box").hover(function () {
             $(this).children("#itemQRCode").toggle()
         }), $(".dtail_cn_ul li:odd").css("background", "white"), $(".question").mouseover(function () {
             $(".yfsm").css("display", "block")
@@ -289,16 +206,6 @@ try {
             return e
         }
 
-        function l(a, b, c, d, e) {
-            var f = {r: !0, message: ""}, g = null == b ? Number($(".item_quantity").val() || 0) : b;
-            return a && g > a ? f = {r: !1, message: "库存不足"} : c.max != -1 && g > c.max ? f = {
-                r: !1,
-                message: "购买数量不能大于最大购买量:" + c.max
-            } : g < c.min ? f = {
-                r: !1,
-                message: "购买数量不能小于最小起订量:" + c.min
-            } : b <= 0 && (f = {r: !1}), m(f.r), d && !f.r && (f.r = !0), a ? (1 == $(".cloth_typea1.current").data("decimal") && (a = Number(a).toFixed(2)), $(".stock_text").show().find("#stockNum").html('库存：<label class="stock_num">' + a + c.unit + "</label> ")) : $(".stock_text").hide().find("#stockNum").html(""), 0 == a ? ($(".detail_top .buy_in .buy_clo").addClass("gray"), $(".stock_text").show().find("#stockNum").html('<label class="stock_num" style="color: #E74C3C">已售罄</label> ')) : $(".detail_top .buy_in .buy_clo").removeClass("gray"), f
-        }
 
         function m(a) {
             var b = $("#isSelfShop").val();
@@ -317,14 +224,7 @@ try {
             1 == k.type ? ($("#price").hide(), $("#swatchPriceUnit,#largeCargoPriceUnit").hide(), $("#priceCard").show(), $("#limit p,.negotiable").hide(), $("#limit p.condition").show()) : 2 == k.type ? ($("#price").show().html(w(e, f)), $("#priceCard").hide(), $("#swatchPriceUnit,#largeCargoPriceUnit").hide(), $("#swatchPriceUnit").show(), $("#limit p,.negotiable").hide(), $("#limit p.range").show()) : 3 == k.type && ($("#price").show().html(w(g, h)), $("#priceCard").hide(), $("#swatchPriceUnit,#largeCargoPriceUnit").hide(), $("#largeCargoPriceUnit,.negotiable").show(), $("#limit p").hide()), calTotalPrice(), p()
         }
 
-        function p() {
-            var a = $(".selling-status.current"), b = a.length;
-            $(".isfutures").show();
-            for (var c = 0; c < b; c++) {
-                var d = a.eq(c).text();
-                d.indexOf("期货") > -1 && $(".isfutures").hide()
-            }
-        }
+
 
         function q() {
             var a = skuCaculater.sku;

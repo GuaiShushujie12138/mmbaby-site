@@ -2,19 +2,21 @@ package com.mmbaby.site.cart;
 
 import com.dianping.pigeon.util.CollectionUtils;
 import com.google.common.collect.Lists;
+import com.mmbaby.base.util.GeneralResult;
 import com.mmbaby.orderline.dto.cart.CartDTO;
 import com.mmbaby.orderline.dto.domain.OrderLineDTO;
 import com.mmbaby.product.dto.domain.ProductDTO;
+import com.mmbaby.product.service.ProductQueryService;
 import com.mmbaby.site.base.controller.BaseController;
 import com.mmbaby.site.base.response.ErrorResponse;
 import com.mmbaby.site.base.response.GeneralResponse;
 import com.mmbaby.site.base.response.Response;
 import com.mmbaby.site.base.response.SimpleSuccessResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -32,25 +34,35 @@ import static com.mmbaby.site.base.constants.Constants.PRODUCT_ID_LIST;
 @RequestMapping("/cart")
 public class CartController extends BaseController {
 
+    @Autowired
+    private ProductQueryService productQueryService;
+
     /**
      * 添加商品进购物车
      * @param session
      * @return
      */
     @RequestMapping(value = "/add-product", method = RequestMethod.POST)
-    public Response addProduct(@RequestParam("productDTO") ProductDTO productDTO,
+    public Response addProduct(@RequestParam("productId") Integer productId,
                                @RequestParam(value = "num", defaultValue = "1") Integer num,
                                HttpSession session) {
         if (!isLogin()) {
             return new ErrorResponse("未登录");
         }
 
-        if (productDTO == null) {
-            return new ErrorResponse("添加购物车的product 不可为空");
+        if (productId == null) {
+            return new ErrorResponse("添加购物车的productId 不可为空");
+        }
+
+        // 根据商品id查询商品
+        GeneralResult<ProductDTO> generalResult = productQueryService.queryProductById(productId);
+        if (!generalResult.isSuccess()
+                || generalResult.getData() == null) {
+            return new ErrorResponse(generalResult.getMsg());
         }
 
         CartDTO cartDTO = getCartDTO(session);
-        cartDTO.addProduct(productDTO, num);
+        cartDTO.addProduct(generalResult.getData(), num);
 
         // 再次放入session
         session.setAttribute(CUSTOMER_CART, cartDTO);

@@ -44,7 +44,7 @@
                             "                                    <div class=\"item-info\">\n" +
                             "                                        <div class=\"normal\">\n" +
                             "                                            <span class=\"red price\">\n" +
-                            "                                                ¥169.00\n" +
+                            "                                                ¥" + value.price + "\n" +
                             "                                            </span>\n" +
                             "                                        </div>\n" +
                             "                                        <div class=\"des normal\">\n" +
@@ -81,8 +81,8 @@
                             "                                        </div>\n" +
                             "                                    </div>\n" +
                             "                                    <div class=\"btns\">\n" +
-                            "                                        <a href=\"javascript:void(0);\" data-click-log=\"list_product_favorite\" class=\"item-btn btn-favorite \" data-item-id=\"188438\"\n" +
-                            "                                            data-log-entry=\"188438\">加入购物车</a>\n" +
+                            "                                        <a href=\"javascript:void(0);\" data-click-log=\"list_product_favorite\" class=\"item-btn btn-favorite \" data-item-id=" + value.id + "\n" +
+                            "                                            data-log-entry=\"188438\">加购</a>\n" +
                             "                                    </div>\n" +
                             "                                </li>";
                     });
@@ -94,6 +94,457 @@
                 $("#itemList").html(content);
 
             });
+
+
+            $(".list_t_x a").click(function () {
+                // 改变css
+                $(".list_t_x a").css("background-color", "#ffffff").css("color", "#535353");
+                $(this).css("background-color", "#ff2c2e").css("color", "#ffffff");
+                $.get("query-product-list?shopId=" + $(this).attr("val"), function(data) {
+                    var content = "";
+                    console.log(data)
+                    if (data.code == 200 && data.data != null) {
+                        $.each(data.data, function(index, value) {
+                            console.log(index + ":" + value.name);
+                            console.log(index + ":" + value.price);
+                            content += "<li class=\"item\">\n" +
+                                "                                    <a href=\"/product/get-product?id=" + value.id + "\" data-click-log=\"list_product\" target=\"_blank\">\n" +
+                                "                                        <img class=\"item-pic\" src=\""  + value.pic + " \"\n" +
+                                "                                            alt=\" " + value.name + " \">\n" +
+                                "                                    </a>\n" +
+                                "                                    <div class=\"item-info\">\n" +
+                                "                                        <div class=\"normal\">\n" +
+                                "                                            <span class=\"red price\">\n" +
+                                "                                                ¥" + value.price + "\n" +
+                                "                                            </span>\n" +
+                                "                                        </div>\n" +
+                                "                                        <div class=\"des normal\">\n" +
+                                "                                            " + value.name + " \n" +
+                                "                                            <font class=\"highlighter\"></font>\n" +
+                                "                                        </div>\n" +
+                                "                                        <div class=\"shop\">\n" +
+                                "                                            <div>\n" +
+                                "                                                <a href=\"javascript:void(0)\" target=\"_blank\">\n" +
+                                "                                                    <img class=\"icon-certification\" src=\"//img.lianshang.cn/lsweb/resources/images/certification/enterprise_gray.png\">\n" +
+                                "                                                </a>\n" +
+                                "                                                <span class=\"ellipsis\">" + value.shopName + "</span>\n" +
+                                "                                            </div>\n" +
+                                "                                            <div class=\"show-hover clearfix\">\n" +
+                                "                                                <a href=\"/shop/membership_shop/106\" class=\"rank rank_shop_list saller_rank shop_search\">\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                </a>\n" +
+                                "                                                <div class=\"shop-city\">\n" +
+                                "                                                    <div class=\"ellipsis\"> |\n" +
+                                "                                                        <i class=\"map\"></i>北京市</div>\n" +
+                                "                                                </div>\n" +
+                                "                                            </div>\n" +
+                                "                                        </div>\n" +
+                                "                                    </div>\n" +
+                                "                                    <div class=\"btns\">\n" +
+                                "                                        <a href=\"javascript:void(0);\" data-click-log=\"list_product_favorite\" class=\"item-btn btn-favorite \" data-item-id="+ value.id +"\n" +
+                                "                                            data-log-entry=\"188438\">加购</a>\n" +
+                                "                                    </div>\n" +
+                                "                                </li>";
+                        });
+                    } else {
+
+                    }
+
+                    console.log("content : \n" + content);
+                    $("#itemList").html(content);
+
+                });
+            });
+
+            $(".list_t_y a").click(function () {
+                $(".list_t_y a").css("background-color", "#ffffff").css("color", "#535353");
+                $(this).css("background-color", "#ff2c2e").css("color", "#ffffff");
+                $.get("query-product-list?priceRegion=" + $(this).attr("val"), function(data) {
+                    var content = "";
+                    console.log(data)
+                    if (data.code == 200 && data.data != null) {
+                        $.each(data.data, function(index, value) {
+                            console.log(index + ":" + value.name);
+                            console.log(index + ":" + value.price);
+                            content += "<li class=\"item\">\n" +
+                                "                                    <a href=\"/product/get-product?id=" + value.id + "\" data-click-log=\"list_product\" target=\"_blank\">\n" +
+                                "                                        <img class=\"item-pic\" src=\""  + value.pic + " \"\n" +
+                                "                                            alt=\" " + value.name + " \">\n" +
+                                "                                    </a>\n" +
+                                "                                    <div class=\"item-info\">\n" +
+                                "                                        <div class=\"normal\">\n" +
+                                "                                            <span class=\"red price\">\n" +
+                                "                                                ¥" + value.price + "\n" +
+                                "                                            </span>\n" +
+                                "                                        </div>\n" +
+                                "                                        <div class=\"des normal\">\n" +
+                                "                                            " + value.name + " \n" +
+                                "                                            <font class=\"highlighter\"></font>\n" +
+                                "                                        </div>\n" +
+                                "                                        <div class=\"shop\">\n" +
+                                "                                            <div>\n" +
+                                "                                                <a href=\"javascript:void(0)\" target=\"_blank\">\n" +
+                                "                                                    <img class=\"icon-certification\" src=\"//img.lianshang.cn/lsweb/resources/images/certification/enterprise_gray.png\">\n" +
+                                "                                                </a>\n" +
+                                "                                                <span class=\"ellipsis\">" + value.shopName + "</span>\n" +
+                                "                                            </div>\n" +
+                                "                                            <div class=\"show-hover clearfix\">\n" +
+                                "                                                <a href=\"/shop/membership_shop/106\" class=\"rank rank_shop_list saller_rank shop_search\">\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                </a>\n" +
+                                "                                                <div class=\"shop-city\">\n" +
+                                "                                                    <div class=\"ellipsis\"> |\n" +
+                                "                                                        <i class=\"map\"></i>北京市</div>\n" +
+                                "                                                </div>\n" +
+                                "                                            </div>\n" +
+                                "                                        </div>\n" +
+                                "                                    </div>\n" +
+                                "                                    <div class=\"btns\">\n" +
+                                "                                        <a href=\"javascript:void(0);\" data-click-log=\"list_product_favorite\" class=\"item-btn btn-favorite \" data-item-id="+ value.id +"\n" +
+                                "                                            data-log-entry=\"188438\">加购</a>\n" +
+                                "                                    </div>\n" +
+                                "                                </li>";
+                        });
+                    } else {
+
+                    }
+
+                    console.log("content : \n" + content);
+                    $("#itemList").html(content);
+
+                });
+            });
+
+            $(".list_t_z a").click(function () {
+                // 改变css
+                $(".list_t_z a").css("background-color", "#ffffff").css("color", "#535353");
+                $(this).css("background-color", "#ff2c2e").css("color", "#ffffff");
+                $.get("query-product-list?ageRegion=" + $(this).attr("val"), function(data) {
+                    var content = "";
+                    console.log(data)
+                    if (data.code == 200 && data.data != null) {
+                        $.each(data.data, function(index, value) {
+                            console.log(index + ":" + value.name);
+                            console.log(index + ":" + value.price);
+                            content += "<li class=\"item\">\n" +
+                                "                                    <a href=\"/product/get-product?id=" + value.id + "\" data-click-log=\"list_product\" target=\"_blank\">\n" +
+                                "                                        <img class=\"item-pic\" src=\""  + value.pic + " \"\n" +
+                                "                                            alt=\" " + value.name + " \">\n" +
+                                "                                    </a>\n" +
+                                "                                    <div class=\"item-info\">\n" +
+                                "                                        <div class=\"normal\">\n" +
+                                "                                            <span class=\"red price\">\n" +
+                                "                                                ¥" + value.price + "\n" +
+                                "                                            </span>\n" +
+                                "                                        </div>\n" +
+                                "                                        <div class=\"des normal\">\n" +
+                                "                                            " + value.name + " \n" +
+                                "                                            <font class=\"highlighter\"></font>\n" +
+                                "                                        </div>\n" +
+                                "                                        <div class=\"shop\">\n" +
+                                "                                            <div>\n" +
+                                "                                                <a href=\"javascript:void(0)\" target=\"_blank\">\n" +
+                                "                                                    <img class=\"icon-certification\" src=\"//img.lianshang.cn/lsweb/resources/images/certification/enterprise_gray.png\">\n" +
+                                "                                                </a>\n" +
+                                "                                                <span class=\"ellipsis\">" + value.shopName + "</span>\n" +
+                                "                                            </div>\n" +
+                                "                                            <div class=\"show-hover clearfix\">\n" +
+                                "                                                <a href=\"/shop/membership_shop/106\" class=\"rank rank_shop_list saller_rank shop_search\">\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                "                                                        <i></i>\n" +
+                                "                                                    </del>\n" +
+                                "                                                </a>\n" +
+                                "                                                <div class=\"shop-city\">\n" +
+                                "                                                    <div class=\"ellipsis\"> |\n" +
+                                "                                                        <i class=\"map\"></i>北京市</div>\n" +
+                                "                                                </div>\n" +
+                                "                                            </div>\n" +
+                                "                                        </div>\n" +
+                                "                                    </div>\n" +
+                                "                                    <div class=\"btns\">\n" +
+                                "                                        <a href=\"javascript:void(0);\" data-click-log=\"list_product_favorite\" class=\"item-btn btn-favorite \" data-item-id="+ value.id +"\n" +
+                                "                                            data-log-entry=\"188438\">加购</a>\n" +
+                                "                                    </div>\n" +
+                                "                                </li>";
+                        });
+                    } else {
+
+                    }
+
+                    console.log("content : \n" + content);
+                    $("#itemList").html(content);
+
+                });
+            });
+
+            var a_time = 0;
+            $("#last_a").click(function () {
+                // 改变css
+                $(".npadd a").css("background-color", "#F9F9F9").css("color", "#A2A2A2");
+                $(this).css("background-color", "#ff2c2e").css("color", "#ffffff");
+                a_time = a_time + 1;
+                if (true) {
+                    $.get("query-product-list?sort=" + $(this).attr("val"), function(data) {
+                        var content = "";
+                        console.log(data)
+                        if (data.code == 200 && data.data != null) {
+                            $.each(data.data, function(index, value) {
+                                console.log(index + ":" + value.name);
+                                console.log(index + ":" + value.price);
+                                content += "<li class=\"item\">\n" +
+                                    "                                    <a href=\"/product/get-product?id=" + value.id + "\" data-click-log=\"list_product\" target=\"_blank\">\n" +
+                                    "                                        <img class=\"item-pic\" src=\""  + value.pic + " \"\n" +
+                                    "                                            alt=\" " + value.name + " \">\n" +
+                                    "                                    </a>\n" +
+                                    "                                    <div class=\"item-info\">\n" +
+                                    "                                        <div class=\"normal\">\n" +
+                                    "                                            <span class=\"red price\">\n" +
+                                    "                                                ¥" + value.price + "\n" +
+                                    "                                            </span>\n" +
+                                    "                                        </div>\n" +
+                                    "                                        <div class=\"des normal\">\n" +
+                                    "                                            " + value.name + " \n" +
+                                    "                                            <font class=\"highlighter\"></font>\n" +
+                                    "                                        </div>\n" +
+                                    "                                        <div class=\"shop\">\n" +
+                                    "                                            <div>\n" +
+                                    "                                                <a href=\"javascript:void(0)\" target=\"_blank\">\n" +
+                                    "                                                    <img class=\"icon-certification\" src=\"//img.lianshang.cn/lsweb/resources/images/certification/enterprise_gray.png\">\n" +
+                                    "                                                </a>\n" +
+                                    "                                                <span class=\"ellipsis\">" + value.shopName + "</span>\n" +
+                                    "                                            </div>\n" +
+                                    "                                            <div class=\"show-hover clearfix\">\n" +
+                                    "                                                <a href=\"/shop/membership_shop/106\" class=\"rank rank_shop_list saller_rank shop_search\">\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                </a>\n" +
+                                    "                                                <div class=\"shop-city\">\n" +
+                                    "                                                    <div class=\"ellipsis\"> |\n" +
+                                    "                                                        <i class=\"map\"></i>北京市</div>\n" +
+                                    "                                                </div>\n" +
+                                    "                                            </div>\n" +
+                                    "                                        </div>\n" +
+                                    "                                    </div>\n" +
+                                    "                                    <div class=\"btns\">\n" +
+                                    "                                        <a href=\"javascript:void(0);\" data-click-log=\"list_product_favorite\" class=\"item-btn btn-favorite \" data-item-id="+ value.id +"\n" +
+                                    "                                            data-log-entry=\"188438\">加购</a>\n" +
+                                    "                                    </div>\n" +
+                                    "                                </li>";
+                            });
+                        } else {
+
+                        }
+
+                        console.log("content : \n" + content);
+                        $("#itemList").html(content);
+
+                    });
+                }
+            });
+
+            var b_time = 0;
+            $("#price_a").click(function () {
+                b_time = b_time + 1;
+                // 改变css
+                $(".npadd a").css("background-color", "#F9F9F9").css("color", "#A2A2A2");
+                $(this).css("background-color", "#ff2c2e").css("color", "#ffffff");
+                if (true) {
+                    $.get("query-product-list?sort=" + $(this).attr("val"), function(data) {
+                        var content = "";
+                        console.log(data)
+                        if (data.code == 200 && data.data != null) {
+                            $.each(data.data, function(index, value) {
+                                console.log(index + ":" + value.name);
+                                console.log(index + ":" + value.price);
+                                content += "<li class=\"item\">\n" +
+                                    "                                    <a href=\"/product/get-product?id=" + value.id + "\" data-click-log=\"list_product\" target=\"_blank\">\n" +
+                                    "                                        <img class=\"item-pic\" src=\""  + value.pic + " \"\n" +
+                                    "                                            alt=\" " + value.name + " \">\n" +
+                                    "                                    </a>\n" +
+                                    "                                    <div class=\"item-info\">\n" +
+                                    "                                        <div class=\"normal\">\n" +
+                                    "                                            <span class=\"red price\">\n" +
+                                    "                                                ¥" + value.price + "\n" +
+                                    "                                            </span>\n" +
+                                    "                                        </div>\n" +
+                                    "                                        <div class=\"des normal\">\n" +
+                                    "                                            " + value.name + " \n" +
+                                    "                                            <font class=\"highlighter\"></font>\n" +
+                                    "                                        </div>\n" +
+                                    "                                        <div class=\"shop\">\n" +
+                                    "                                            <div>\n" +
+                                    "                                                <a href=\"javascript:void(0)\" target=\"_blank\">\n" +
+                                    "                                                    <img class=\"icon-certification\" src=\"//img.lianshang.cn/lsweb/resources/images/certification/enterprise_gray.png\">\n" +
+                                    "                                                </a>\n" +
+                                    "                                                <span class=\"ellipsis\">" + value.shopName + "</span>\n" +
+                                    "                                            </div>\n" +
+                                    "                                            <div class=\"show-hover clearfix\">\n" +
+                                    "                                                <a href=\"/shop/membership_shop/106\" class=\"rank rank_shop_list saller_rank shop_search\">\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                </a>\n" +
+                                    "                                                <div class=\"shop-city\">\n" +
+                                    "                                                    <div class=\"ellipsis\"> |\n" +
+                                    "                                                        <i class=\"map\"></i>北京市</div>\n" +
+                                    "                                                </div>\n" +
+                                    "                                            </div>\n" +
+                                    "                                        </div>\n" +
+                                    "                                    </div>\n" +
+                                    "                                    <div class=\"btns\">\n" +
+                                    "                                        <a href=\"javascript:void(0);\" data-click-log=\"list_product_favorite\" class=\"item-btn btn-favorite \" data-item-id="+ value.id +"\n" +
+                                    "                                            data-log-entry=\"188438\">加购</a>\n" +
+                                    "                                    </div>\n" +
+                                    "                                </li>";
+                            });
+                        } else {
+
+                        }
+
+                        console.log("content : \n" + content);
+                        $("#itemList").html(content);
+
+                    });
+                }
+            });
+
+            var c_time = 0;
+            $("#sales_a").click(function () {
+                // 改变css
+                $(".npadd a").css("background-color", "#F9F9F9").css("color", "#A2A2A2");
+                $(this).css("background-color", "#ff2c2e").css("color", "#ffffff");
+                c_time = c_time + 1;
+                if (true) {
+                    $.get("query-product-list?sort=" + $(this).attr("val"), function(data) {
+                        var content = "";
+                        console.log(data)
+                        if (data.code == 200 && data.data != null) {
+                            $.each(data.data, function(index, value) {
+                                console.log(index + ":" + value.name);
+                                console.log(index + ":" + value.price);
+                                content += "<li class=\"item\">\n" +
+                                    "                                    <a href=\"/product/get-product?id=" + value.id + "\" data-click-log=\"list_product\" target=\"_blank\">\n" +
+                                    "                                        <img class=\"item-pic\" src=\""  + value.pic + " \"\n" +
+                                    "                                            alt=\" " + value.name + " \">\n" +
+                                    "                                    </a>\n" +
+                                    "                                    <div class=\"item-info\">\n" +
+                                    "                                        <div class=\"normal\">\n" +
+                                    "                                            <span class=\"red price\">\n" +
+                                    "                                                ¥" + value.price + "\n" +
+                                    "                                            </span>\n" +
+                                    "                                        </div>\n" +
+                                    "                                        <div class=\"des normal\">\n" +
+                                    "                                            " + value.name + " \n" +
+                                    "                                            <font class=\"highlighter\"></font>\n" +
+                                    "                                        </div>\n" +
+                                    "                                        <div class=\"shop\">\n" +
+                                    "                                            <div>\n" +
+                                    "                                                <a href=\"javascript:void(0)\" target=\"_blank\">\n" +
+                                    "                                                    <img class=\"icon-certification\" src=\"//img.lianshang.cn/lsweb/resources/images/certification/enterprise_gray.png\">\n" +
+                                    "                                                </a>\n" +
+                                    "                                                <span class=\"ellipsis\">" + value.shopName + "</span>\n" +
+                                    "                                            </div>\n" +
+                                    "                                            <div class=\"show-hover clearfix\">\n" +
+                                    "                                                <a href=\"/shop/membership_shop/106\" class=\"rank rank_shop_list saller_rank shop_search\">\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                    <del class=\"rank_icon rank_heart_del\">\n" +
+                                    "                                                        <i></i>\n" +
+                                    "                                                    </del>\n" +
+                                    "                                                </a>\n" +
+                                    "                                                <div class=\"shop-city\">\n" +
+                                    "                                                    <div class=\"ellipsis\"> |\n" +
+                                    "                                                        <i class=\"map\"></i>北京市</div>\n" +
+                                    "                                                </div>\n" +
+                                    "                                            </div>\n" +
+                                    "                                        </div>\n" +
+                                    "                                    </div>\n" +
+                                    "                                    <div class=\"btns\">\n" +
+                                    "                                        <a href=\"javascript:void(0);\" data-click-log=\"list_product_favorite\" class=\"item-btn btn-favorite \" data-item-id="+ value.id +"\n" +
+                                    "                                            data-log-entry=\"188438\">加购</a>\n" +
+                                    "                                    </div>\n" +
+                                    "                                </li>";
+                            });
+                        } else {
+
+                        }
+
+                        console.log("content : \n" + content);
+                        $("#itemList").html(content);
+
+                    });
+                }
+            });
+
+            $(".btn-favorite").click(function () {
+                $.post("/cart/add-product",
+                    {"productId" : $(this).attr("data-item-id")},
+                function (data) {
+                    if (data.code == 200) {
+                        alert("添加购物车成功!");
+                    } else {
+                        alert(data.message);
+                    }
+                });
+            });
+
         });
     </script>
     <script async="" charset="UTF-8" src="../../js/meiqia.js?v=10"></script>
@@ -652,7 +1103,7 @@
                 </form>
             </div>
             <div class="header_r" id="shoppingCartNum">
-                <a href="/pay/cart/list" data-click-log="shoppingCart" target="_blank">
+                <a href="/cart" data-click-log="shoppingCart" target="_blank">
                     <i></i>
                     购物车
                     <em></em>
@@ -827,120 +1278,95 @@
                             <!-- 筛选条件开始 -->
                             <div class="list_content" data-display="3">
                                 <div class="list_top" style="">
-                                <div class="list_top" style="">
                                     <div class="list_t_t fontc_9">品牌：</div>
                                     <div class="list_t_c list_t_cw">
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10000" val="976" title="雀氏">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10000" title="雀氏">
                                                 <em></em>雀氏</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10001" val="975" title="Pamppers">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10001" title="Pamppers">
                                                 <em></em>Pamppers</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10002" val="971" title="Magics Premium">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10002" title="Magics Premium">
                                                 <em></em>Magics Premium</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10003" val="24" title="Bambino">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10003" title="Bambino">
                                                 <em></em>Bambino</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10004" val="7" title="Nestle">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10004" title="Nestle">
                                                 <em></em>Nestle</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10005" val="970" title="Hipp">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10005" title="Hipp">
                                                 <em></em>Hipp</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10006" val="27" title="Aptamil">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10006" title="Aptamil">
                                                 <em></em>Aptamil</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10007" val="20" title="Topfer">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10007" title="Topfer">
                                                 <em></em>Topfer</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10008" val="12" title="Quinny">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10008" title="Quinny">
                                                 <em></em>Quinny</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10009" val="28" title="Britax">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10009" title="Britax">
                                                 <em></em>Britax</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10010" val="26" title="Maxi">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10010" title="Maxi">
                                                 <em></em>Maxi</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10011" val="973" title="CYBEX">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10011" title="CYBEX">
                                                 <em></em>CYBEX</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?shopId=10012" val="9" title="茵诗曼">
+                                        <div class="list_t_a list_t_x">
+                                            <a href="javascript:void(0)" val="10012" title="茵诗曼">
                                                 <em></em>茵诗曼</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/search/item-keyword?keyword=%E5%85%A8%E6%A3%89&amp;type=1&amp;pv1=6" val="6" title="暗红">
-                                                <em></em>暗红</a>
-                                        </div>
-                                        <div class="list_t_a">
-                                            <a href="/search/item-keyword?keyword=%E5%85%A8%E6%A3%89&amp;type=1&amp;pv1=18" val="18" title="米色">
-                                                <em></em>米色</a>
-                                        </div>
-                                        <div class="list_t_a">
-                                            <a href="/search/item-keyword?keyword=%E5%85%A8%E6%A3%89&amp;type=1&amp;pv1=14" val="14" title="卡其">
-                                                <em></em>卡其</a>
-                                        </div>
-                                        <div class="list_t_a">
-                                            <a href="/search/item-keyword?keyword=%E5%85%A8%E6%A3%89&amp;type=1&amp;pv1=15" val="15" title="咖色">
-                                                <em></em>咖色</a>
-                                        </div>
-                                        <div class="list_t_a">
-                                            <a href="/search/item-keyword?keyword=%E5%85%A8%E6%A3%89&amp;type=1&amp;pv1=30" val="30" title="紫色">
-                                                <em></em>紫色</a>
-                                        </div>
-                                        <div class="list_t_a">
-                                            <a href="/search/item-keyword?keyword=%E5%85%A8%E6%A3%89&amp;type=1&amp;pv1=931" val="931" title="玫红色">
-                                                <em></em>玫红色</a>
-                                        </div>
-                                        <div class="list_t_a">
-                                            <a href="/search/item-keyword?keyword=%E5%85%A8%E6%A3%89&amp;type=1&amp;pv1=974" val="974" title="浅灰">
-                                                <em></em>浅灰</a>
                                         <div class="list_btn none">
                                             <a href="javascript:;" class="list_confirm disabled"></a>
                                             <a href="javascript:;" class="list_cancel"></a>
                                         </div>
                                     </div>
+                                    <div class="list_t_m">更多
+                                        <em></em>
+                                    </div>
                                     <div class="list_t_d" par="pv1" val="/search/item-keyword?keyword=%E5%85%A8%E6%A3%89&amp;type=1"></div>
                                 </div>
-                                <div class="list_top" style="display:none">
+                                <div class="list_top" style="display:block">
                                     <div class="list_t_t fontc_9">价格区间：</div>
                                     <div class="list_t_c list_t_cw">
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?priceRegion=10" val="257" title="0-60">
+                                        <div class="list_t_a list_t_y">
+                                            <a href="javascript:void(0)" val="10" title="0-60">
                                                 <em></em>0-60</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?priceRegion=20" val="255" title="61-100">
+                                        <div class="list_t_a list_t_y">
+                                            <a href="javascript:void(0)" val="20" title="61-100">
                                                 <em></em>61-100</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?priceRegion=30" val="256" title="101-200">
+                                        <div class="list_t_a list_t_y">
+                                            <a href="javascript:void(0)" val="30" title="101-200">
                                                 <em></em>101-200</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?priceRegion=40" val="258" title="201-400">
+                                        <div class="list_t_a list_t_y">
+                                            <a href="javascript:void(0)" val="40" title="201-400">
                                                 <em></em>201-400</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?priceRegion=50" val="258" title="401-1000">
+                                        <div class="list_t_a list_t_y">
+                                            <a href="javascript:void(0)" val="50" title="401-1000">
                                                 <em></em>401-1000</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?priceRegion=60" val="258" title="1000-">
+                                        <div class="list_t_a list_t_y">
+                                            <a href="javascript:void(0)" val="60" title="1000-">
                                                 <em></em>1000-</a>
                                         </div>
                                         <div class="list_btn none">
@@ -950,31 +1376,31 @@
                                     </div>
                                     <div class="list_t_d" par="pv11" val="/search/item-keyword?keyword=%E5%85%A8%E6%A3%89&amp;type=1"></div>
                                 </div>
-                                <div class="list_top" style="display:none">
+                                <div class="list_top" style="display:block">
                                     <div class="list_t_t fontc_9">年龄区间：</div>
                                     <div class="list_t_c list_t_cw">
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?ageRegion=10" val="238" title="0-6个月宝宝">
+                                        <div class="list_t_a list_t_z">
+                                            <a href="javascript:void(0)" val="10" title="0-6个月宝宝">
                                                 <em></em>0-6个月宝宝</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?ageRegion=20" val="239" title="6-12个月宝宝">
+                                        <div class="list_t_a list_t_z">
+                                            <a href="javascript:void(0)" val="20" title="6-12个月宝宝">
                                                 <em></em>6-12个月宝宝</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?ageRegion=30" val="246" title="1-3岁">
+                                        <div class="list_t_a list_t_z">
+                                            <a href="javascript:void(0)" val="30" title="1-3岁">
                                                 <em></em>1-3岁</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?ageRegion=40" val="248" title="4-6岁">
+                                        <div class="list_t_a list_t_z">
+                                            <a href="javascript:void(0)" val="40" title="4-6岁">
                                                 <em></em>4-6岁</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?ageRegion=50" val="247" title="7-9岁">
+                                        <div class="list_t_a list_t_z">
+                                            <a href="javascript:void(0)" val="50" title="7-9岁">
                                                 <em></em>7-9岁</a>
                                         </div>
-                                        <div class="list_t_a">
-                                            <a href="/product/get-product-list?ageRegion=60" val="251" title="10岁及以上">
+                                        <div class="list_t_a list_t_z">
+                                            <a href="javascript:void(0)" val="60" title="10岁及以上">
                                                 <em></em>10岁及以上</a>
                                         </div>
                                         <div class="list_btn none">
@@ -984,11 +1410,12 @@
                                     </div>
                                     <div class="list_t_d" par="pv10" val="/search/item-keyword?keyword=%E5%85%A8%E6%A3%89&amp;type=1"></div>
                                 </div>
-                                    <div></div>
+                            </div>
+
                             <div class="sort mt20 npadd">
-                                <a href="/product/get-sort-product-list?sort='create_time desc'">最新</a>
-                                <a href="/product/get-sort-product-list?sort='sales desc'">销量</a>
-                                <a href="/product/get-sort-product-list?sort='price'">价格</a>
+                                <a id="last_a" href="javascript:void(0)" val="create_time desc">最新</a>
+                                <a id="sales_a" href="javascript:void(0)" val="sales desc">销量</a>
+                                <a id="price_a" href="javascript:void(0)" val="price">价格</a>
                                 <em></em>
                             </div>
                             <!-- 排序及价格筛选结束 -->
@@ -1020,26 +1447,24 @@
                         <div class="home_left home_left1" style="margin-top: 0; border-top: 0;">
                             <h2>热门商品</h2>
                             <div class="hot_pro">
-                                <a href="/item/121305600?pf=www&amp;biz=hotrecommend&amp;position=1&amp;page=1&amp;id=121305600&amp;s_type=item" data-click-log="list_hot_product"
+                                <a href="/product/get-product?id=6" data-click-log="list_hot_product"
                                     class="img" target="_blank">
-                                    <img src="http://img.lianshang.cn/data/item/20167/5/2202_1468561051090.jpg?x-oss-process=style/p_w_200"
-                                        alt="">
+                                    <img src="../../images/product/zhiniaoku/zhiniaoku6.jpg"
+                                        alt="纸尿裤">
                                 </a>
                                 <ol>
                                     <li>
-                                        <a href="/item/121305600?pf=www&amp;biz=hotrecommend&amp;position=1&amp;page=1&amp;id=121305600&amp;s_type=item"
-                                            data-click-log="list_hot_product">50S锦棉罗马 320g 针织罗马 弹力针织布</a>
+                                        <a href="/product/get-product?id=6"
+                                            data-click-log="list_hot_product">安尔乐纸尿裤,你的放心选择</a>
                                     </li>
-                                    <li>样布价：
-                                        <span>¥25.00-25.00/米</span>
+                                    <li>价格：
+                                        <span>¥25.00</span>
                                     </li>
-                                    <li>大货价：
-                                        <span>¥34.00-36.00/公斤</span>
-                                    </li>
+
                                 </ol>
                             </div>
                             <div class="hot_pro">
-                                <a href="/item/121313005?pf=www&amp;biz=hotrecommend&amp;position=2&amp;page=1&amp;id=121313005&amp;s_type=item" data-click-log="list_hot_product"
+                                <a href="/product/get-product?id=6" data-click-log="list_hot_product"
                                     class="img" target="_blank">
                                     <img src="http://img.lianshang.cn/data/item/201611/5/5156_1479352751556.jpg?x-oss-process=style/p_w_200"
                                         alt="">

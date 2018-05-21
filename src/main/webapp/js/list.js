@@ -41,12 +41,12 @@ try {
             }
         }, a.prototype.onMouseEnterItem = function (a, c) {
             b.event.mouseTriggerOfChild(a) || $(c).addClass("item-hover")
-        }, a.prototype.onEditFavorite = function (a, b) {
-            this.loginCheck();
-            var c = $(b), d = c.data() || {}, e = {contentType: "application/json"},
-                d = {type: "ITEM", objectId: d.itemId},
-                f = c.hasClass("done") ? "/favorites/favoritesDelete" : "/favorites/favoritesSave";
-            return this.lock(this.onEditFavorite), this.post(f, d, e).complete(this.yesCall(this.editFavoriteComplete, c, this.onEditFavorite))
+        // }, a.prototype.onEditFavorite = function (a, b) {
+        //     this.loginCheck();
+        //     var c = $(b), d = c.data() || {}, e = {contentType: "application/json"},
+        //         d = {type: "ITEM", objectId: d.itemId},
+        //         f = c.hasClass("done") ? "/favorites/favoritesDelete" : "/favorites/favoritesSave";
+        //     return this.lock(this.onEditFavorite), this.post(f, d, e).complete(this.yesCall(this.editFavoriteComplete, c, this.onEditFavorite))
         }, a.prototype.loginCheck = function () {
             b.string.isNullOrWhiteSpace(d.token) && (location.href = "/user/login")
         }, a.prototype.editFavoriteComplete = function (a, c) {

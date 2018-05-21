@@ -7,6 +7,7 @@ import com.mmbaby.site.base.response.GeneralResponse;
 import com.mmbaby.site.base.response.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -104,6 +105,18 @@ public class WebController extends BaseController {
             }
             // 将选择的商品id集合放进session
             session.setAttribute(PRODUCT_ID_LIST, productIdList);
+        }
+
+        return view;
+    }
+
+    @RequestMapping(value = "/go-count", method = RequestMethod.GET)
+    public ModelAndView goToCount(HttpSession session) {
+        ModelAndView view = new ModelAndView("count");
+
+        // 判断是否登陆
+        if (!isLogin()) {
+            view.setViewName("login");
         }
 
         return view;

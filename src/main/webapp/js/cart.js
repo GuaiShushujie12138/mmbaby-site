@@ -80,23 +80,23 @@ try {
             c("delete", a), this.syncCart(a.length <= 1 ? "delete" : "deleteSome", a, b)
         }, b.prototype.syncCart = function (a, b, c, d) {
             var e = JSON.stringify(b), f = $.extend({type: a, items: e}, d), g = this;
-            Lsmain.api.postRequest("/pay/cart/asyncUpdate", f).complete(function (d, e) {
-                e = d || e, c(e), g.listener(b, a)
-            })
+            // Lsmain.api.postRequest("/pay/cart/asyncUpdate", f).complete(function (d, e) {
+            //     e = d || e, c(e), g.listener(b, a)
+            // })
         }, b.prototype.doSettle = function () {
             var a = this.getSelectedItems();
             if (!(a.length < 1) && this.validateCart(a)) {
-                var b = JSON.stringify(a),
-                    c = $('<form action="/pay/order/buyFromCart" method="post"><input type="hidden" name="items" value="" /></form>');
-                $("body").append(c), c.find("[name=items]").val(b), c.submit()
+                // var b = JSON.stringify(a),
+                    // c = $('<form action="/pay/order/buyFromCart" method="post"><input type="hidden" name="items" value="" /></form>');
+                // $("body").append(c), c.find("[name=items]").val(b), c.submit()
             }
         }, b.prototype.updateSummary = function () {
             var a = this.getSummary();
-            $("#proNum").html(a.cartItemsCount), $("#totalPrice").html("锟�" + a.totalPrice), this.listener()
+            $("#proNum").html(a.cartItemsCount), $("#totalPrice").html("￥" + a.totalPrice), this.listener()
         }, b.prototype.validateCart = function (a) {
             var b = !0, a = this.getSelectedItems();
             return $.each(a, function (a, c) {
-                return c.quantity < c.min ? (this.alertCartItemValidateError(c, "璐拱鏁伴噺涓嶈兘灏忎簬鏈€灏忚捣璁㈤噺:" + c.min), b = !1, !1) : c.quantity > c.max ? (this.alertCartItemValidateError(c, "璐拱鏁伴噺涓嶈兘澶т簬鏈€澶ц喘涔伴噺:" + c.max), b = !1, !1) : void 0
+                return c.quantity < c.min ? (this.alertCartItemValidateError(c, "购买数量不能小于最小起订量:" + c.min), b = !1, !1) : c.quantity > c.max ? (this.alertCartItemValidateError(c, "购买数量不能大于最大购买量:" + c.max), b = !1, !1) : void 0
             }), b || $("body").scrollTop($(".cart-item-validate-error:eq(0)").offset() - 50), b
         }, b.prototype.alertCartItemValidateError = function (a, b) {
             var c = $("#ci_" + a.itemId + "_" + a.skuId + "_" + a.itemTypeId), d = c.parent().find(".shop_more"),
@@ -139,7 +139,7 @@ try {
                 f = parseInt(c.data("itemDecimal")), g = c.val();
             "" == g && (g = 0);
             var h = parseFloat(g) + b;
-            h > e ? (h = e, 0 == b && c.val(h), ShopCart.alertCartItemValidateError(c.data(), "鏈€澶ф暟閲忛檺鍒讹細" + e)) : d > h ? (h = d, 0 == b && (1 == f && (h = h.toFixed(2)), c.val(h)), ShopCart.alertCartItemValidateError(c.data(), "鏈€灏忔暟閲忛檺鍒讹細" + d)) : (ShopCart.removeAlertCartItemValidateError(c.data()), 1 == f && (h = h.toFixed(2)), c.val(h), 0 != b && c.trigger("change"))
+            h > e ? (h = e, 0 == b && c.val(h), ShopCart.alertCartItemValidateError(c.data(), "最大数量限制：" + e)) : d > h ? (h = d, 0 == b && (1 == f && (h = h.toFixed(2)), c.val(h)), ShopCart.alertCartItemValidateError(c.data(), "最小数量限制：" + d)) : (ShopCart.removeAlertCartItemValidateError(c.data()), 1 == f && (h = h.toFixed(2)), c.val(h), 0 != b && c.trigger("change"))
         }
 
         function b(a) {
@@ -153,7 +153,8 @@ try {
         }
 
         function c(a) {
-            messager.confirm("鎮ㄧ‘瀹氳鍒犻櫎鍟嗗搧涔堬紵").yes(function () {
+            messager.confirm("您确定要删除商品么？").yes(function () {
+
                 ShopCart.deleteCarts(a, function (a) {
                     1 == a.code || messager.error(a.message)
                 }, "json")
@@ -192,8 +193,8 @@ try {
             if (a.data("collapse")) {
                 a.data("collapse", !1);
                 var b = a.parent().find(".shop_l_c").length - a.data().display;
-                a.html("灞曞紑鏈簵閾虹殑鏇村鍟嗗搧锛�<span>" + b + "</span>锛�"), a.parent().find(".shop_l_c").addClass("none"), a.parent().find(".shop_l_c:lt(2)").removeClass("none")
-            } else a.data("collapse", !0), a.html('鏀惰捣<em class="up"></em>'), a.parent().find(".shop_l_c").removeClass("none")
+                a.html("展开本店铺的更多商品（<span>" + b + "</span>）"), a.parent().find(".shop_l_c").addClass("none"), a.parent().find(".shop_l_c:lt(2)").removeClass("none")
+            } else a.data("collapse", !0), a.html('收起<em class="up"></em>'), a.parent().find(".shop_l_c").removeClass("none")
         }), ShopCart.initActionBar(), $(".quantity_plus").on("click", function () {
             a($(this), 1)
         }), $(".quantity_minus").on("click", function () {
@@ -207,7 +208,7 @@ try {
             var a = [];
             return $("[data-marker=cart-item]:checked").each(function (b, c) {
                 a.push(ShopCart.getCartData($(c).parents(".shop_l_c")))
-            }), 0 == a.length ? (messager.alert("璇烽€夋嫨浣犺鍒犻櫎鐨勫晢鍝�!"), !1) : void c(a)
+            }), 0 == a.length ? (messager.alert("请选择你要删除的商品!"), !1) : void c(a)
         }), $(".total_check").on("click", function () {
             var a = $(this);
             d(a, "#cart_list", a.attr("checked")), f(a, "#cart_list", a.attr("checked")), $("#cart_list").find(".total_check").each(function (b, c) {

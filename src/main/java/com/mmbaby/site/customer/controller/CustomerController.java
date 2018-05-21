@@ -84,7 +84,7 @@ public class CustomerController extends BaseController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "logout", method = RequestMethod.POST)
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
     public ModelAndView logout(HttpSession session) {
         ModelAndView view = new ModelAndView("index");
 

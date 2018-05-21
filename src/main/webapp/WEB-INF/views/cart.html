@@ -12,6 +12,178 @@
     <meta name="description" content="怪蜀黍网（lianshang.com）-全球面辅料交易平台，专业的纺服业供应链B2B。采购需求在线发布，进口面料应有尽有，帮助千万时尚从业者实现“足不出户，全球采购”，链接全球时尚">
 
 
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            // 判断客户是否登陆
+            $.post("ifLogin", function(data) {
+                console.log(data)
+                if (data.code == 200 && data.data != null) {
+                    $("#login-toolbar").css("display", "block");
+                    $("#un-login-toolbar").css("display", "none");
+
+                    $("#customer-name-a").text(data.data.customerName);
+                } else {
+                    $("#login-toolbar").css("display", "none");
+                    $("#un-login-toolbar").css("display", "block");
+                }
+            });
+
+            var checkNum = 0;
+            var total_money = 0.0;
+
+            var check_num = 0;
+            var total_price = 0.0;
+
+            // 判断购物车是否是空的
+            $.get("/cart/get-cart-product", function(data) {
+                if (data.code != 200) {
+                    alert("未登录");
+                }
+                if (data.code == 200 && data.data != null) {
+                    $("#cart_list").css("display", "block");
+                    $(".list_first").css("display", "none");
+
+                    $.each(data.data, function (index, value) {
+                        checkNum = checkNum + 1;
+                        total_money = total_money + value.amount;
+                        $(".mt33").append("<div uid=\"204215\" id=\"ci_121151469_763940_2\" class=\"shop_l_c\">\n" +
+                            "<div class=\"c1\">\n" +
+                            "<input type=\"checkbox\" checked='checked' value=" + value.product.id + " data-marker=\"cart-item\" autocomplete=\"off\">\n" +
+                            "</div>\n" +
+                            "<div class=\"c2\">\n" +
+                            "<dl>\n" +
+                            "<dt>\n" +
+                            "<a href=\" /product/get-product?id= " + value.productId +" \" target=\"_blank\">\n" +
+                            "<img src=" + value.product.pic +  " alt= " + value.product.name + "\n" +
+                            "width=\"80\" height=\"80\">\n" +
+                            "</a>\n" +
+                            "</dt>\n" +
+                            "<dd class=\"name\">\n" +
+                            "<a href=\"/product/get-product?id=" + value.productId + "\" target=\"_blank\">" + value.product.name + "</a>\n" +
+                            "\n" +
+                            "</dd>\n" +
+                            "<dd>\n" +
+                            "</dd>\n" +
+                            "</dl>\n" +
+                            "</div>\n" +
+                            "<div class=\"c3\">￥ " + value.product.price +"</div>\n" +
+                            "<div class=\"c3\">\n" +
+                            "<div class=\"shop_num\" id=\"shop0\">\n" +
+                            "<span class=\"quantity_minus\">-</span>\n" +
+                            "<input readonly class=\"cart_quantity\" data-marker=\"cart_quantity\" type=\"text\" value=" + value.num + " data-origin=\"1.00\" data-keep-two-decimal=\"\"\n" +
+                            "                                           data-index=\"1\" data-shop-id=\"2\" data-item-id=\"121151469\" data-sku-id=\"763940\" data-item-type-id=\"2\"\n" +
+                            "                                           data-cart-id=\"204215\" data-price=\"50.75\" data-min-limit=\"1\" ,=\"\" data-max-limit=\"10\"\n" +
+                            "                                           data-item-decimal=\"1\">\n" +
+                            "<span class=\"quantity_plus\">+</span>\n" +
+                            "</div>\n" +
+                            "</div>\n" +
+                            "<div class=\"c3\">\n" +
+                            "<span>￥ </span><span class=\"pr cart_totalPrice\">"+ value.amount +"</span>\n" +
+                            "</div>\n" +
+                            "<div class=\"c4\">\n" +
+                            "<div class=\"cart_del\">删除</div>\n" +
+                            "</div>\n" +
+                            "</div>");
+                    });
+                } else {
+                    $("#cart_list").css("display", "none");
+                    $(".list_first").css("display", "block");
+                }
+            });
+
+            var total_change = 0;
+            $(".total_check").change(function () {
+                alert("全选触发");
+                total_change = total_change + 1;
+
+                if (total_change % 2 == 0){
+                    // 全选
+                    $(".c1 input").attr("checked", "checked");
+                    // 结算按钮css 更改
+                    $(".btn_small_t").css("background-color", "#FF4643");
+                    $(".btn_small_t").css("color", "#FFF");
+
+                    check_num = checkNum;
+                    total_price = total_money;
+
+                    $("#proNum").text(checkNum);
+                    $("#totalPrice").text("￥ " + total_money);
+                } else {
+                    // 反选
+                    $(".c1 input").attr("checked", "");
+                    // 结算按钮css 更改
+                    $(".btn_small_t").css("background-color", "#83837e");
+                    $(".btn_small_t").css("color", "#000");
+
+                    check_num = 0;
+                    total_price = 0.0;
+
+                    $("#proNum").text("0");
+                    $("#totalPrice").text("￥ 0.0")
+                }
+            });
+
+            // 单个checkbox的选择
+            $(".c1 input").change(function () {
+                if ($(this).attr("checked") == "checked") {
+                    // 结算按钮css 更改
+                    $(".btn_small_t").css("background-color", "#FF4643");
+                    $(".btn_small_t").css("color", "#FFF");
+
+                    check_num = check_num + 1;
+                    console.log($(this).nextAll().find(".cart_totalPrice").text());
+                    console.log($(this).nextAll().find(".cart_totalPrice"));
+                    total_price = total_price + $(this).nextAll().find(".cart_totalPrice").text();
+
+                    $("#proNum").text(check_num);
+                    $("#totalPrice").text("￥ " + total_price);
+                } else {
+                    check_num = check_num - 1;
+                    console.log($(this).nextAll().find(".cart_totalPrice").text());
+                    console.log($(this).nextAll().find(".cart_totalPrice"));
+                    total_price = total_price - $(this).nextAll().find(".cart_totalPrice").text();
+
+                    $("#proNum").text(check_num);
+                    $("#totalPrice").text("￥ " + total_price);
+
+                    if (check_num == 0) {
+                        // 结算按钮css 更改
+                        $(".btn_small_t").css("background-color", "#83837e");
+                        $(".btn_small_t").css("color", "#000");
+                    }
+                }
+            });
+
+            // 结算按钮的点击
+            $(".btn_small_t").click(function () {
+               // 判断是否有商品被选择
+               var checked = 0;
+
+               var checkboxs = $(".c1 input");
+               var productIdList = new Arrays();
+               $.each(checkboxs, function (index, value) {
+                   if (value.attr("checked") == "checked") {
+                       checked = checked + 1;
+
+                       productIdList[checked - 1] = value.val();
+                   }
+               });
+
+               if (checked != 0) {
+                   // 说明选中了商品，可以提交
+                   $.post("/count", {"productIdList" : productIdList}, function () {
+
+                   });
+                   $(location).attr("href", "/go-count");
+               } else {
+
+               }
+            });
+
+        });
+
+    </script>
     <script async="" charset="UTF-8" src="../../js/meiqia.js?v=10"></script>
     <script src="//hm.baidu.com/hm.js?bfeebb83050db0f41b20bd00fade1531"></script>
     <script type="text/javascript" data-pack-ignore="">
@@ -496,37 +668,12 @@
     <!-- toolbar开始 -->
     <div id="toolbar">
         <div class="toolbar_cont">
-            <div class="toolbar_left left">
-                <div class="toolbar_home left">
-                    <em></em>
-                    <a href="/">怪蜀黍首页</a>
-                </div>
-                <a href="/user/linkmanInfo" target="_blank">ls-e879759</a>
+            <div class="toolbar_left left" id="login-toolbar" style="display: block;">
+                <div class="toolbar_home left"><em></em><a href="/">怪蜀黍首页</a></div>
+                <a href="/customer/customerInfo" target="_blank" id="customer-name-a"></a>
 
-                <p>欢迎来到怪蜀黍，</p>
-                <a href="/user/logout" class="exit">退出</a>
+                <p>欢迎来到怪蜀黍，</p><a href="/customer/logout" class="exit">退出</a>
                 <em class="line_head line_left"></em>
-
-                <div class="toolbar_my toolbar_my_news">
-                    <div class="toolbar_tit">
-                        <a href="javascript:;">未读消息
-                            <strong>
-                                0
-                            </strong>
-                        </a>
-                        <em></em>
-                    </div>
-                    <div class="toolbar_select none">
-                        <a href="/user/message?reply=1" target="_blank">买家消息
-                            <strong>0</strong>
-                        </a>
-                        <a href="/user/free-shop" target="_blank">卖家消息
-                            <strong>
-                                0
-                            </strong>
-                        </a>
-                    </div>
-                </div>
             </div>
             <div class="toolbar_right right">
                 <!-- 手机怪蜀黍 -->
@@ -557,45 +704,6 @@
                         <a href="/user/bankcardlist" target="_blank">银行账户</a>
                     </div>
                 </div>
-                <!-- 卖家中心 -->
-                <em class="line_head"></em>
-                <div class="toolbar_my">
-                    <div class="toolbar_tit">
-                        <a href="/user/free-shop" target="_blank">卖家中心</a>
-                        <em></em>
-                    </div>
-                    <div class="toolbar_select none">
-                        <a href="/user/free-shop" target="_blank">销售订单</a>
-                        <a href="/user/free-shop" target="_blank">商品管理</a>
-                        <a href="/user/free-shop" target="_blank">商机管理</a>
-                        <a href="/user/free-shop" target="_blank">店铺管理</a>
-                        <a href="/user/free-shop" target="_blank">卖家消息</a>
-                    </div>
-                </div>
-                <!-- 买家中心 -->
-                <em class="line_head"></em>
-                <div class="toolbar_my">
-                    <div class="toolbar_tit">
-                        <a href="/pay/trade/user/list" target="_blank">买家中心</a>
-                        <em></em>
-                    </div>
-                    <div class="toolbar_select none">
-                        <a href="/pay/trade/user/list" target="_blank">采购订单
-                            <strong>0</strong>
-                        </a>
-                        <a href="/pay/coupon/couponList" target="_blank">我的抵用券</a>
-                        <a href="/demand/manager" target="_blank">采购需求
-                            <strong>0</strong>
-                        </a>
-                        <a href="/favorites/itemFavorites" target="_blank">我的收藏
-                            <strong>0</strong>
-                        </a>
-                        <a href="/user/message" target="_blank">买家消息
-                            <strong>0</strong>
-                        </a>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
@@ -609,113 +717,51 @@
                 <div class="header_cont">
                     <div class="header_l header_del">
                         <a href="/">
-                            <img src="//img.lianshang.cn/lsweb/resources/images/logo.png" alt="怪蜀黍" title="怪蜀黍">
+                            <img src="" alt="怪蜀黍" title="怪蜀黍">
                         </a>
                     </div>
                     <div class="shop_step shop_step1 right"></div>
                 </div>
             </div>
 
+            <!--TODO 空购物车-->
+            <div class="list_first" style="display: block">
+                <div class="list_element">
+                    <div class="list_content_l"></div>
+                    <div class="list_content_r">
+                        <p>购物车空空的~，去挑选心仪的商品吧~</p>
+                        <a href="/"> 去购物</a>
+                    </div>
+                </div>
+            </div>
+
             <!--内容开始-->
-            <div id="cart_list" class="clearfix">
+            <div id="cart_list" class="clearfix" style="display: none;">
                 <!--购物车列表 开始-->
                 <div class="shop_cont">
 
-                    <!--TODO 空购物车-->
-                    <!--<div class="list_first">-->
-                        <!--<div class="list_element">-->
-                            <!--<div class="list_content_l"></div>-->
-                            <!--<div class="list_content_r">-->
-                                <!--<p>购物车空空的~，去挑选心仪的商品吧~</p>-->
-                                <!--<a href="/"> 去购物</a>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-
-                    <div class="shop_cont_top">
-                        <div class="c1">
-                            <input type="checkbox" value="" autocomplete="off" class="total_check" data-marker="checkAll" checked="checked"> 全选
-                        </div>
-                        <div class="c2">商品信息</div>
-                        <div class="c3">颜色</div>
-                        <div class="c3">单位</div>
-                        <div class="c3">单价(元)</div>
-                        <div class="c3">数量</div>
-                        <div class="c3">总价(元)</div>
-                        <div class="c4">操作</div>
-                    </div>
-                    <div class="mt31 mt33">
-                        <div class="shop_list mt30 clearfix" data-marker="shoplist">
-                            <div class="shop_list_tit">
-                                <span>
-                                    <input type="checkbox" value="2" name="sale" autocomplete="off" class="partial_check" checked="checked">
-                                    <em val="2" class="shop_list_em">
-                                        店铺：
-                                        <a href="/shop/2" target="_blank">GTC</a>
-                                    </em>
-                                </span>
-                                <!-- TODO shopCity display -->
+                        <div class="shop_cont_top">
+                            <div class="c1">
+                                <input type="checkbox" value=""  class="total_check" data-marker="checkAll" checked="checked"> 全选
                             </div>
-                            <div uid="204215" id="ci_121151469_763940_2" class="shop_l_c">
-                                <div class="c1">
-                                    <input type="checkbox" value="204215" data-marker="cart-item" autocomplete="off" checked="checked">
-                                </div>
-                                <div class="c2">
-                                    <dl>
-                                        <dt>
-                                            <a href="/item/121151469" target="_blank">
-                                                <img src="http://img.lianshang.cn/data/item/20163/5/271_1457722669591.jpg?x-oss-process=style/p_w_80" alt="浅蓝色期货夏季其他棉棉纺面料"
-                                                    width="80" height="80">
-                                            </a>
-                                        </dt>
-                                        <dd class="name">
-                                            <a href="/item/121151469" target="_blank">浅蓝色期货夏季其他棉棉纺面料</a>
-                                            期货
-
-                                        </dd>
-                                        <dd>
-                                            <span class="shop_tag2" title="样布"></span>
-                                        </dd>
-                                    </dl>
-                                </div>
-                                <div class="c3 c3_dif">
-                                    浅蓝色
-                                    <div class="bu" style="background:#c5e3ff"></div>
-                                </div>
-                                <div class="c3">码</div>
-                                <div class="c3">￥ 50.75</div>
-                                <div class="c3">
-                                    <div class="shop_num" id="shop0">
-                                        <span class="quantity_minus">-</span>
-                                        <input class="cart_quantity" data-marker="cart_quantity" type="text" value="1.00" data-origin="1.00" data-keep-two-decimal=""
-                                            data-index="1" data-shop-id="2" data-item-id="121151469" data-sku-id="763940" data-item-type-id="2"
-                                            data-cart-id="204215" data-price="50.75" data-min-limit="1" ,="" data-max-limit="10"
-                                            data-item-decimal="1" autocomplete="off">
-                                        <span class="quantity_plus">+</span>
-                                    </div>
-                                </div>
-                                <div class="c3">
-                                    <span class="pr cart_totalPrice">￥ 50.75</span>
-                                </div>
-                                <div class="c4">
-                                    <div class="cart_del">删除</div>
-                                </div>
-                            </div>
-                            <div style="height:0px;visibility: hidden"></div>
+                            <div class="c2">商品信息</div>
+                            <div class="c3">单价(元)</div>
+                            <div class="c3">数量</div>
+                            <div class="c3">总价(元)</div>
+                            <div class="c4">操作</div>
                         </div>
-                    </div>
+                        <div class="mt31 mt33">
+
+                        </div>
+
                     <!--购物车列表 结束-->
                 </div>
                 <div id="action-bar" class="slide_float mt20">
                     <div class="slide_float_l left">
-                        <div class="slide_float_all left">
-                            <input type="checkbox" value="" autocomplete="off" data-behavior="checkAll" class="total_check" checked="checked"> 全选
-                        </div>
-                        <div class="slide_del left">删除选中的商品</div>
                         <div class="slide_num left">已选
                             <span class="proNum" id="proNum">1</span> 件商品</div>
                         <div class="slide_price left">总价：
-                            <span id="totalPrice">￥50.75</span> （不含运费）</div>
+                            <span id="totalPrice">￥ </span> （不含运费）</div>
                     </div>
                     <div id="settle-btn" class="slide_account right btn_small_t" data-click-log="">结算
                     </div>

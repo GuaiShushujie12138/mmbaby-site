@@ -65,4 +65,9 @@ public class Constants {
      * 年龄区间
      */
     public static final String AGE_REGION = "age_region";
+
+    /**
+     * 商品查询排序
+     */
+    public static final String SORT = "sort";
 }

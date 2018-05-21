@@ -14,35 +14,54 @@
 
     <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript">
-        // 判断客户是否登陆
-        $.post("/ifLogin", function(data) {
-            if (data.code == 200 && data.data != null) {
-                $("#login-toolbar").css("display", "block");
-                $("#un-login-toolbar").css("display", "none");
 
-                $("#customer-name-a").text(data.data.customerName);
-            } else {
-                $("#login-toolbar").css("display", "none");
-                $("#un-login-toolbar").css("display", "block");
-            }
+        $(function () {
+            // 判断客户是否登陆
+            $.post("/ifLogin", function(data) {
+                if (data.code == 200 && data.data != null) {
+                    $("#login-toolbar").css("display", "block");
+                    $("#un-login-toolbar").css("display", "none");
+
+                    $("#customer-name-a").text(data.data.customerName);
+                } else {
+                    $("#login-toolbar").css("display", "none");
+                    $("#un-login-toolbar").css("display", "block");
+                }
+            });
+
+            // 获取当前的商品详细信息
+            $.get("query-product", function(data) {
+                if (data.code == 200 && data.data != null) {
+                    $("#item_name").html(data.data.name);
+                    $("#price").html("￥" + data.data.price);
+                    $("#inventory").html(data.data.inventory);
+                    $("#sales").html(data.data.sales);
+                    $("#big_image").attr("src", data.data.pic);
+                    $("#big_image").attr("alt", data.data.name);
+                    $("#small_image").attr("src", data.data.pic);
+                    $("#small_image").attr("alt", data.data.name);
+                    $("#fbig").attr("src", data.data.pic);
+                    $(".btn_tjiao").attr("val", data.data.id);
+                } else {
+                    alert("商品不存在!")
+                }
+
+            });
+
+            $(".btn_tjiao").click(function () {
+                alert("进来了")
+                $.post("/cart/add-product",
+                    {"productId" : $(this).attr("val")},
+                    function (data) {
+                        if (data.code == 200) {
+                            alert("添加购物车成功!")
+                        } else {
+                            alert("添加购物车失败!")
+                        }
+                    });
+            });
         });
 
-        // 获取当前的商品详细信息
-        $.get("query-product", function(data) {
-            if (data.code == 200 && data.data != null) {
-                $("#item_name").html(data.data.name);
-                $("#price").html("￥" + data.data.price);
-                $("#inventory").html(data.data.inventory);
-                $("#sales").html(data.data.sales);
-                $("#big_image").attr("src", data.data.pic);
-                $("#big_image").attr("alt", data.data.name);
-                $("#small_image").attr("src", data.data.pic);
-                $("#small_image").attr("alt", data.data.name);
-                $("#fbig").attr("src", data.data.pic);
-            } else {
-                alert("商品不存在!")
-            }
-        });
     </script>
     <script async="" charset="UTF-8" src="../../js/meiqia.js?v=10"></script>
     <script src="//hm.baidu.com/hm.js?bfeebb83050db0f41b20bd00fade1531"></script>
@@ -602,7 +621,7 @@
                 </form>
             </div>
             <div class="header_r" id="shoppingCartNum">
-                <a href="/pay/cart/list" data-click-log="shoppingCart" target="_blank">
+                <a href="/cart" data-click-log="shoppingCart" target="_blank">
                     <i></i>
                     购物车
                     <em></em>
@@ -856,7 +875,7 @@
                         </dl>
 
                         <div class="buy_in">
-                            <div class="buy_clo buyCar shopingCar btn_small_t btn_tjiao" data-click-log="item_cart" act="cart">
+                            <div val="1" class="buy_clo buyCar shopingCar btn_small_t btn_tjiao" data-click-log="item_cart" act="cart">
                                 加入购物车
                             </div>
                             <input type="hidden" id="dataStaging" data-value="false">
