@@ -12,6 +12,58 @@
     <meta name="description" content="怪蜀黍网（lianshang.com）-全球面辅料交易平台，专业的纺服业供应链B2B。采购需求在线发布，进口面料应有尽有，帮助千万时尚从业者实现“足不出户，全球采购”，链接全球时尚">
 
 
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            // 判断客户是否登陆
+            $.post("ifLogin", function(data) {
+                console.log(data)
+                if (data.code == 200 && data.data != null) {
+                    $("#login-toolbar").css("display", "block");
+                    $("#un-login-toolbar").css("display", "none");
+
+                    $("#customer-name-a").text(data.data.customerName);
+
+                    $("#customer_id").val(data.data.id);
+                } else {
+                    $("#login-toolbar").css("display", "none");
+                    $("#un-login-toolbar").css("display", "block");
+                }
+            });
+
+            // 获取待支付的订单信息
+            $.get("/order/get-pay-order", function (data) {
+                if (data.code == 200) {
+                    $(".total_money").text(data.data.amount);
+
+                    $("#rece_name").text(data.data.address.receiveName);
+                    $("#rece_mobile").text(data.data.address.mobile);
+                    $("#rece_zip").text(data.data.address.zip);
+                    $("#order_time").text(data.data.createTime);
+                    $("#order_id").text(data.data.id);
+                }
+
+                $(".look_pay").click(function () {
+                    if (data.code == 200) {
+                        // $(location).attr("href", "/order_detail?orderId=" + data.data.id);
+                    } else {
+                        alert("订单不存在")
+                    }
+                });
+            });
+
+            $(".pay-way").click(function () {
+               $.post("/order/pay", function (data) {
+                   if (data.code == 200) {
+                       alert("恭喜，支付成功!");
+                       $(location).attr("href", "/order_detail");
+                   } else {
+                       alert("系统繁忙，请稍后再试")
+                   }
+               });
+            });
+        });
+    </script>
     <script async="" charset="UTF-8" src="../../js/meiqia.js?v=10"></script>
     <script src="//hm.baidu.com/hm.js?bfeebb83050db0f41b20bd00fade1531"></script>
     <script type="text/javascript" data-pack-ignore="">
@@ -617,7 +669,7 @@
                 </div>
                 <div class="success_pay_total">
                     <p class="left">应付金额：
-                        <em>￥50.75</em>
+                        <em id="pay_money">￥<span class="total_money">50.75</span></em>
                     </p>
 
                     <p class="right look_pay">查看订单详情
@@ -627,9 +679,9 @@
                 <div class="success_pay_main">
                     <div class="success_pay_name">
                         <p>
-                            收货信息：&nbsp;&nbsp;张三&nbsp;&nbsp; &nbsp;&nbsp;aa&nbsp;&nbsp;330013 </p>
+                            收货信息：&nbsp;&nbsp;<span id="rece_name"></span>&nbsp;&nbsp; &nbsp;&nbsp;<span id="rece_address"</span>&nbsp;&nbsp;<span id="rece_zip"></span> </p>
 
-                        <p>下单时间：2018-05-10 11:38:33 </p>
+                        <p>下单时间：<span id="order_time"></span> </p>
                     </div>
 
                     <input type="hidden" value="1216353329005459" id="tradeIds">
@@ -639,28 +691,22 @@
                                 <span>上海市</span>
                             </p>
 
-                            <p>配送：
-                                <span>任意物流</span>
-                            </p>
                         </div>
 
 
                         <div class="success_pay_pack_m last">
                             <div class="left">
                                 <p>订单号：
-                                    <span>1216353329005459</span>
+                                    <span id="order_id">1216353329005459</span>
                                 </p>
-                                <p>商品名称：
-                                    <em>浅蓝色期货夏季其他棉棉纺面料</em>
-                                </p>
+
                                 <p>交易金额：
-                                    <i>￥ 50.75</i>
+                                    <i>￥ <span class="total_money">50.75</span></i>
                                 </p>
                             </div>
                             <div class="shop_information">
                                 <a href="" target="_blank" style="color:#000;font-size:14px;padding-top:20px;display:block">GTC</a>
 
-                                <div class="shoper" style="margin-top:10px;margin-right:8px">其他</div>
                             </div>
                         </div>
 
@@ -669,350 +715,11 @@
                 <div class="pays">
                     <div class="pay_bot">
                         <div class="pay_bank_tit tabs" data-plugin="tabs">
-                            <span class="tab current" data-click-log="" data-log-entry="5" data-target="#payPanel_5" data-id="5">公司转账</span>
-                            <span class="tab" data-click-log="" data-log-entry="8" data-target="#payPanel_8" data-id="8">快捷支付</span>
                             <span class="tab" data-click-log="" data-log-entry="9" data-target="#payPanel_9" data-id="9">平台支付</span>
                             <span class="tab" data-click-log="" data-log-entry="7" data-target="#payPanel_7" data-id="7">个人网银</span>
-                            <span class="tab" data-click-log="" data-log-entry="6" data-target="#payPanel_6" data-id="6">企业网银</span>
                         </div>
                         <div class="tabPanels">
-                            <div class="tabPanel" id="payPanel_8" data-id="8" style="display: none;">
-
-
-
-                                <div class="pay_bank_cont quickpay payCommon" id="quickpay">
-                                    <div class="title ">
-                                        <em class="icon"></em>
-                                        如果使用快捷支付付款，卖家需为您支付0.6%的手续费，请提前与卖家沟通。
-                                    </div>
-                                    <input type="hidden" value="" id="cvv2">
-                                    <input type="hidden" value="" id="bindIdFirst">
-                                    <input type="hidden" value="" id="bankCardType">
-                                    <input type="hidden" value="" id="paymentId">
-                                    <input type="hidden" value="false" id="needSetPassword">
-                                    <input type="hidden" value="1" id="errorCode">
-                                    <input type="hidden" value="" id="payToken">
-                                    <div class="bind-card-two">
-                                        <div id="bindCardTwice" class="" data-validator="yes">
-                                            <div id="" class="bind-card ">
-                                                <div class="credit-remind none" style="">
-                                                </div>
-                                                <div class="title title1">
-                                                    <em></em>
-                                                    以下信息将用于实名身份验证
-                                                </div>
-                                                <div class="row" id="bank-num">
-                                                    <div class="left row-left">银行卡号</div>
-                                                    <div class="left row-right">
-                                                        <input class="input-mess left" maxlength="25" data-bank-card="yes" name="bankno" type="text" value="">
-                                                        <p class="error-mess error-mess-num col-main left none">
-                                                            <em></em>
-                                                            暂不支持此银行卡，请更换其他银行卡或其他支付方式
-                                                        </p>
-                                                        <div class="col-info view-banks left" data-click-log="">查看支持的银行卡列表</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row row-mb10 none" id="bank-pay">
-                                                    <div class="left row-left">付款银行</div>
-                                                    <div class="left row-right">
-                                                        <div class="pay-bank">
-                                                            <span class="left">
-                                                                <img class="bank-logo" src="" alt="" title="">
-                                                            </span>
-
-                                                            <p class="left" id="ammountLimit"></p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row none" id="card-type">
-                                                    <div class="left row-left">卡种</div>
-                                                    <div class="left row-right">
-                                                        <p class="left backcard-name">
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div class="row effective-date none" id="effective-date" style="">
-                                                    <div class="left row-left">有效期</div>
-                                                    <div class="left row-right">
-                                                        <p class="left">
-                                                            <input id="effective-time" data-plugin="number" name="effectiveTime" maxlength="4" class="effective-time  input-mess" type="text"
-                                                                value="" placeholder="0726">
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div class="row none" id="safe-code" style="">
-                                                    <div class="left row-left">安全码</div>
-                                                    <div class="left row-right">
-                                                        <input class="input-mess" data-plugin="number" maxlength="3" name="safeCode" type="text" value="">
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="left row-left">姓名</div>
-                                                    <div class="left row-right">
-                                                        <input class="input-mess" maxlength="20" name="name" type="text" value="">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="left row-left">身份证</div>
-                                                    <div class="left row-right">
-                                                        <input class="input-mess" maxlength="18" name="idCardNo" type="text" value="">
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="left row-left">手机号</div>
-                                                    <div class="left row-right">
-                                                        <input class="input-mess" data-plugin="number" maxlength="11" name="phoneNo" id="phone-num" type="text" value="">
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="left row-left">短信校验码</div>
-                                                    <div class="left row-right">
-                                                        <input class="left input-mess" maxlength="10" name="verifyCode" type="text" value="">
-
-                                                        <div class="left disabled mobileCheck verify-code sms-event-click" data-click-log="">获取验证码</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tip">
-                                                <em class="icon"></em>
-                                                快捷支付服务是由怪蜀黍与专业的第三方支付平台共同提供，支付信息经过严格加密保护，保障您的资金安全。
-                                            </div>
-                                            <div id="" class="row row-next">
-                                                <div class="left row-right ">
-                                                    <div class="btn btn-main next-pay btn_tjiao disabled" id="next-pay" data-click-log="">下一步</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="agreement" style="display:none;width: 1000px;" data-title="怪蜀黍快捷支付服务协议" id="lsquickpay" data-mask="true" data-widht="500"
-                                        data-height="450">
-                                        <div class="agreement_con">
-                                            <h4>概述</h4>
-
-                                            <p>
-                                                1、为明确双方的权利和义务，规范双方行为，您与上海链展国际贸易有限公司（以下简称“怪蜀黍”）本着平等互利的原则，就本快捷支付服务的相关事宜达成快捷支付服务协议（以下简称“本协议”）。</p>
-
-                                            <p>
-                                                2、在接受本协议之前，请您仔细阅读本协议的全部内容。如您不同意接受本协议的任意内容，或者无法准确理解相关条款含义的，请不要进行后续操作。</p>
-
-                                            <p>
-                                                3、您理解并确认，您是具有中华人民共和国法律规定的完全民事权利能力和民事行为能力的，能够独立承担民事责任的自然人（中华人民共和国境内（香港、澳门除外）的用户应年满18周岁），或者是在中国大陆地区合法开展经营活动或其他业务的法人或其他组织；本协议内容不受您所属国家或地区法律的排斥。不具备前述条件的，您应立即终止使用本服务。
-                                            </p>
-                                            <p>
-                                                4、本协议条款与您的权益具有或可能具有重大关系，请您在同意接受本服务前确认，您已经充分阅读、理解并接受本协议的全部内容。您通过网络页面点击确认本协议或以其他方式选择接受本协议，即表示您与怪蜀黍已达成协议并同意接受本协议的全部约定内容。
-                                            </p>
-
-                                            <h4>您的权利与义务</h4>
-
-                                            <p>
-                                                1、您选择使用的本服务要求您提供个人的支付信息，您需保证您所提供的所有信息是真实的、合法的、正确的、完整的。本协议所指支付信息是指您使用本服务时需要提供的个人信息，包括但不限于账户名、密码、个人姓名、身份证号码、银行卡号等。</p>
-
-                                            <p>
-                                                2、您如使用本服务进行支付的，应当在确认支付金额后输入密码进行支付。您认可和同意：输入密码即视为您确认交易和交易金额并已不可撤销地向怪蜀黍的支付系统发出指令，怪蜀黍有权根据您的指令委托银行或第三方从您绑定的银行卡中将您确认的交易资金划扣给收款人。您不应以非本人意愿交易或其他任何原因要求退款或承担其他责任。
-                                            </p>
-
-                                            <p>
-                                                3、您承诺对使用本服务过程中您发出的所有指令的真实性、有效性承担全部责任；怪蜀黍依照您的指令进行操作的一切风险由您自行承担。
-                                            </p>
-
-                                            <p>
-                                                4、您认可，您使用本服务所涉及的账户的使用记录数据、交易金额数据等均以怪蜀黍系统平台记录的数据为准。
-                                            </p>
-
-                                            <p>
-                                                5、您保证不向其他任何人泄露该支付信息。您知晓应妥善保管银行卡、卡号、密码以及您的账号、密码、数字证书等与银行卡或与您的支付账户有关的一切信息。如您遗失银行卡、泄露账户密码或相关信息的，您应及时通知发卡行及/或怪蜀黍，以减少可能发生的损失。因泄露密码、数字证书、丢失银行卡等导致的损失需由您自行承担。
-                                            </p>
-                                            <p>
-                                                6、您认可，如果您违反本协议的约定；或违反本网站或其他关联公司网站的条款、协议、规则、通告等相关规定，而被终止提供服务的，怪蜀黍有权暂停或终止向您提供部分或全部本服务，您将承担因此产生的一切责任，公司对此不承担任何责任。
-                                            </p>
-                                            <p>
-                                                7、如您发现有他人冒用或盗用您的账户及密码或任何其他未经合法授权之情形时，应立即以书面方式通知本公司并要求本公司暂停本服务。怪蜀黍将积极响应您的要求，但您理解，对您的要求采取行动需要合理期限，在此之前，本公司对已执行的指令及(或)所导致的您的损失不承担任何责任。
-                                            </p>
-                                            <p>
-                                                8、您授权怪蜀黍在您使用本服务期间或本服务终止后，有权保留您在使用本服务期间所形成的相关信息数据，同时该授权不可撤销。
-                                            </p>
-                                            <p>
-                                                9、您保证使用本服务过程中提供的信息真实、准确、完整、有效，您为了使用本服务向怪蜀黍提供的所有信息，如姓名、身份证号、银行卡卡号及预留手机号，将全部成为您怪蜀黍账户信息的一部分。怪蜀黍按照您设置的相关信息为您提供相应服务，对于因您提供信息不真实或不完整所造成的损失由您自行承担。
-                                            </p>
-                                            <p>
-                                                10、可能由于银行本身系统问题、银行相关作业网络连线问题或其他不可抗拒因素，造成本服务无法提供。您确保您所输入的您的资料无误，如果因资料错误造成怪蜀黍于上述异常状况发生时，无法及时通知您相关交易后续处理方式的，怪蜀黍不承担任何损害赔偿责任。
-                                            </p>
-
-                                            <h4>怪蜀黍的权利与义务</h4>
-
-                                            <p>
-                                                1、怪蜀黍将严格确保您的个人信息和支付信息的安全。
-                                            </p>
-
-                                            <p>
-                                                2、为了提供本服务的技术需要，怪蜀黍有权采集、获取或在系统内保存您的部分支付信息。
-                                            </p>
-
-                                            <p>
-                                                3、若您的支付信息变更而您未及时更新资料，导致本服务无法提供或提供时发生任何错误，您不得将此作为取消交易、拒绝付款的理由，您将承担因此产生的一切后果，本公司不承担任何责任。
-                                            </p>
-
-                                            <p>
-                                                4、基于运行和交易安全的需要，怪蜀黍有权暂停提供或者限制本服务部分功能,或提供新的功能，在减少、增加或者变化任何功能时，只要您仍然使用本服务，表示您仍然同意本协议或者变更后的协议。
-                                            </p>
-
-                                            <p>
-                                                5、怪蜀黍有权随时对本协议内容进行单方面的变更，并以在本网站公告的方式予以公布，无需另行单独通知您；若您在本协议内容公告变更后继续使用本服务的，表示您已充分阅读、理解并接受修改后的协议内容，也将遵循修改后的协议内容使用本服务；若您不同意修改后的协议内容，您应停止使用本服务。
-                                            </p>
-
-                                            <p>
-                                                6、怪蜀黍将严格确保您的个人信息和支付信息的安全，但怪蜀黍根据法律法规规定向有权查询的相关政府机关，或为完成本次转账到银行卡服务及基于更好为您提供服务目的，可视需要向其他第三方提供。
-                                            </p>
-
-                                            <p>
-                                                7、怪蜀黍有权根据自身业务情况决定是否向您提供相应的免费付款额度及免费额度的大小；但怪蜀黍并不承诺该免费付款额度一定提供以及该免费额度在您使用前不会进行调整。
-                                            </p>
-
-                                            <p>
-                                                8、在怪蜀黍有合理理由怀疑您提供的资料错误、不实、过时或不完整的情况下，本公司有权暂停或终止向您提供部分或全部本服务，您将承担因此产生的一切责任，公司对此不承担任何责任。
-                                            </p>
-
-                                            <h4>其他条款</h4>
-
-                                            <p>
-                                                因本协议产生之争议，均应依照中华人民共和国法律予以处理，并由被告住所地人民法院管辖。
-                                            </p>
-
-                                        </div>
-                                        <button style="" data-dismiss="modal" class="ui-button ui-button-white close-btn ">关闭</button>
-                                    </div>
-                                </div>
-                                <div class="quickpay-des none" id="quickpay-des">
-                                    <p class="title">快捷支付使用说明：</p>
-
-                                    <div class="quickpay-answer">
-                                        <p class="title">1.可以使用他人银行卡开通快捷支付么？</p>
-
-                                        <p>答：不可以。为了您的支付账号和银行储蓄卡的安全，请使用本人银行卡开通快捷支付。</p>
-                                    </div>
-                                    <div class="quickpay-answer">
-                                        <p class="title">2. 什么是银行预留手机号码？</p>
-
-                                        <p>答：银行预留手机号码是您在办理信用卡或借记卡时填写的手机号码。若您未留或预留的为固话，则无法进行支付。请您至银行柜台或拨打银行客服热线登记或 变更手机号码。
-                                        </p>
-                                    </div>
-                                    <div class="quickpay-answer">
-                                        <p class="title">3. 手机收不到验证码，怎么办？</p>
-
-                                        <p>答：经过网关时，网络通讯异常可能会造成短信丢失，或者您会延时收到短信，请您耐心等待一下，或者重新点击页面上的“获取短信验证码”试一下。</p>
-                                    </div>
-                                    <div class="quickpay-answer">
-                                        <p class="title">4. 请务必关闭“Google工具栏”或者“3721”等“屏蔽弹出窗口”的工具。</p>
-                                    </div>
-                                    <div class="quickpay-answer">
-                                        <p class="title">5. 在支付的时候，请尽量选择网络状况良好的网络服务商，避免在公共场合上网进行支付（例如：网吧等）。</p>
-                                    </div>
-                                </div>
-                                <div class="bank-cards-box none">
-                                    <div class="bank-card-tab tabs" data-plugin="tabs">
-                                        <span class="tab" data-click-log="" data-target="#db_0">借记卡</span>
-                                        <span class="tab " data-click-log="" data-target="#db_1">信用卡</span>
-                                        <span class="right icon-close" data-click-log="">╳</span>
-                                    </div>
-                                    <div class="bank-card-con tabPanels">
-                                        <div id="db_0" class="banks-con clearfix tabPanel" style="display: none;">
-                                            <a data-bank="SPDB" style="cursor: default" class="" target="" href="javascript:;" title="上海浦东发展银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/spdb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CGB" style="cursor: default" class="" target="" href="javascript:;" title="广发银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/cgb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="PSBC" style="cursor: default" class="" target="" href="javascript:;" title="中国邮政储蓄银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/psbc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CIB" style="cursor: default" class="" target="" href="javascript:;" title="兴业银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/cib.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CEB" style="cursor: default" class="" target="" href="javascript:;" title="中国光大银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/ceb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CCB" style="cursor: default" class="" target="" href="javascript:;" title="中国建设银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/ccb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="HXB" style="cursor: default" class="" target="" href="javascript:;" title="华夏银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/hxb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="BOC" style="cursor: default" class="" target="" href="javascript:;" title="中国银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/boc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="BOS" style="cursor: default" class="" target="" href="javascript:;" title="上海银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/bos.jpg" alt="">
-                                            </a>
-                                            <a data-bank="ABC" style="cursor: default" class="" target="" href="javascript:;" title="中国农业银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/abc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="BOB" style="cursor: default" class="" target="" href="javascript:;" title="北京银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/bob.jpg" alt="">
-                                            </a>
-                                            <a data-bank="ICBC" style="cursor: default" class="" target="" href="javascript:;" title="中国工商银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/icbc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="PAB" style="cursor: default" class="" target="" href="javascript:;" title="平安银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/pab.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CMBC" style="cursor: default" class="" target="" href="javascript:;" title="中国民生银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/cmbc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CITIC" style="cursor: default" class="" target="" href="javascript:;" title="中信银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/citic.jpg" alt="">
-                                            </a>
-                                        </div>
-                                        <div id="db_1" class="banks-con clearfix tabPanel " style="display: none;">
-                                            <a data-bank="CMB" style="cursor: default" class="" target="" href="javascript:;" title="招商银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/cmb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CEB" style="cursor: default" class="" target="" href="javascript:;" title="中国光大银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/ceb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CITIC" style="cursor: default" class="" target="" href="javascript:;" title="中信银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/citic.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CCB" style="cursor: default" class="" target="" href="javascript:;" title="中国建设银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/ccb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="BOS" style="cursor: default" class="" target="" href="javascript:;" title="上海银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/bos.jpg" alt="">
-                                            </a>
-                                            <a data-bank="ABC" style="cursor: default" class="" target="" href="javascript:;" title="中国农业银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/abc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="BOB" style="cursor: default" class="" target="" href="javascript:;" title="北京银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/bob.jpg" alt="">
-                                            </a>
-                                            <a data-bank="ICBC" style="cursor: default" class="" target="" href="javascript:;" title="中国工商银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/icbc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="PAB" style="cursor: default" class="" target="" href="javascript:;" title="平安银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/pab.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CMBC" style="cursor: default" class="" target="" href="javascript:;" title="中国民生银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/cmbc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="SPDB" style="cursor: default" class="" target="" href="javascript:;" title="上海浦东发展银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/spdb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CGB" style="cursor: default" class="" target="" href="javascript:;" title="广发银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/cgb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CIB" style="cursor: default" class="" target="" href="javascript:;" title="兴业银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/cib.jpg" alt="">
-                                            </a>
-                                            <a data-bank="PSBC" style="cursor: default" class="" target="" href="javascript:;" title="中国邮政储蓄银行">
-                                                <img class="bank-card-list" src="//img.lianshang.cn/lsweb/resources/images/bank/psbc.jpg" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="lsMark" class="none"></div>
-                            </div>
-                            <div class="tabPanel" id="payPanel_9" data-id="9" style="display: none;">
+                            <div class="tabPanel" id="payPanel_9" data-id="9" style="display: block;">
                                 <div class="pay_bank_cont platform payCommon">
                                     <div class="title">
                                         <em class="icon"></em>
@@ -1020,7 +727,7 @@
                                     </div>
                                     <div class="pay-platforms clearfix pay-inner">
                                         <div class="plat-list">
-                                            <a class="box pay-way" data-click-log="" data-log-entry="ALIPAY" href="/pay/buyNow?paymentId=122405352905505" target="_blank">
+                                            <a class="box pay-way" data-click-log="" data-log-entry="ALIPAY" href="javascript:void(0)" target="_blank">
                                                 <img class="border_dif" src="//img.lianshang.cn/lsweb/resources/images/bank/alipay.jpg" alt="">
                                             </a>
                                         </div>
@@ -1035,290 +742,60 @@
                                     </div>
                                     <div class="pay-inner">
                                         <div class="bank">
-                                            <a data-bank="ICBC" class="box pay-way " target="_blank" data-log-entry="ICBC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=ICBC"
+                                            <a data-bank="ICBC" class="box pay-way " target="_blank" data-log-entry="ICBC" href="javascript:void(0)"
                                                 title="工商银行">
                                                 <img src="//img.lianshang.cn/lsweb/resources/images/bank/icbc.jpg" alt="">
                                             </a>
-                                            <a data-bank="ABC" class="box pay-way " target="_blank" data-log-entry="ABC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=ABC"
+                                            <a data-bank="ABC" class="box pay-way " target="_blank" data-log-entry="ABC" href="javascript:void(0)"
                                                 title="农业银行">
                                                 <img src="//img.lianshang.cn/lsweb/resources/images/bank/abc.jpg" alt="">
                                             </a>
-                                            <a data-bank="BOC" class="box pay-way " target="_blank" data-log-entry="BOC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=BOC"
+                                            <a data-bank="BOC" class="box pay-way " target="_blank" data-log-entry="BOC" href="javascript:void(0)"
                                                 title="中国银行">
                                                 <img src="//img.lianshang.cn/lsweb/resources/images/bank/boc.jpg" alt="">
                                             </a>
-                                            <a data-bank="CCB" class="box pay-way " target="_blank" data-log-entry="CCB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=CCB"
+                                            <a data-bank="CCB" class="box pay-way " target="_blank" data-log-entry="CCB" href="javascript:void(0)"
                                                 title="建设银行">
                                                 <img src="//img.lianshang.cn/lsweb/resources/images/bank/ccb.jpg" alt="">
                                             </a>
-                                            <a data-bank="BCM" class="box pay-way " target="_blank" data-log-entry="BCM" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=BCM"
+                                            <a data-bank="BCM" class="box pay-way " target="_blank" data-log-entry="BCM" href="javascript:void(0)"
                                                 title="交通银行">
                                                 <img src="//img.lianshang.cn/lsweb/resources/images/bank/bcm.jpg" alt="">
                                             </a>
-                                            <a data-bank="PSBC" class="box pay-way " target="_blank" data-log-entry="PSBC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=PSBC"
+                                            <a data-bank="PSBC" class="box pay-way " target="_blank" data-log-entry="PSBC" href="javascript:void(0)"
                                                 title="邮储银行">
                                                 <img src="//img.lianshang.cn/lsweb/resources/images/bank/psbc.jpg" alt="">
                                             </a>
-                                            <a data-bank="CMB" class="box pay-way " target="_blank" data-log-entry="CMB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=CMB"
+                                            <a data-bank="CMB" class="box pay-way " target="_blank" data-log-entry="CMB" href="javascript:void(0)"
                                                 title="招商银行">
                                                 <img src="//img.lianshang.cn/lsweb/resources/images/bank/cmb.jpg" alt="">
                                             </a>
-                                            <a data-bank="CMBC" class="box pay-way " target="_blank" data-log-entry="CMBC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=CMBC"
+                                            <a data-bank="CMBC" class="box pay-way " target="_blank" data-log-entry="CMBC" href="javascript:void(0)"
                                                 title="民生银行">
                                                 <img src="//img.lianshang.cn/lsweb/resources/images/bank/cmbc.jpg" alt="">
                                             </a>
-                                            <a data-bank="SPDB" class="box pay-way " target="_blank" data-log-entry="SPDB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=SPDB"
+                                            <a data-bank="SPDB" class="box pay-way " target="_blank" data-log-entry="SPDB" href="javascript:void(0)"
                                                 title="浦发银行">
                                                 <img src="//img.lianshang.cn/lsweb/resources/images/bank/spdb.jpg" alt="">
                                             </a>
-                                            <a data-bank="CGB" class="box pay-way " target="_blank" data-log-entry="CGB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=CGB"
+                                            <a data-bank="CGB" class="box pay-way " target="_blank" data-log-entry="CGB" href="javascript:void(0)"
                                                 title="广发银行">
                                                 <img src="//img.lianshang.cn/lsweb/resources/images/bank/cgb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CITIC" class="box pay-way " target="_blank" data-log-entry="CITIC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=CITIC"
-                                                title="中信银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/citic.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CEB" class="box pay-way " target="_blank" data-log-entry="CEB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=CEB"
-                                                title="光大银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/ceb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CIB" class="box pay-way " target="_blank" data-log-entry="CIB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=CIB"
-                                                title="兴业银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/cib.jpg" alt="">
-                                            </a>
-                                            <a data-bank="HXB" class="box pay-way " target="_blank" data-log-entry="HXB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=HXB"
-                                                title="华夏银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/hxb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="BOS" class="box pay-way " target="_blank" data-log-entry="BOS" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=BOS"
-                                                title="上海银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/bos.jpg" alt="">
-                                            </a>
-                                            <a data-bank="PAB" class="box pay-way hide more" target="_blank" data-log-entry="PAB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=PAB"
-                                                title="平安银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/pab.jpg" alt="">
-                                            </a>
-                                            <a data-bank="HZB" class="box pay-way hide more" target="_blank" data-log-entry="HZB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=HZB"
-                                                title="杭州银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/hzb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="BOB" class="box pay-way hide more" target="_blank" data-log-entry="BOB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=7&amp;bankCode=BOB"
-                                                title="北京银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/bob.jpg" alt="">
                                             </a>
                                             <span data-bank-display="15" class="bank_dif bank_more box">更多银行</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tabPanel" id="payPanel_6" data-id="6" style="display: none;">
-                                <div class="pay_bank_cont enterprise payCommon">
-                                    <div class="title">
-                                        <em class="icon"></em>
-                                        如果使用企业网银付款，卖家需为您支付0.6%的手续费，请提前与卖家沟通。
-                                    </div>
-                                    <div class="pay-inner">
-                                        <div class="bank">
-                                            <a data-bank="CMB" class="box pay-way " target="_blank" data-log-entry="CMB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=CMB"
-                                                title="招商银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/cmb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="ICBC" class="box pay-way " target="_blank" data-log-entry="ICBC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=ICBC"
-                                                title="中国工商银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/icbc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="ABC" class="box pay-way " target="_blank" data-log-entry="ABC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=ABC"
-                                                title="中国农业银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/abc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CCB" class="box pay-way " target="_blank" data-log-entry="CCB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=CCB"
-                                                title="中国建设银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/ccb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CMBC" class="box pay-way " target="_blank" data-log-entry="CMBC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=CMBC"
-                                                title="民生银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/cmbc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CIB" class="box pay-way " target="_blank" data-log-entry="CIB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=CIB"
-                                                title="兴业银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/cib.jpg" alt="">
-                                            </a>
-                                            <a data-bank="SPDB" class="box pay-way " target="_blank" data-log-entry="SPDB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=SPDB"
-                                                title="上海浦东发展银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/spdb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CGB" class="box pay-way " target="_blank" data-log-entry="CGB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=CGB"
-                                                title="广发银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/cgb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="BCM" class="box pay-way " target="_blank" data-log-entry="BCM" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=BCM"
-                                                title="交通银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/bcm.jpg" alt="">
-                                            </a>
-                                            <a data-bank="HXB" class="box pay-way " target="_blank" data-log-entry="HXB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=HXB"
-                                                title="华夏银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/hxb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="PSBC" class="box pay-way " target="_blank" data-log-entry="PSBC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=PSBC"
-                                                title="邮储银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/psbc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="BOC" class="box pay-way " target="_blank" data-log-entry="BOC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=BOC"
-                                                title="中国银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/boc.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CITIC" class="box pay-way " target="_blank" data-log-entry="CITIC" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=CITIC"
-                                                title="中信银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/citic.jpg" alt="">
-                                            </a>
-                                            <a data-bank="CEB" class="box pay-way " target="_blank" data-log-entry="CEB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=CEB"
-                                                title="中国光大银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/ceb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="BOB" class="box pay-way " target="_blank" data-log-entry="BOB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=BOB"
-                                                title="北京银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/bob.jpg" alt="">
-                                            </a>
-                                            <a data-bank="HSB" class="box pay-way hide more" target="_blank" data-log-entry="HSB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=HSB"
-                                                title="徽商银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/hsb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="NBCB" class="box pay-way hide more" target="_blank" data-log-entry="NBCB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=NBCB"
-                                                title="宁波银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/nbcb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="TJCB" class="box pay-way hide more" target="_blank" data-log-entry="TJCB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=TJCB"
-                                                title="天津银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/tjcb.jpg" alt="">
-                                            </a>
-                                            <a data-bank="BHB" class="box pay-way hide more" target="_blank" data-log-entry="BHB" href="/pay/buyNow?paymentId=122405352905505&amp;payPlatform=6&amp;bankCode=BHB"
-                                                title="河北银行">
-                                                <img src="//img.lianshang.cn/lsweb/resources/images/bank/bhb.jpg" alt="">
-                                            </a>
-                                            <span data-bank-display="15" class="bank_dif bank_more box">更多银行</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        </div>
                             <div class="tabPanel current" id="payPanel_5" data-id="5" style="display: block;">
-                                <div id="offlinePay" data-validator="yes">
-                                    <div class="pay_bank_cont">
-                                        <div id="offlinepayOne" class="inCont offline-pay">
-                                            <input type="hidden" name="id" id="id" value="122405352905505">
-                                            <input type="hidden" name="pay_type" id="pay_type" value="1">
-
-                                            <div class="hd1">如果您需要通过银行汇款业务进行支付，请您汇入如下账户：</div>
-                                            <div class="cont">
-                                                <p class="clearfix">
-                                                    <i>银 行 帐 号 :</i>
-                                                    <span class="col">4559 7159 3965</span>
-                                                    <a href="javascript:void(0)" class="btn_small_t btn-copy" data-clipboard-name="账号" data-clipboard-text="4559 7159 3965">复制账号</a>
-                                                </p>
-
-                                                <p class="clearfix">
-                                                    <i>户 名 :</i>
-                                                    <span>上海链展国际贸易有限公司</span>
-                                                    <a href="javascript:void(0)" class="btn_small_t btn-copy" data-clipboard-name="户名" data-clipboard-text="上海链展国际贸易有限公司">复制户名</a>
-                                                </p>
-
-                                                <p class="clearfix">
-                                                    <i>开 户 行 :</i>
-                                                    <span>中国银行上海市闸北支行</span>
-                                                </p>
-
-                                                <p class="clearfix">
-                                                    <i>经 营 地 址 :</i>
-                                                    <span>上海市闸北区广中西路757号多媒体大厦16楼</span>
-                                                </p>
-                                            </div>
-                                            <div id="offlinepayTwo" class="offline-pay-form">
-                                                <form action="/pay/offline-pay" method="post" id="offlineSubmitForm">
-                                                    <input type="hidden" name="paymentId" value="122405352905505">
-                                                    <input type="hidden" name="imgPath" value="" id="imgPath">
-                                                    <div class="form-container small">
-                                                        <div style="display:none;"></div>
-                                                        <div class="form-group clearfix">
-                                                            <label class="form-label vertical-align-top">
-                                                                <span class="required">*</span>汇款凭单：</label>
-                                                            <div class="form-content">
-                                                                <div class="credential-upload">
-                                                                    <a class="btn-upload" data-upload="uploadCredential" href="javascript:void(0)"></a>
-                                                                    <span class="upload-tip">最多可上传3张 JPG/PNG/JPEG格式图片，大小不能超过8M</span>
-                                                                </div>
-                                                                <div class="credential-imglist" style="display:none" data-provider="credentialPics" data-form="imglist">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="form-label">
-                                                                <span class="required">*</span>汇款人户名：</label>
-                                                            <input class="form-content form-input" placeholder="请输入汇款人姓名/公司名" name="remitter" maxlength="30">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="form-label">汇款时间：</label>
-                                                            <input class="form-content form-input" name="bankSeq" placeholder="请填写汇款时间" maxlength="30">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="form-label">&nbsp;</label>
-
-                                                            <div class="form-content">
-                                                                <a class="btn-submit-credential" href="javascript:void(0);">确认完成汇款</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <p class="yiw">如有任何疑问，请电话联系客服：
-                                                <span class="col1">400-821-7111</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="zhuy">
-                                        <p>
-                                            <i>转账付款注意事项：</i>
-                                            <br>
-                                            <span class="pay-notice" id="payNotice">
-                                                1）您可以通过支付宝、手机银行、网上银行、柜台等方式进行汇款 。
-                                                <br> 2）如果直接到银行柜台办理汇款时，务必带上身份证，汇款实名制要求汇款人出具身份证 。
-                                                <br> 3）汇款金额请以订单实际金额为准，汇款所需手续费用需要另付，不能从订单金额中直接扣除。
-                                                <br> 4）请务必上传清晰的汇款凭证，这可以帮助怪蜀黍准确、快速地确认您的款项。
-                                                <br>
-                                            </span>
-                                        </p>
-
-                                    </div>
-                                    <script type="text/html" id="credentialPicTmpl">
-    <div class="credential-box">
-      <img data-img src="{0}" class="credential-img"/>
-      <a class="remove" href="javascript:void(0)">&nbsp;</a>
-      <a class="remove-back" href="javascript:void(0)">&nbsp;</a>
-    </div>
-  </script>
-                                </div>
 
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--弹框-->
-            <div class="pay_problem" style="display:none;">
-                <i class="pay_problem_close"></i>
-
-                <p class="in_pay_problem">支付遇到问题？</p>
-
-                <p class="in_pay_please">
-                    <em></em>请在新打开的支付页面完成付款后再选择。</p>
-
-                <p class="in_pay_finished">付款完成前请不要关闭此窗口。完成付款后请根据你的情况点击下面的按钮：</p>
-
-                <div class="in_pay_button">
-                    <a href="/pay/trade/user/list" class="btn_small_t btn_tjiao">已完成付款</a>
-                    <a href="javascript:;" class="in_pay_button_r btn_small_t btn_tjiao">付款遇到问题</a>
-                </div>
-            </div>
-            <div id="lsMark" class="none" style="display: none; opacity: 0.5;"></div>
+            <div id="" class="none" style="display: none; opacity: 0.5;"></div>
             <!-- footer开始 -->
             <div id="footer">
                 <div class="footer-top clearfix">

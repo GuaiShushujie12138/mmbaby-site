@@ -241,7 +241,7 @@
                });
 
                if (checked != 0) {
-                   alert("checked > 0");
+                   var code = 0;
                    // 说明选中了商品，可以提交
                    $.ajax({url : "/count",
                        type : "POST",
@@ -250,14 +250,20 @@
                    :
                        itemIdList
                    },
+                       async : false,
                        traditional : true
                , success : function (data) {
-                       if (data.code == 200) {
+                           code = 200;
                            $(location).attr("href", "/go-count");
-                       }
                    }
                });
 
+                   console.log(code);
+                   if (code == 200) {
+                       $(location).attr("href", "/go-count");
+                   } else {
+                       alert("系统繁忙，请稍后再试!");
+                   }
                } else {
 
                }

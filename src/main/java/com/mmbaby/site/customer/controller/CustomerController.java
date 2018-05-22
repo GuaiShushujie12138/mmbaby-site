@@ -100,7 +100,7 @@ public class CustomerController extends BaseController {
      * @return
      */
     @RequestMapping(value = "update-info", method = RequestMethod.POST)
-    public Response updateCustomer(CustomerSubmitDTO customerSubmitDTO) {
+    public Response updateCustomer(CustomerSubmitDTO customerSubmitDTO, HttpSession session) {
         // 检查登陆参数
         Response response = checkUpdateArgs(customerSubmitDTO);
         if (!response.isSuccess()) {
@@ -114,7 +114,25 @@ public class CustomerController extends BaseController {
             return new ErrorResponse(generalResult.getMsg());
         }
 
+        // 更新session 中的客户信息
+        session.setAttribute(LOGIN_CUSTOMER, generalResult.getData());
+
         return new GeneralResponse<>(generalResult.getData());
+    }
+
+    /**
+     * 获取登陆客户信息
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "get-customer", method = RequestMethod.POST)
+    public Response getLoginCustomer() {
+        // 判断是否登陆
+        if (!isLogin()) {
+            return new ErrorResponse("请先登录");
+        }
+
+        return new GeneralResponse<>( getCustomer());
     }
 
     /**

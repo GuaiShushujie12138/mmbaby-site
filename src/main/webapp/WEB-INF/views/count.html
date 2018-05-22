@@ -12,6 +12,213 @@
     <meta name="description" content="怪蜀黍网（lianshang.com）-全球面辅料交易平台，专业的纺服业供应链B2B。采购需求在线发布，进口面料应有尽有，帮助千万时尚从业者实现“足不出户，全球采购”，链接全球时尚">
 
 
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $(".btn_add").css("background-image", "../../images/add_address.png");
+
+            // 判断客户是否登陆
+            $.post("ifLogin", function(data) {
+                console.log(data)
+                if (data.code == 200 && data.data != null) {
+                    $("#login-toolbar").css("display", "block");
+                    $("#un-login-toolbar").css("display", "none");
+
+                    $("#customer-name-a").text(data.data.customerName);
+
+                    $("#customer_id").val(data.data.id);
+                } else {
+                    $("#login-toolbar").css("display", "none");
+                    $("#un-login-toolbar").css("display", "block");
+                }
+            });
+
+            // 获取所有的收货地址
+            $.get("/address/get-all-adress", function (data) {
+                if (data.code == 200) {
+                    $.each(data.data, function (index, value) {
+
+                        var add_address = "设置默认地址";
+                        var address_class = "set";
+                        var gou = "";
+                        var add_check = "";
+                        // 判断当前是否为默认地址
+                        if (value.defaultAddress == true) {
+                            add_address = "默认收货地址"
+                            address_class = "m_add";
+                            gou = "<i class=\"gou\"></i>";
+                            add_check = "check_mor";
+                        }
+
+                        $("#addressList").append("<li addressId=" + value.id + " class=\"check_subcon " + add_check + "\" data-id=\"44704\" id=\"44704\" is_default=\"1\">\n" +
+                            "                                            <i class=\"del\" data-click-log=\"\" data-address-id=\"44704\"></i>\n" +
+                            "\n" +
+                            "\n" +
+                            "                                            <p class=\"ch_name\">收货人：<em data-provider=\"name\" data-form=\":html\">" + value.receiveName + "</em></p>\n" +
+                            "\n" +
+                            "                                            <p class=\"ch_tel\">手机：<label data-provider=\"mobile\" data-form=\":html\">" + value.mobile + "</label> <label data-provider=\"tel\" data-form=\":html\"></label></p>\n" +
+                            "\n" +
+                            "                                            <p>\n" +
+                            "                                                邮编：<label data-provider=\"zcode\" data-form=\":html\">" + value.zip + "</label>\n" +
+                            "                                            </p>\n" +
+                            "\n" +
+                            "                                            <p id=\"address_\" class=\"ch_add\" data-provider=\"addressInfo\" data-form=\":html\">\n" +
+                            "\n" +
+                            "                                            </p>\n" +
+                            "\n" +
+                            "                                            <p class=\"cz_add\">\n" +
+                            "                                                <i class=\"set\" style=\"display: none\" data-address-id=\"44704\" data-click-log=\"\">设置为默认地址</i>\n" +
+                            "                                            </p>\n" +
+                            "                                            <i class='rece_address "   + address_class + "'>" + add_address + "</i>\n" +
+                            "\n" +
+                            "                                           " + gou + "</li>");
+                    });
+                }
+            });
+
+            var allNumber = 0;
+            var allMoney = 0;
+            // 获取所有的需要购买商品列表
+            $.get("/order/get-count-product", function (data) {
+                if (data.code == 200) {
+                    $.each(data.data, function (index, value) {
+                        allNumber = allNumber + 1;
+                        allMoney = allMoney + value.amount;
+                        $(".detail_cont").append("<div class=\"shop_list mt15\" data-shop-id=\"2\">\n" +
+                            "                        <div class=\"shop_list_body\">\n" +
+                            "                            <div class=\"shop_l_c\" order_id=\"\">\n" +
+                            "                                <div class=\"c1\"></div>\n" +
+                            "                                <div class=\"c2\">\n" +
+                            "                                    <dl>\n" +
+                            "                                        <dt>\n" +
+                            "                                            <a href='/product/get-product?id='" + value.product.id +">\n" +
+                            "                                                <img src=" + value.product.pic + "\n" +
+                            "                                                    alt=" + value.product.name + ">\n" +
+                            "                                            </a>\n" +
+                            "                                        </dt>\n" +
+                            "                                        <dd class=\"name\">\n" +
+                            "                                            " + value.product.name + "\n" +
+                            "                                        </dd>\n" +
+                            "                                        <dd>\n" +
+                            "                                            <span class=\"shop_tag2\" title=\"样布\"></span>\n" +
+                            "                                        </dd>\n" +
+                            "                                    </dl>\n" +
+                            "                                </div>\n" +
+                            "\n" +
+                            "                                <div class=\"c4 shopPrice\">￥ " + value.product.price + "</div>\n" +
+                            "                                <div class=\"c4\">" + value.number +"</div>\n" +
+                            "                                <div class=\"c4\">\n" +
+                            "                                    <span class=\"pr totalPrice\">￥ " + value.amount +"</span>\n" +
+                            "                                </div>\n" +
+                            "                            </div>\n" +
+                            "                        </div>\n" +
+                            "                    </div>");
+                    });
+
+                    $(".total_money").text(allMoney);
+                    $(".products_num").text(allNumber);
+
+                    $("#buy").click(function () {
+                       $.post("/order/add-order", {"addressId" : $(".check_mor").attr("addressId")}, function (data) {
+                          if (data.code == 200) {
+                              $(location).attr("href", "/pay");
+                          }
+                       });
+                    });
+                }
+
+            });
+
+            $("#submit_address").click(function () {
+                alert("进来了")
+                var userName = $("#user_name").val();
+                var address = $("#rece_address").val();
+                var mobile = $("#rece_mobile").val();
+                var zcode = $("#rece_zcode").val();
+                var defaultAddress = ($("#default_address").attr("checked") == true
+                    || $("#default_address").attr("checked") == "checked") ? true : false;
+                console.log("defaultAddress:" + defaultAddress);
+                var customer_id = $("#customer_id").val();
+
+                if (userName == null || userName == "") {
+                    alert("收货人姓名不能为空!")
+                }
+                if (rece_address == null || rece_address == "") {
+                    alert("收货人地址不能为空!")
+                }
+                if (mobile == null || userName == "") {
+                    alert("收货人电话不能为空!")
+                } else if (mobile.length != 11) {
+                    alert("收货人电话长度要为11位!")
+                }
+
+                $.post("/address/add-address",
+                    {"customerId" : customer_id,
+                    "address" : address,
+                    "receiveName" : userName,
+                    "mobile" : mobile,
+                    "defaultAddress" : defaultAddress,
+                    "zip" : zcode},
+                    function (data) {
+                        if (data.code == 200) {
+                            alert("地址添加成功!")
+                            $("#lSlideShow1").css("display", "none");
+                            $("#lsMark").css("display", "none");
+
+                            var add_address = "设置默认地址";
+                            var address_class = "set";
+                            // 判断当前是否为默认地址
+                            if (data.data.defaultAddress == true) {
+                                add_address = "默认收货地址"
+                                address_class = "m_add";
+
+                                $(".rece_address").removeClass("m_add");
+                                $(".rece_address").addClass("set");
+                                $(".rece_address").text("设置默认地址");
+
+                                $(".gou").removeClass("gou");
+                            }
+
+                            $("#addressList").append("<li addressId=" + data.data.id + " class=\"check_subcon check_mor\" data-id=\"44704\" id=\"44704\" is_default=\"1\">\n" +
+                                "                                            <input type=\"hidden\" name=\"address_meta\" value=\"\" data-address-id=\"44704\" data-country-id=\"1\" data-province-id=\"110000\" data-city-id=\"110100\" data-area-id=\"110102\" data-zip=\"330013\" data-address=\"aaa\" data-telephone=\"\" data-mobile=\"13312345678\" data-name=\"aaa\" data-area-name=\"西城区\" data-country-name=\"中国\" data-province-name=\"北京\" data-city-name=\"北京市\">\n" +
+                                "                                            <i class=\"del\" data-click-log=\"\" data-address-id=\"44704\"></i>\n" +
+                                "\n" +
+                                "\n" +
+                                "                                            <p class=\"ch_name\">收货人：<em data-provider=\"name\" data-form=\":html\">" + userName + "</em></p>\n" +
+                                "\n" +
+                                "                                            <p class=\"ch_tel\">手机：<label data-provider=\"mobile\" data-form=\":html\">" + mobile + "</label> <label data-provider=\"tel\" data-form=\":html\"></label></p>\n" +
+                                "\n" +
+                                "                                            <p>\n" +
+                                "                                                邮编：<label data-provider=\"zcode\" data-form=\":html\">" + zcode + "</label>\n" +
+                                "                                            </p>\n" +
+                                "\n" +
+                                "                                            <p id=\"address_\" class=\"ch_add\" data-provider=\"addressInfo\" data-form=\":html\">\n" +
+                                "\n" + data.data.address +
+                                "                                            </p>\n" +
+                                "\n" +
+                                "                                            <p class=\"cz_add\">\n" +
+                                "                                                <i class=\"set\" style=\"display: none\" data-address-id=\"44704\" data-click-log=\"\">设置为默认地址</i>\n" +
+                                "                                            </p>\n" +
+                                "                                            <i class='rece_address "   + address_class + "'>" + add_address + "</i>\n" +
+                                "\n" +
+                                "                                           </li>");
+                        } else {
+                            alert(data.message);
+                        }
+                    });
+            });
+
+            $(".set").click(function() {
+                alert("收货地址进来了");
+                var defa = $(".m_add");
+                $(defa).attr("class", "set");
+                $(defa).text("设置默认地址");
+                $(this).attr("class", "m_add");
+                $(this).text("默认收货地址");
+            });
+
+        });
+    </script>
     <script async="" charset="UTF-8" src="../../js/meiqia.js?v=10"></script>
     <script src="//hm.baidu.com/hm.js?bfeebb83050db0f41b20bd00fade1531"></script>
     <script type="text/javascript" data-pack-ignore="">
@@ -610,232 +817,43 @@
             <script type="text/javascript">
                 var bankLength = '9-20';
             </script>
-            <form action="" id="form_sh" onsubmit="return false;" novalidate="novalidate">
+            <form action="" id="form_sh" class="address_form" onsubmit="return false;" novalidate="novalidate">
                 <div id="lSlideShow1" class="none" style="display:none;margin-top:-200px">
                     <div class="check_list check_t">
                         <div class="check_l">
                             <em>*</em>收货人姓名：</div>
                         <div class="check_r">
-                            <input type="text" class="ipt" value="" name="username" data-provider="name" autocomplete="off" maxlength="15">
-                        </div>
-                    </div>
-                    <div class="check_list">
-                        <div class="check_l">
-                            <em>*</em>所在地：</div>
-                        <div class="check_r pt4">
-                            <div class="combobox-wrap">
-                                <div class="combobox">
-                                    <input type="text" class="combobox-input" placeholder="请选择">
-                                </div>
-                                <ul class="combobox-list" style="display: none; height: 180px; width: 0px;">
-                                    <li class="combobox-list-item combobox-selected" data-value="110000">
-                                        <a class="combobox-list-item-a" href="###">北京</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="120000">
-                                        <a class="combobox-list-item-a" href="###">天津</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="130000">
-                                        <a class="combobox-list-item-a" href="###">河北省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="140000">
-                                        <a class="combobox-list-item-a" href="###">山西省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="150000">
-                                        <a class="combobox-list-item-a" href="###">内蒙古自治区</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="210000">
-                                        <a class="combobox-list-item-a" href="###">辽宁省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="220000">
-                                        <a class="combobox-list-item-a" href="###">吉林省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="230000">
-                                        <a class="combobox-list-item-a" href="###">黑龙江省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="310000">
-                                        <a class="combobox-list-item-a" href="###">上海</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="320000">
-                                        <a class="combobox-list-item-a" href="###">江苏省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="330000">
-                                        <a class="combobox-list-item-a" href="###">浙江省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="340000">
-                                        <a class="combobox-list-item-a" href="###">安徽省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="350000">
-                                        <a class="combobox-list-item-a" href="###">福建省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="360000">
-                                        <a class="combobox-list-item-a" href="###">江西省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="370000">
-                                        <a class="combobox-list-item-a" href="###">山东省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="410000">
-                                        <a class="combobox-list-item-a" href="###">河南省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="420000">
-                                        <a class="combobox-list-item-a" href="###">湖北省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="430000">
-                                        <a class="combobox-list-item-a" href="###">湖南省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="440000">
-                                        <a class="combobox-list-item-a" href="###">广东省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="450000">
-                                        <a class="combobox-list-item-a" href="###">广西壮族自治区</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="460000">
-                                        <a class="combobox-list-item-a" href="###">海南省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="500000">
-                                        <a class="combobox-list-item-a" href="###">重庆</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="510000">
-                                        <a class="combobox-list-item-a" href="###">四川省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="520000">
-                                        <a class="combobox-list-item-a" href="###">贵州省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="530000">
-                                        <a class="combobox-list-item-a" href="###">云南省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="540000">
-                                        <a class="combobox-list-item-a" href="###">西藏自治区</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="610000">
-                                        <a class="combobox-list-item-a" href="###">陕西省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="620000">
-                                        <a class="combobox-list-item-a" href="###">甘肃省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="630000">
-                                        <a class="combobox-list-item-a" href="###">青海省</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="640000">
-                                        <a class="combobox-list-item-a" href="###">宁夏回族自治区</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="650000">
-                                        <a class="combobox-list-item-a" href="###">新疆维吾尔自治区</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="710000">
-                                        <a class="combobox-list-item-a" href="###">台湾</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="810000">
-                                        <a class="combobox-list-item-a" href="###">香港特别行政区</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="820000">
-                                        <a class="combobox-list-item-a" href="###">澳门特别行政区</a>
-                                    </li>
-                                    <li class="combobox-list-item" data-value="990000">
-                                        <a class="combobox-list-item-a" href="###">海外</a>
-                                    </li>
-                                </ul>
-
-                                <input type="hidden" value="110000">
-                            </div>
-                            <select name="province" data-provider="provinceId" id="province" class="left" style="width: 120px; margin-right: 5px; display: none;">
-                                <option value="110000">北京</option>
-                                <option value="120000">天津</option>
-                                <option value="130000">河北省</option>
-                                <option value="140000">山西省</option>
-                                <option value="150000">内蒙古自治区</option>
-                                <option value="210000">辽宁省</option>
-                                <option value="220000">吉林省</option>
-                                <option value="230000">黑龙江省</option>
-                                <option value="310000">上海</option>
-                                <option value="320000">江苏省</option>
-                                <option value="330000">浙江省</option>
-                                <option value="340000">安徽省</option>
-                                <option value="350000">福建省</option>
-                                <option value="360000">江西省</option>
-                                <option value="370000">山东省</option>
-                                <option value="410000">河南省</option>
-                                <option value="420000">湖北省</option>
-                                <option value="430000">湖南省</option>
-                                <option value="440000">广东省</option>
-                                <option value="450000">广西壮族自治区</option>
-                                <option value="460000">海南省</option>
-                                <option value="500000">重庆</option>
-                                <option value="510000">四川省</option>
-                                <option value="520000">贵州省</option>
-                                <option value="530000">云南省</option>
-                                <option value="540000">西藏自治区</option>
-                                <option value="610000">陕西省</option>
-                                <option value="620000">甘肃省</option>
-                                <option value="630000">青海省</option>
-                                <option value="640000">宁夏回族自治区</option>
-                                <option value="650000">新疆维吾尔自治区</option>
-                                <option value="710000">台湾</option>
-                                <option value="810000">香港特别行政区</option>
-                                <option value="820000">澳门特别行政区</option>
-                                <option value="990000">海外</option>
-                            </select>
-                            <div class="combobox-wrap">
-                                <div class="combobox">
-                                    <input type="text" class="combobox-input" placeholder="请选择">
-                                </div>
-                                <ul class="combobox-list" style="display: none; height: 180px; width: 0px;">
-                                    <li class="combobox-list-item" data-value="110100">
-                                        <a class="combobox-list-item-a" href="###">北京市</a>
-                                    </li>
-                                </ul>
-
-                                <input type="hidden" value="">
-                            </div>
-                            <select name="city" data-provider="cityId" id="city" class="left" style="width: 80px; margin-right: 5px; display: none;">
-                                <option value="">市</option>
-                            </select>
-                            <div class="combobox-wrap">
-                                <div class="combobox">
-                                    <input type="text" class="combobox-input" placeholder="请选择">
-                                </div>
-                                <ul class="combobox-list" style="display: none; height: 180px; width: 0px;"></ul>
-                                <input type="hidden" value="">
-                            </div>
-                            <select name="county" data-provider="countyId" id="county" class="left" style="width: 80px; margin-right: 5px; display: none;">
-                                <option value="">区/县</option>
-                            </select>
-
-                            <div class="addr_error"></div>
+                            <input id="user_name" type="text" class="ipt" value="" name="username" data-provider="name" autocomplete="off" maxlength="15">
                         </div>
                     </div>
                     <div class="check_list">
                         <div class="check_l">
                             <em>*</em>详细地址：</div>
                         <div class="check_r">
-                            <input type="text" class="ipt" maxlength="25" name="address" data-provider="address" value="" autocomplete="off">
+                            <input id="rece_address" type="text" class="ipt" maxlength="40" name="address" data-provider="address" value="" autocomplete="off">
                         </div>
                     </div>
                     <div class="check_list">
                         <div class="check_l">
                             <em>*</em>手机号码：</div>
                         <div class="check_r">
-                            <input type="text" class="ipt" maxlength="13" name="mobile" data-provider="mobile" style="width:180px;" value="" autocomplete="off">
-
-                            <div class="address_text">或　固定号码</div>
-                            <input type="text" class="ipt" maxlength="13" id="lastname" data-provider="tel" name="tel" style="width:180px;" value=""
-                                autocomplete="off">
+                            <input maxLength="11" id="rece_mobile" type="text" class="ipt" maxlength="13" name="mobile" data-provider="mobile" style="width:180px;" value="" autocomplete="off">
                         </div>
-                        <div class="phone_tel">手机号码和固定号码至少必须填写一项</div>
                     </div>
                     <div class="check_list">
                         <div class="check_l">邮编：</div>
                         <div class="check_r">
-                            <input type="text" class="ipt" value="" maxlength="13" data-provider="zcode" name="zcode" autocomplete="off">
+                            <input maxLength="6" id="rece_zcode" type="text" class="ipt" value="" maxlength="13" data-provider="zcode" name="zcode" autocomplete="off">
                         </div>
                     </div>
                     <div class="phone_tel check_shez">
-                        <input type="checkbox" data-click-log="" class="check_sz" data-provider="isDefault" name="is_default">
+                        <input id="default_address" type="checkbox" data-click-log="" class="check_sz" data-provider="isDefault" name="is_default">
 
                         <div class="check_sztxt">默认收货地址</div>
                     </div>
                     <div class="tBtn">
                         <!-- <input type="button" class="quxiao" id="picCancel" /> -->
-                        <input type="submit" class="queding btn_small_t btn_tjiao" id="picConfirm" value="确定" style="margin-left:0">
+                        <input id="submit_address" type="submit" class="queding btn_small_t btn_tjiao" id="picConfirm" value="确定" style="margin-left:0">
                         <input type="hidden" class="cur_id">
                     </div>
                     <i id="lSlide1Close"></i>
@@ -860,7 +878,7 @@
                             <div class="check_title">填写并核对订单信息</div>
                             <div class="check_left">
                                 收货人信息：
-                                <i class="btn_add" data-click-log=""></i>
+                                <i class="btn_add" data-click-log="">新增收货地址</i>
                             </div>
                             <div class="check_allcont">
                                 <span class="check_btn_l" onselectstart="return false;" style="display: none;"></span>
@@ -883,101 +901,16 @@
                         </span>
                     </div>
                     <input type="hidden" class="couponId" value="0">
-                    <div class="check_left pd30" id="couponWrap">
-                        <div class="">
-                            <span class="payTypes-title">使用优惠券</span>
-                            <select class="select-coupon" disabled="disabled">
-                                <option value="0">暂无可使用优惠券</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="dk_all">抵扣金额：
-                        <span class="dk_money">-￥0.00</span>
 
-                        <div class="cancel_use">取消使用</div>
-                    </div>
-                </div>
                 <div class="check_left mt40">确认订单信息：</div>
                 <div class="detail_cont mt15">
                     <div class="detail_t">
                         <span class="c1">商品信息</span>
-                        <span class="c2">颜色</span>
-                        <span class="c2">单位</span>
                         <span class="c2">单价</span>
                         <span class="c2">数量</span>
                         <span class="c2">金额</span>
                     </div>
-                    <div class="shop_list mt15" data-shop-id="2">
-                        <div class="shop_list_body">
-                            <div class="shop_list_tit clearfix">
-                                <span val="2">
-                                    店铺：
-                                    <a href="/shop/2" target="_blank">GTC</a>
-                                </span>
 
-                                <div class="freight delivery_info" data-delivery="2">
-                                    <input type="radio" data-click-log="" class="radio_delivery" name="delivery_2" value="0" checked="checked">
-                                    <span class="">物流：</span>
-
-                                    <div class="logistics_box logistics_box_dif">
-                                        <div class="in_logistics_box ">
-                                            <p class="logistics_other" data-name="任意物流" data-marker="logistics" data-trade-index="0" data-id="419">任意物流</p>
-                                        </div>
-                                        <ul>
-                                            <li class="logistics_one" data-click-log="" style="border-bottom-style: none;">任意物流</li>
-                                            <li data-click-log="" class="logistics_one" style="border-bottom-style: none;">顺丰速运</li>
-                                            <li data-click-log="" class="logistics_one" style="border-bottom: none;">德邦物流</li>
-                                        </ul>
-                                    </div>
-                                    <input type="radio" data-click-log="" class="radio_delivery" name="delivery_2" value="4">
-                                    <span class="" data-click-log="">自提</span>
-                                </div>
-                            </div>
-                            <div class="shop_l_c" order_id="">
-                                <div class="c1"></div>
-                                <div class="c2">
-                                    <dl>
-                                        <dt>
-                                            <a href="/item/121151469">
-                                                <img src="http://img.lianshang.cn/data/item/20163/5/271_1457722669591.jpg?x-oss-process=style/p_w_80"
-                                                    alt="浅蓝色期货夏季其他棉棉纺面料">
-                                            </a>
-                                        </dt>
-                                        <dd class="name">
-                                            浅蓝色期货夏季其他棉棉纺面料 期货
-                                        </dd>
-                                        <dd>
-                                            <span class="shop_tag2" title="样布"></span>
-                                        </dd>
-                                    </dl>
-                                </div>
-                                <div class="c4">
-                                    &nbsp; 浅蓝色
-                                    <div class="bu" style="background:#c5e3ff"></div>
-                                </div>
-                                <div class="c4">码</div>
-                                <div class="c4 shopPrice">￥ 50.75</div>
-                                <div class="c4">1.00</div>
-                                <div class="c4">
-                                    <span class="pr totalPrice">￥ 50.75</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="buy-remark">
-                            <span>买家留言：</span>
-                            <input type="text" data-remark="2" class="remark-text" maxlength="200" name="remark" value="" placeholder="请填写购买此商品的特殊要求，请与商家协商一致">
-                            <span class="remark-limit">内容长度不能超过200</span>
-                        </div>
-                        <div class="report-service">
-                            <span class="left">验布服务：</span>
-                            <input class="left report-checkbox" type="checkbox" name="report-cloth">
-                            <i class="left ls-report-btn">怪蜀黍验布</i>
-                            <a class="left report-cloth-square" href="/subject/static/inspection-cloth-square.html" target="_blank"></a>
-                            <p class="left report-text">目前仅支持柯桥、广州的商家，验布可能会影响发货速度，请提前与商家沟通。
-                                <span>[免费]</span>
-                            </p>
-                        </div>
-                    </div>
                 </div>
                 <input type="hidden" id="tradetotalAmount" data-value="51">
                 <div class="pay_btn">
@@ -989,158 +922,17 @@
                         <i class="products_num">1</i>
                         <em>件商品，货品金额：</em>
                         <span>￥</span>
-                        <span>50.75</span>
-                    </div>
-                    <div class="pay_btn_price none money_d">
-                        <em>抵用金额：</em>
-                        <span>0</span>
+                        <span class="total_money">50.75</span>
                     </div>
                     <div class="pay_btn_price money_need">
                         <em>应付总额：</em>
                         <span>￥</span>
-                        <span id="totalAmount" data-amount="50.75">50.75</span>
+                        <span id="totalAmount" class="total_money" data-amount="50.75">50.75</span>
                     </div>
                     <input type="button" id="buy" class="btn_small_t  btn_tjiao" data-click-log="" value="提交订单">
                 </div>
             </div>
-            <!--推荐开始-->
-            <div class="addr_bot">
-                <div class="addr_title mt25">
-                    <div class="addr_t_l left">
-                        <h2>给您推荐</h2>
-                        <span>RECOMMEND</span>
-                    </div>
-                </div>
-                <div class="recommend">
-                    <div class="recommend_cont">
-                        <div class="recommend_list">
-                            <dl>
-                                <dt>
-                                    <a href="/item/121506521" target="_blank">
-                                        <img src="http://img10.lianshang.cn/data/item/20183/5/1521796097511_6522.jpg?x-oss-process=style/p_w_200"
-                                            alt="" width="192" height="192">
-                                    </a>
-                                </dt>
-                                <dd>
-                                    <a href="/item/121506521" target="_blank">秋冬夹克时装尼龙烫金面料</a>
-                                </dd>
-                            </dl>
-                            <div class="recommend_b" title="">
-                                大货价：
-                                <span>¥17.80 -17.80/米
-                                </span>
-                            </div>
-                        </div>
-                        <div class="recommend_list">
-                            <dl>
-                                <dt>
-                                    <a href="/item/121513285" target="_blank">
-                                        <img src="http://img10.lianshang.cn/data/item/20184/5/1524025722565_9833.jpg?x-oss-process=style/p_w_200"
-                                            alt="" width="192" height="192">
-                                    </a>
-                                </dt>
-                                <dd>
-                                    <a href="/item/121513285" target="_blank">秋冬女装面料麻花面料</a>
-                                </dd>
-                            </dl>
-                            <div class="recommend_b" title="">
-                                样布价：
-                                <span>¥25.00-25.00/米</span>
-                            </div>
-                            <div class="recommend_b" title="">
-                                大货价：
-                                <span>¥30.00 -30.00/公斤
-                                </span>
-                            </div>
-                        </div>
-                        <div class="recommend_list">
-                            <dl>
-                                <dt>
-                                    <a href="/item/121506467" target="_blank">
-                                        <img src="http://img10.lianshang.cn/data/item/20183/5/1521788174996_9285.jpg?x-oss-process=style/p_w_200"
-                                            alt="" width="192" height="192">
-                                    </a>
-                                </dt>
-                                <dd>
-                                    <a href="/item/121506467" target="_blank">秋冬烫金（离子膜金色和银色）夹克面料</a>
-                                </dd>
-                            </dl>
-                            <div class="recommend_b" title="">
-                                大货价：
-                                <span>¥17.80 -17.80/米
-                                </span>
-                            </div>
-                        </div>
-                        <div class="recommend_list">
-                            <dl>
-                                <dt>
-                                    <a href="/item/121514726" target="_blank">
-                                        <img src="http://img10.lianshang.cn/data/item/20184/5/1524464720522_7961.jpg?x-oss-process=style/p_w_200"
-                                            alt="" width="192" height="192">
-                                    </a>
-                                </dt>
-                                <dd>
-                                    <a href="/item/121514726" target="_blank">毛巾布复合TPU透气膜 尿不湿 隔尿垫复合面料</a>
-                                </dd>
-                            </dl>
-                            <div class="recommend_b" title="">
-                                样布价：
-                                <span>¥25.00-25.00/米</span>
-                            </div>
-                            <div class="recommend_b" title="">
-                                大货价：
-                                <span>¥2.80 -2.80/米
-                                </span>
-                            </div>
-                        </div>
-                        <div class="recommend_list">
-                            <dl>
-                                <dt>
-                                    <a href="/item/121512981" target="_blank">
-                                        <img src="http://img10.lianshang.cn/data/item/20184/5/1523939845096_857.jpg?x-oss-process=style/p_w_200"
-                                            alt="" width="192" height="192">
-                                    </a>
-                                </dt>
-                                <dd>
-                                    <a href="/item/121512981" target="_blank">弹力皱全涤纶面料 修身印花服装面料批发</a>
-                                </dd>
-                            </dl>
-                            <div class="recommend_b" title="">
-                                样布价：
-                                <span>¥10.00-10.00/米</span>
-                            </div>
-                            <div class="recommend_b" title="">
-                                大货价：
-                                <span>¥27.00 -27.00/米
-                                </span>
-                            </div>
-                        </div>
-                        <div class="recommend_list">
-                            <dl>
-                                <dt>
-                                    <a href="/item/121514804" target="_blank">
-                                        <img src="http://img10.lianshang.cn/data/item/20184/5/1524473334018_8586.jpg?x-oss-process=style/p_w_200"
-                                            alt="" width="192" height="192">
-                                    </a>
-                                </dt>
-                                <dd>
-                                    <a href="/item/121514804" target="_blank">法兰绒复合TPU透气膜 隔尿垫 尿不湿面料</a>
-                                </dd>
-                            </dl>
-                            <div class="recommend_b" title="">
-                                样布价：
-                                <span>¥20.00-20.00/米</span>
-                            </div>
-                            <div class="recommend_b" title="">
-                                大货价：
-                                <span>¥3.50 -3.50/米
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--推荐结束-->
+
             <script type="text/html" id="invoicePanel">
     <div class="in_box" id="invoicePanel" style="display: none">
       <div class="in_type">

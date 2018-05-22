@@ -125,6 +125,7 @@ public class CartController extends BaseController {
             cartDTO.getProductMap().remove(productId);
         } else {
             orderLineDTO.setNumber(orderLineDTO.getNumber() - 1);
+            orderLineDTO.setAmount(orderLineDTO.getAmount() - orderLineDTO.getProduct().getPrice());
         }
 
         // 再将cartDTO放进session
@@ -160,6 +161,7 @@ public class CartController extends BaseController {
         }
 
         orderLineDTO.setNumber(orderLineDTO.getNumber() + 1);
+        orderLineDTO.setAmount(orderLineDTO.getAmount() + orderLineDTO.getProduct().getPrice());
 
         // 再将cartDTO放进session
         session.setAttribute(CUSTOMER_CART, cartDTO);

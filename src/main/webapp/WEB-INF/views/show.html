@@ -93,6 +93,18 @@
                 console.log("content : \n" + content);
                 $("#itemList").html(content);
 
+                $(".btn-favorite").click(function () {
+                    $.post("/cart/add-product",
+                        {"productId" : $(this).attr("data-item-id")},
+                        function (data) {
+                            if (data.code == 200) {
+                                alert("添加购物车成功!");
+                            } else {
+                                alert(data.message);
+                            }
+                        });
+                });
+
             });
 
 
@@ -164,6 +176,18 @@
                     console.log("content : \n" + content);
                     $("#itemList").html(content);
 
+
+                    $(".btn-favorite").click(function () {
+                        $.post("/cart/add-product",
+                            {"productId" : $(this).attr("data-item-id")},
+                            function (data) {
+                                if (data.code == 200) {
+                                    alert("添加购物车成功!");
+                                } else {
+                                    alert(data.message);
+                                }
+                            });
+                    });
                 });
             });
 
@@ -233,6 +257,18 @@
 
                     console.log("content : \n" + content);
                     $("#itemList").html(content);
+
+                    $(".btn-favorite").click(function () {
+                        $.post("/cart/add-product",
+                            {"productId" : $(this).attr("data-item-id")},
+                            function (data) {
+                                if (data.code == 200) {
+                                    alert("添加购物车成功!");
+                                } else {
+                                    alert(data.message);
+                                }
+                            });
+                    });
 
                 });
             });
@@ -304,6 +340,18 @@
 
                     console.log("content : \n" + content);
                     $("#itemList").html(content);
+
+                    $(".btn-favorite").click(function () {
+                        $.post("/cart/add-product",
+                            {"productId" : $(this).attr("data-item-id")},
+                            function (data) {
+                                if (data.code == 200) {
+                                    alert("添加购物车成功!");
+                                } else {
+                                    alert(data.message);
+                                }
+                            });
+                    });
 
                 });
             });
@@ -378,6 +426,18 @@
 
                         console.log("content : \n" + content);
                         $("#itemList").html(content);
+
+                        $(".btn-favorite").click(function () {
+                            $.post("/cart/add-product",
+                                {"productId" : $(this).attr("data-item-id")},
+                                function (data) {
+                                    if (data.code == 200) {
+                                        alert("添加购物车成功!");
+                                    } else {
+                                        alert(data.message);
+                                    }
+                                });
+                        });
 
                     });
                 }
@@ -454,6 +514,18 @@
                         console.log("content : \n" + content);
                         $("#itemList").html(content);
 
+                        $(".btn-favorite").click(function () {
+                            $.post("/cart/add-product",
+                                {"productId" : $(this).attr("data-item-id")},
+                                function (data) {
+                                    if (data.code == 200) {
+                                        alert("添加购物车成功!");
+                                    } else {
+                                        alert(data.message);
+                                    }
+                                });
+                        });
+
                     });
                 }
             });
@@ -528,6 +600,18 @@
 
                         console.log("content : \n" + content);
                         $("#itemList").html(content);
+
+                        $(".btn-favorite").click(function () {
+                            $.post("/cart/add-product",
+                                {"productId" : $(this).attr("data-item-id")},
+                                function (data) {
+                                    if (data.code == 200) {
+                                        alert("添加购物车成功!");
+                                    } else {
+                                        alert(data.message);
+                                    }
+                                });
+                        });
 
                     });
                 }
@@ -1077,7 +1161,7 @@
                 </a>
             </div>
             <div class="header_m">
-                <form action="/search/item-keyword?" method="get" id="headerSearch">
+                <form action="/product/search-product?" method="get" id="headerSearch">
                     <div class="search">
                         <div class="search_tab">
                             <ul>
@@ -1094,8 +1178,8 @@
                             <div id="head_match">
                                 <span id="v" onselectstart="return false" style="z-index: 999; display: none;"></span>
                             </div>
-                            <input type="text" class="txt" id="inputMatch" autocomplete="off" placeholder="" name="keyword"
-                                value="全棉">
+                            <input type="text" class="txt" id="inputMatch" autocomplete="off" placeholder="" name="keyWord"
+                                value="">
                             <div class="auto_hidden"></div>
                             <input type="button" class="search_btn" value="搜索">
                         </div>

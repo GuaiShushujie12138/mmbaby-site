@@ -94,6 +94,12 @@ public class ProductController extends BaseController {
         return view;
     }
 
+    /**
+     * 搜索商品
+     * @param keyWord
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/search-product", method = RequestMethod.GET)
     public ModelAndView searchProduct(@RequestParam(value = "keyWord", defaultValue = "纸尿裤") String keyWord,
                                       HttpSession session) {

@@ -63,7 +63,7 @@ public class AddressController extends BaseController {
      * @param addressSubmitDTO
      * @return
      */
-    @RequestMapping(value = "add-adress", method = RequestMethod.POST)
+    @RequestMapping(value = "add-address", method = RequestMethod.POST)
     public Response addAddress(AddressSubmitDTO addressSubmitDTO) {
         if (!isLogin()) {
             return new ErrorResponse("请先登陆");
@@ -90,6 +90,11 @@ public class AddressController extends BaseController {
      * @return
      */
     private Response checkAddressSubmitDTO(AddressSubmitDTO addressSubmitDTO) {
+
+        if (addressSubmitDTO.getCustomerId() == null) {
+            addressSubmitDTO.setCustomerId(getCustomer().getId());
+        }
+
         if (StringUtils.isEmpty(addressSubmitDTO.getReceiveName())) {
             return new ErrorResponse("收货人姓名不可为空");
         }

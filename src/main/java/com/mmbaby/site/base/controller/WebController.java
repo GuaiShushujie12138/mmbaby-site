@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.mmbaby.site.base.constants.Constants.LOGIN_CUSTOMER;
+import static com.mmbaby.site.base.constants.Constants.ORDER_ID;
 import static com.mmbaby.site.base.constants.Constants.PRODUCT_ID_LIST;
 
 /**
@@ -111,6 +112,11 @@ public class WebController extends BaseController {
         return view;
     }
 
+    /**
+     * 结算界面
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/go-count", method = RequestMethod.GET)
     public ModelAndView goToCount(HttpSession session) {
         ModelAndView view = new ModelAndView("count");
@@ -118,6 +124,61 @@ public class WebController extends BaseController {
         // 判断是否登陆
         if (!isLogin()) {
             view.setViewName("login");
+        }
+
+        return view;
+    }
+
+    /**
+     * 支付界面
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/pay", method = RequestMethod.GET)
+    public ModelAndView goToPay(HttpSession session) {
+        ModelAndView view = new ModelAndView("pay");
+
+        // 判断是否登陆
+        if (!isLogin()) {
+            view.setViewName("login");
+        }
+
+        return view;
+    }
+
+    /**
+     * 订单详情界面
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/order_detail", method = RequestMethod.GET)
+    public ModelAndView goToOrderDetail(Integer orderId, HttpSession session) {
+        ModelAndView view = new ModelAndView("order_detail");
+
+        // 判断是否登陆
+        if (!isLogin()) {
+            view.setViewName("login");
+        } else {
+            session.setAttribute(ORDER_ID, orderId);
+        }
+
+        return view;
+    }
+
+    /**
+     * 个人中心界面
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/userinfo", method = RequestMethod.GET)
+    public ModelAndView goToUserInfo(HttpSession session) {
+        ModelAndView view = new ModelAndView("userinfo");
+
+        // 判断是否登陆
+        if (!isLogin()) {
+            view.setViewName("login");
+        } else {
+
         }
 
         return view;

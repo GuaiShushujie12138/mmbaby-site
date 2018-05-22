@@ -75,4 +75,9 @@ public class Constants {
      * 商品搜索关键字
      */
     public static final String KEY_WORD = "key_word";
+
+    /**
+     * 订单id
+     */
+    public static final String ORDER_ID = "order_id";
 }
