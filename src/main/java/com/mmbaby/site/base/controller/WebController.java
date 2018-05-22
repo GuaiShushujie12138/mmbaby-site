@@ -1,19 +1,18 @@
 package com.mmbaby.site.base.controller;
 
 import com.dianping.pigeon.util.CollectionUtils;
+import com.google.common.collect.Lists;
 import com.mmbaby.customer.dto.domain.CustomerDTO;
 import com.mmbaby.site.base.constants.Constants;
 import com.mmbaby.site.base.response.GeneralResponse;
 import com.mmbaby.site.base.response.Response;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.mmbaby.site.base.constants.Constants.LOGIN_CUSTOMER;
@@ -93,18 +92,20 @@ public class WebController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/count", method = RequestMethod.POST)
-    public ModelAndView goCount(List<Integer> productIdList, HttpSession session) {
+    public ModelAndView goCount(Integer[] productIdList, HttpSession session) {
         ModelAndView view = new ModelAndView("count");
+
+        List<Integer> idList = Arrays.asList(productIdList);
 
         // 判断是否登陆
         if (!isLogin()) {
             view.setViewName("login");
         } else {
-            if (CollectionUtils.isEmpty(productIdList)) {
+            if (CollectionUtils.isEmpty(idList)) {
                 view.setViewName("cart");
             }
             // 将选择的商品id集合放进session
-            session.setAttribute(PRODUCT_ID_LIST, productIdList);
+            session.setAttribute(PRODUCT_ID_LIST, idList);
         }
 
         return view;

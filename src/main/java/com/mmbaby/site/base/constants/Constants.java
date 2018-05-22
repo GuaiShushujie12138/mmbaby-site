@@ -70,4 +70,9 @@ public class Constants {
      * 商品查询排序
      */
     public static final String SORT = "sort";
+
+    /**
+     * 商品搜索关键字
+     */
+    public static final String KEY_WORD = "key_word";
 }

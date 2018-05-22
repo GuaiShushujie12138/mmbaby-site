@@ -49,7 +49,6 @@
             });
 
             $(".btn_tjiao").click(function () {
-                alert("进来了")
                 $.post("/cart/add-product",
                     {"productId" : $(this).attr("val")},
                     function (data) {

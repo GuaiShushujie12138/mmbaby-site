@@ -45,22 +45,23 @@
                     $(".list_first").css("display", "none");
 
                     $.each(data.data, function (index, value) {
+                        console.log(value)
                         checkNum = checkNum + 1;
                         total_money = total_money + value.amount;
                         $(".mt33").append("<div uid=\"204215\" id=\"ci_121151469_763940_2\" class=\"shop_l_c\">\n" +
                             "<div class=\"c1\">\n" +
-                            "<input type=\"checkbox\" checked='checked' value=" + value.product.id + " data-marker=\"cart-item\" autocomplete=\"off\">\n" +
+                            "<input type=\"checkbox\" class='a_checkbox' id='check_" + value.itemId + "'  checked='checked' value=" + value.product.id + " data-marker=\"cart-item\">\n" +
                             "</div>\n" +
                             "<div class=\"c2\">\n" +
                             "<dl>\n" +
                             "<dt>\n" +
-                            "<a href=\" /product/get-product?id= " + value.productId +" \" target=\"_blank\">\n" +
+                            "<a href=\" /product/get-product?id= " + value.itemId +" \" target=\"_blank\">\n" +
                             "<img src=" + value.product.pic +  " alt= " + value.product.name + "\n" +
                             "width=\"80\" height=\"80\">\n" +
                             "</a>\n" +
                             "</dt>\n" +
                             "<dd class=\"name\">\n" +
-                            "<a href=\"/product/get-product?id=" + value.productId + "\" target=\"_blank\">" + value.product.name + "</a>\n" +
+                            "<a href=\"/product/get-product?id=" + value.itemId + "\" target=\"_blank\">" + value.product.name + "</a>\n" +
                             "\n" +
                             "</dd>\n" +
                             "<dd>\n" +
@@ -70,19 +71,19 @@
                             "<div class=\"c3\">￥ " + value.product.price +"</div>\n" +
                             "<div class=\"c3\">\n" +
                             "<div class=\"shop_num\" id=\"shop0\">\n" +
-                            "<span class=\"quantity_minus\">-</span>\n" +
-                            "<input readonly class=\"cart_quantity\" data-marker=\"cart_quantity\" type=\"text\" value=" + value.num + " data-origin=\"1.00\" data-keep-two-decimal=\"\"\n" +
+                            "<span class=\"quantity_minus\" val=" + value.itemId + ">-</span>\n" +
+                            "<input readonly id='input_num_" + value.itemId + "' inventory=" + value.product.inventory + " class=\"cart_quantity\" price='" + value.product.price + "'  item_id=" + value.itemId + " data-marker=\"cart_quantity\" type=\"text\" value=" + value.number + " data-origin=\"1.00\" data-keep-two-decimal=\"\"\n" +
                             "                                           data-index=\"1\" data-shop-id=\"2\" data-item-id=\"121151469\" data-sku-id=\"763940\" data-item-type-id=\"2\"\n" +
                             "                                           data-cart-id=\"204215\" data-price=\"50.75\" data-min-limit=\"1\" ,=\"\" data-max-limit=\"10\"\n" +
                             "                                           data-item-decimal=\"1\">\n" +
-                            "<span class=\"quantity_plus\">+</span>\n" +
+                            "<span class=\"quantity_plus\" val=" + value.itemId + ">+</span>\n" +
                             "</div>\n" +
                             "</div>\n" +
                             "<div class=\"c3\">\n" +
-                            "<span>￥ </span><span class=\"pr cart_totalPrice\">"+ value.amount +"</span>\n" +
+                            "<span>￥ </span><span id='amount_" + value.itemId + "' class=\"pr cart_totalPrice\">"+ value.amount +"</span>\n" +
                             "</div>\n" +
                             "<div class=\"c4\">\n" +
-                            "<div class=\"cart_del\">删除</div>\n" +
+                            "<div class=\"cart_del\" productId=" + value.itemId + ">删除</div>\n" +
                             "</div>\n" +
                             "</div>");
                     });
@@ -90,16 +91,112 @@
                     $("#cart_list").css("display", "none");
                     $(".list_first").css("display", "block");
                 }
+
+                $("#proNum").text(checkNum);
+                $("#totalPrice").text(total_money);
+
+                // 单个checkbox的选择
+                $(".a_checkbox").click(function () {
+                    alert("单个checkbox 点击");
+                    if ($(this).attr("checked") == "checked" || $(this).attr("checked") == true) {
+                        // 结算按钮css 更改
+                        $(".btn_small_t").css("background-color", "#FF4643");
+                        $(".btn_small_t").css("color", "#FFF");
+
+                        $("#proNum").text(parseInt($("#proNum").text()) + 1);
+                        $("#totalPrice").text(parseInt($("#totalPrice").text()) + parseInt($("#amount_" + parseInt($(this).attr("value"))).text()));
+
+
+                        if (parseInt($("#proNum").text()) == checkNum) {
+
+                            $(".total_check").attr("checked", true);
+                        }
+                    } else {
+
+                        $("#proNum").text(parseInt($("#proNum").text()) - 1);
+                        $("#totalPrice").text(parseInt($("#totalPrice").text()) - parseInt($("#amount_" + parseInt($(this).attr("value"))).text()));
+
+                        if (parseInt($("#proNum").text()) == 0) {
+                            // 结算按钮css 更改
+                            $(".btn_small_t").css("background-color", "#83837e");
+                            $(".btn_small_t").css("color", "#000");
+
+                            $(".total_check").attr("checked", false);
+                        }
+                    }
+                });
+
+                // 加号
+                $(".quantity_plus").click(function () {
+                    var itemId = parseInt($(this).attr("val"));
+
+                    if (parseInt($("#input_num_" + itemId).val()) >= $("#input_num_" + itemId).attr("inventory")) {
+                        alert("库存不足!")
+                    } else {
+
+                        console.log("itemId :" + itemId)
+                        $("#input_num_" + itemId).attr("value", parseInt($("#input_num_" + itemId).val()) + 1);
+                        $("#amount_" + itemId).text(parseInt($("#amount_" + itemId).text()) + parseInt($("#input_num_" + itemId).attr("price")));
+
+                        console.log(" +   checked : " + $("#check_" + itemId).attr("checked"));
+                        // 判断当前input 是否被选择
+                        if ($("#check_" + itemId).attr("checked") == "checked") {
+                            $("#totalPrice").text(parseInt($("#totalPrice").text()) + parseInt($("#input_num_" + itemId).attr("price")));
+                        }
+
+                        $.post("/cart/incremen-product", {"productId" : itemId}, function (data) {
+                            if (data.code != 200) {
+                                alert("增加数量失败!");
+                            }
+                        });
+                    }
+                });
+
+                // 减号
+                $(".quantity_minus").click(function () {
+                    var itemId = parseInt($(this).attr("val"));
+
+                    if (parseInt($("#input_num_" + itemId).val()) == 1) {
+
+                    } else {
+                        $("#input_num_" + itemId).attr("value", parseInt($("#input_num_" + itemId).val()) - 1);
+                        $("#amount_" + itemId).text(parseInt($("#amount_" + itemId).text()) - parseInt($("#input_num_" + itemId).attr("price")));
+
+                        console.log(" -  checked : " + $("#check_" + itemId).attr("checked"));
+                        // 判断当前input 是否被选择
+                        if ($("#check_" + itemId).attr("checked") == "checked") {
+                            $("#totalPrice").text(parseInt($("#totalPrice").text()) - parseInt($("#input_num_" + itemId).attr("price")));
+                        }
+
+                        $.post("/cart/desc-product", {"productId" : itemId}, function (data) {
+                            if (data.code != 200) {
+                                alert("减少数量失败!");
+                            }
+                        });
+                    }
+                });
+
+                // 删除
+                $(".cart_del").click(function () {
+                   var productId = parseInt($(this).attr("productId"));
+
+                   $.post("/cart/del-product", {"productId" : productId},
+                       function (data) {
+                       if (data.code == 200) {
+                           $(location).attr("href", "/cart");
+                       }
+                   });
+                });
+
             });
 
-            var total_change = 0;
-            $(".total_check").change(function () {
-                alert("全选触发");
-                total_change = total_change + 1;
 
-                if (total_change % 2 == 0){
+
+            $(".total_check").change(function () {
+                if ($(this).attr("checked") == true || $(this).attr("checked") == "checked"){
+                    console.log($(".a_checkbox"))
                     // 全选
-                    $(".c1 input").attr("checked", "checked");
+                    $(".a_checkbox").attr("checked", true);
                     // 结算按钮css 更改
                     $(".btn_small_t").css("background-color", "#FF4643");
                     $(".btn_small_t").css("color", "#FFF");
@@ -108,10 +205,10 @@
                     total_price = total_money;
 
                     $("#proNum").text(checkNum);
-                    $("#totalPrice").text("￥ " + total_money);
+                    $("#totalPrice").text(total_money);
                 } else {
                     // 反选
-                    $(".c1 input").attr("checked", "");
+                    $(".a_checkbox").attr("checked", false);
                     // 结算按钮css 更改
                     $(".btn_small_t").css("background-color", "#83837e");
                     $(".btn_small_t").css("color", "#000");
@@ -120,38 +217,7 @@
                     total_price = 0.0;
 
                     $("#proNum").text("0");
-                    $("#totalPrice").text("￥ 0.0")
-                }
-            });
-
-            // 单个checkbox的选择
-            $(".c1 input").change(function () {
-                if ($(this).attr("checked") == "checked") {
-                    // 结算按钮css 更改
-                    $(".btn_small_t").css("background-color", "#FF4643");
-                    $(".btn_small_t").css("color", "#FFF");
-
-                    check_num = check_num + 1;
-                    console.log($(this).nextAll().find(".cart_totalPrice").text());
-                    console.log($(this).nextAll().find(".cart_totalPrice"));
-                    total_price = total_price + $(this).nextAll().find(".cart_totalPrice").text();
-
-                    $("#proNum").text(check_num);
-                    $("#totalPrice").text("￥ " + total_price);
-                } else {
-                    check_num = check_num - 1;
-                    console.log($(this).nextAll().find(".cart_totalPrice").text());
-                    console.log($(this).nextAll().find(".cart_totalPrice"));
-                    total_price = total_price - $(this).nextAll().find(".cart_totalPrice").text();
-
-                    $("#proNum").text(check_num);
-                    $("#totalPrice").text("￥ " + total_price);
-
-                    if (check_num == 0) {
-                        // 结算按钮css 更改
-                        $(".btn_small_t").css("background-color", "#83837e");
-                        $(".btn_small_t").css("color", "#000");
-                    }
+                    $("#totalPrice").text("0")
                 }
             });
 
@@ -160,27 +226,42 @@
                // 判断是否有商品被选择
                var checked = 0;
 
-               var checkboxs = $(".c1 input");
-               var productIdList = new Arrays();
+               var checkboxs = $(".a_checkbox");
+               var itemIdList = new Array();
+
+               console.log("进入结算");
+               console.log(checkboxs);
+
                $.each(checkboxs, function (index, value) {
-                   if (value.attr("checked") == "checked") {
+                   if ($(value).attr("checked") == "checked" || $(value).attr("checked") == true) {
                        checked = checked + 1;
 
-                       productIdList[checked - 1] = value.val();
+                       itemIdList[checked - 1] = parseInt($(value).val());
                    }
                });
 
                if (checked != 0) {
+                   alert("checked > 0");
                    // 说明选中了商品，可以提交
-                   $.post("/count", {"productIdList" : productIdList}, function () {
+                   $.ajax({url : "/count",
+                       type : "POST",
+                   data : {
+                       "productIdList"
+                   :
+                       itemIdList
+                   },
+                       traditional : true
+               , success : function (data) {
+                       if (data.code == 200) {
+                           $(location).attr("href", "/go-count");
+                       }
+                   }
+               });
 
-                   });
-                   $(location).attr("href", "/go-count");
                } else {
 
                }
             });
-
         });
 
     </script>
@@ -761,7 +842,7 @@
                         <div class="slide_num left">已选
                             <span class="proNum" id="proNum">1</span> 件商品</div>
                         <div class="slide_price left">总价：
-                            <span id="totalPrice">￥ </span> （不含运费）</div>
+                            <span>￥ </span><span id="totalPrice"></span> （不含运费）</div>
                     </div>
                     <div id="settle-btn" class="slide_account right btn_small_t" data-click-log="">结算
                     </div>

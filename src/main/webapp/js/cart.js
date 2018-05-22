@@ -1,4 +1,5 @@
-/*!  2017-04-14 */
+/*
+/!*!  2017-04-14 *!/
 try {
     !function (a) {
         function b() {
@@ -65,7 +66,7 @@ try {
         }, b.prototype.getSummary = function () {
             var a = 0, b = 0;
             return $.each(this.getSelectedItems(), function (c, d) {
-                b += Number(d.price) * Number(d.quantity), a++
+                // b += Number(d.price) * Number(d.quantity), a++
             }), {cartItemsCount: a, totalPrice: b.toFixed(2)}
         }, b.prototype.updateCarts = function (a, b) {
             c("update", a), this.syncCart("update", a, b)
@@ -226,4 +227,4 @@ try {
     })
 } catch (ex) {
     window.console && console.error(ex), window.BJ_REPORT && BJ_REPORT.report(ex)
-}
+}*/

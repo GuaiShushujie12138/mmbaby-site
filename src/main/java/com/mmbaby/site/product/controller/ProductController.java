@@ -94,6 +94,16 @@ public class ProductController extends BaseController {
         return view;
     }
 
+    @RequestMapping(value = "/search-product", method = RequestMethod.GET)
+    public ModelAndView searchProduct(@RequestParam(value = "keyWord", defaultValue = "纸尿裤") String keyWord,
+                                      HttpSession session) {
+        ModelAndView view = new ModelAndView("show");
+
+        session.setAttribute(KEY_WORD, keyWord);
+
+        return view;
+    }
+
     /**
      * 查询商品列表
      * @param session
@@ -106,65 +116,93 @@ public class ProductController extends BaseController {
                                      @RequestParam(value = "sort", required = false) String sort,
                                      @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
                                      @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                     @RequestParam(value = "keyword", required = false) String keyWord,
                                      HttpSession session) {
-        // 获取category
-        Integer category = session.getAttribute(PRODUCT_CATEGORY) == null
-                ? null
-                : (Integer) session.getAttribute(PRODUCT_CATEGORY);
-
-        Long shop_id = null;
-        Integer price_region = null;
-        Integer age_region = null;
-
-        if (shopId == null) {
-            // 获取商家信息
-            shop_id = session.getAttribute(SHOP_ID) == null
+        if (StringUtils.isEmpty(keyWord)) {
+            keyWord = session.getAttribute(KEY_WORD) == null
                     ? null
-                    : (Long) session.getAttribute(SHOP_ID);
-        } else if (shopId == 0) {
-            // 说明shopId 失效，已经不再使用该条件
-            session.removeAttribute(SHOP_ID);
-        } else {
-            shop_id = shopId;
-            session.setAttribute(SHOP_ID, shop_id);
+                    : (String) session.getAttribute(KEY_WORD);
         }
 
-        if (priceRegion == null) {
-            // 获取价格区间
-            price_region = session.getAttribute(PRICE_REGION) == null
+        if (StringUtils.isEmpty(keyWord)) {
+            // 获取category
+            Integer category = session.getAttribute(PRODUCT_CATEGORY) == null
                     ? null
-                    : (Integer) session.getAttribute(PRICE_REGION);
-        } else if (priceRegion == 0) {
-            // 说明priceRegion 失效，已经不再使用该条件
-            session.removeAttribute(PRICE_REGION);
-        } else {
-            price_region = priceRegion;
-            session.setAttribute(PRICE_REGION, price_region);
+                    : (Integer) session.getAttribute(PRODUCT_CATEGORY);
+
+            Long shop_id = null;
+            Integer price_region = null;
+            Integer age_region = null;
+
+            if (shopId == null) {
+                // 获取商家信息
+                shop_id = session.getAttribute(SHOP_ID) == null
+                        ? null
+                        : (Long) session.getAttribute(SHOP_ID);
+            } else if (shopId == 0) {
+                // 说明shopId 失效，已经不再使用该条件
+                session.removeAttribute(SHOP_ID);
+            } else {
+                shop_id = shopId;
+                session.setAttribute(SHOP_ID, shop_id);
+            }
+
+            if (priceRegion == null) {
+                // 获取价格区间
+                price_region = session.getAttribute(PRICE_REGION) == null
+                        ? null
+                        : (Integer) session.getAttribute(PRICE_REGION);
+            } else if (priceRegion == 0) {
+                // 说明priceRegion 失效，已经不再使用该条件
+                session.removeAttribute(PRICE_REGION);
+            } else {
+                price_region = priceRegion;
+                session.setAttribute(PRICE_REGION, price_region);
+            }
+
+            if (ageRegion == null) {
+                // 获取年龄区间
+                age_region = session.getAttribute(AGE_REGION) == null
+                        ? null
+                        : (Integer) session.getAttribute(AGE_REGION);
+            } else if (ageRegion == 0) {
+                // 说明priceRegion 失效，已经不再使用该条件
+                session.removeAttribute(AGE_REGION);
+            } else {
+                age_region = ageRegion;
+                session.setAttribute(AGE_REGION, age_region);
+            }
+
+            // 构造查询对象
+            ProductQueryDTO productQueryDTO = buildProductQueryDTO(category, shop_id, price_region, age_region);
+
+            // 构造分页对象
+            PageUtil pageUtil = new PageUtil(page, pageSize);
+            // 排序
+            pageUtil.setSort(sort);
+            // 搜索关键字
+            if (StringUtils.isNotEmpty(keyWord)) {
+                pageUtil.setKeyWord(keyWord);
+            }
+
+            // 根据category查询商品
+            GeneralResult<List<ProductDTO>> generalResult =
+                    productQueryService.queryProductList(productQueryDTO, pageUtil);
+            if (!generalResult.isSuccess()
+                    || CollectionUtils.isEmpty(generalResult.getData())) {
+                return new GeneralResponse(null);
+            }
+
+            // 查询店铺名称,put
+            List<ProductDTO> productList = buildProductList(generalResult.getData());
+
+            return new GeneralResponse<>(productList);
         }
 
-        if (ageRegion == null) {
-            // 获取年龄区间
-            age_region = session.getAttribute(AGE_REGION) == null
-                    ? null
-                    : (Integer) session.getAttribute(AGE_REGION);
-        } else if (ageRegion == 0) {
-            // 说明priceRegion 失效，已经不再使用该条件
-            session.removeAttribute(AGE_REGION);
-        } else {
-            age_region = ageRegion;
-            session.setAttribute(AGE_REGION, age_region);
-        }
+        PageUtil pageUtil = new PageUtil();
+        pageUtil.setKeyWord(keyWord);
+        GeneralResult<List<ProductDTO>> generalResult = productQueryService.queryByKeyWord(pageUtil);
 
-        // 构造查询对象
-        ProductQueryDTO productQueryDTO = buildProductQueryDTO(category, shop_id, price_region, age_region);
-
-        // 构造分页对象
-        PageUtil pageUtil = new PageUtil(page, pageSize);
-        pageUtil.setSort(sort);
-
-        // 根据category查询商品
-        GeneralResult<List<ProductDTO>> generalResult =
-                productQueryService.queryProductList(productQueryDTO, pageUtil);
         if (!generalResult.isSuccess()
                 || CollectionUtils.isEmpty(generalResult.getData())) {
             return new GeneralResponse(null);
@@ -172,6 +210,9 @@ public class ProductController extends BaseController {
 
         // 查询店铺名称,put
         List<ProductDTO> productList = buildProductList(generalResult.getData());
+
+        // 清除keyword
+        session.removeAttribute(KEY_WORD);
 
         return new GeneralResponse<>(productList);
     }
